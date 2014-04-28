@@ -1,0 +1,210 @@
+# depslib dependency file v1.0
+1398251623 source:/home/alex/Projects/rgadtrackerd/main.cpp
+	<unistd.h>
+	"CgiService.h"
+	"Log.h"
+	"Server.h"
+
+1396274946 /home/alex/Projects/rgadtrackerd/include/CgiService.h
+	<string>
+	"Config.h"
+	<fcgiapp.h>
+
+1398337610 /home/alex/Projects/rgadtrackerd/include/Config.h
+	<string>
+	<vector>
+	<tinyxml.h>
+
+1398321292 /home/alex/Projects/rgadtrackerd/include/Log.h
+	<stdio.h>
+	<syslog.h>
+	<stdarg.h>
+	<pthread.h>
+	<string>
+
+1396248304 /home/alex/Projects/rgadtrackerd/include/Server.h
+	<string>
+
+1398340551 source:/home/alex/Projects/rgadtrackerd/src/CgiService.cpp
+	<sys/stat.h>
+	<boost/algorithm/string.hpp>
+	"Log.h"
+	"CgiService.h"
+	"UrlParser.h"
+	"Core.h"
+	"Server.h"
+	"Cookie.h"
+	<fcgi_stdio.h>
+
+1396432259 /home/alex/Projects/rgadtrackerd/include/UrlParser.h
+	<map>
+	<string>
+
+1396613845 /home/alex/Projects/rgadtrackerd/include/Core.h
+	<list>
+	<vector>
+	<map>
+	<utility>
+	<algorithm>
+	<boost/date_time.hpp>
+	<boost/algorithm/string.hpp>
+	"Params.h"
+	"Searcher.h"
+	"RedisClient.h"
+
+1398340425 /home/alex/Projects/rgadtrackerd/include/Params.h
+	<sstream>
+	<string>
+	<boost/date_time.hpp>
+
+1396252862 /home/alex/Projects/rgadtrackerd/include/Cookie.h
+	<string>
+	<time.h>
+	<boost/date_time/posix_time/posix_time_types.hpp>
+
+1398404435 source:/home/alex/Projects/rgadtrackerd/src/Config.cpp
+	<iostream>
+	<fstream>
+	<boost/filesystem.hpp>
+	<boost/regex.hpp>
+	<boost/lexical_cast.hpp>
+	<string.h>
+	<stdlib.h>
+	<pwd.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<assert.h>
+	"Log.h"
+	"Config.h"
+
+1396252889 source:/home/alex/Projects/rgadtrackerd/src/Cookie.cpp
+	"Cookie.h"
+	<string.h>
+	<boost/date_time/posix_time/posix_time.hpp>
+
+1398404993 source:/home/alex/Projects/rgadtrackerd/src/Core.cpp
+	<signal.h>
+	<boost/foreach.hpp>
+	<boost/date_time/posix_time/ptime.hpp>
+	<boost/date_time/posix_time/posix_time_io.hpp>
+	<boost/format.hpp>
+	<boost/algorithm/string.hpp>
+	"../config.h"
+	<ctime>
+	<cstdlib>
+	"Config.h"
+	"Log.h"
+	"Core.h"
+
+1396253332 /home/alex/Projects/rgadtrackerd/config.h
+
+1398326482 source:/home/alex/Projects/rgadtrackerd/src/Log.cpp
+	"Log.h"
+
+1396253530 source:/home/alex/Projects/rgadtrackerd/src/GeoIPTools.cpp
+	"GeoIPTools.h"
+
+1396253554 /home/alex/Projects/rgadtrackerd/include/GeoIPTools.h
+	<GeoIP.h>
+	<GeoIPCity.h>
+	<string>
+
+1396253895 source:/home/alex/Projects/rgadtrackerd/src/GeoRerions.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<strings.h>
+	<string.h>
+	<vector>
+	<boost/algorithm/string.hpp>
+	"GeoRerions.h"
+	"Log.h"
+
+1396253586 /home/alex/Projects/rgadtrackerd/include/GeoRerions.h
+
+1398340698 source:/home/alex/Projects/rgadtrackerd/src/Params.cpp
+	<sstream>
+	<boost/algorithm/string/trim.hpp>
+	<boost/regex/icu.hpp>
+	<boost/date_time.hpp>
+	<string>
+	"Params.h"
+	"GeoIPTools.h"
+	"Log.h"
+
+1396248332 source:/home/alex/Projects/rgadtrackerd/src/Server.cpp
+	<fstream>
+	<signal.h>
+	<pwd.h>
+	<syslog.h>
+	<fcntl.h>
+	<dirent.h>
+	<sys/types.h>
+	<unistd.h>
+	<string.h>
+	<sys/stat.h>
+	<math.h>
+	<sys/mman.h>
+	"Server.h"
+	"Config.h"
+	"Log.h"
+
+1396428378 source:/home/alex/Projects/rgadtrackerd/src/UrlParser.cpp
+	<sstream>
+	<algorithm>
+	"UrlParser.h"
+
+1396356551 source:/home/alex/Projects/rgadtrackerd/src/XXXSearcher.cpp
+	<typeinfo>
+	"Log.h"
+	"Config.h"
+	"XXXSearcher.h"
+
+1396356597 /home/alex/Projects/rgadtrackerd/include/XXXSearcher.h
+	<string>
+	<vector>
+	<map>
+	<sphinxclient.h>
+
+1398404881 source:/home/alex/Projects/rgadtrackerd/src/Sphinx.cpp
+	<typeinfo>
+	<boost/regex/icu.hpp>
+	<boost/algorithm/string.hpp>
+	"Log.h"
+	"Config.h"
+	"Sphinx.h"
+
+1396602120 /home/alex/Projects/rgadtrackerd/include/Sphinx.h
+	<string>
+	<vector>
+	<map>
+	<boost/regex/icu.hpp>
+	<sphinxclient.h>
+	"Config.h"
+
+1396861992 source:/home/alex/Projects/rgadtrackerd/src/Searcher.cpp
+	<boost/crc.hpp>
+	"Searcher.h"
+	"UrlParser.h"
+
+1396533484 /home/alex/Projects/rgadtrackerd/include/Searcher.h
+	<string>
+	<list>
+	<Sphinx.h>
+	<Params.h>
+
+1396621641 source:/home/alex/Projects/rgadtrackerd/src/RedisClient.cpp
+	<strings.h>
+	<string.h>
+	"RedisClient.h"
+	"Log.h"
+	"Config.h"
+
+1396621372 /home/alex/Projects/rgadtrackerd/include/RedisClient.h
+	<string>
+	<vector>
+	<list>
+	<libredis/redis.h>
+
+1396613218 /home/alex/Projects/rgadtrackerd/libs/libredis/libredis/redis.h
+

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="rgadtrackerd" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/rgadtrackerd" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/rgadtrackerd" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="libs/libredis" />
+		</Compiler>
+		<Linker>
+			<Add library="fcgi" />
+			<Add library="pthread" />
+			<Add library="tinyxml" />
+			<Add library="icuuc" />
+			<Add library="boost_system" />
+			<Add library="boost_filesystem" />
+			<Add library="boost_date_time" />
+			<Add library="boost_regex" />
+			<Add library="GeoIP" />
+			<Add library="sphinxclient" />
+			<Add library="libs/libredis/lib/libredis.a" />
+		</Linker>
+		<Unit filename="config.h" />
+		<Unit filename="config.xml" />
+		<Unit filename="include/CgiService.h" />
+		<Unit filename="include/Config.h" />
+		<Unit filename="include/Cookie.h" />
+		<Unit filename="include/Core.h" />
+		<Unit filename="include/GeoIPTools.h" />
+		<Unit filename="include/GeoRerions.h" />
+		<Unit filename="include/Log.h" />
+		<Unit filename="include/Params.h" />
+		<Unit filename="include/RedisClient.h" />
+		<Unit filename="include/Searcher.h" />
+		<Unit filename="include/Server.h" />
+		<Unit filename="include/Sphinx.h" />
+		<Unit filename="include/UrlParser.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/CgiService.cpp" />
+		<Unit filename="src/Config.cpp" />
+		<Unit filename="src/Cookie.cpp" />
+		<Unit filename="src/Core.cpp" />
+		<Unit filename="src/GeoIPTools.cpp" />
+		<Unit filename="src/GeoRerions.cpp" />
+		<Unit filename="src/Log.cpp" />
+		<Unit filename="src/Params.cpp" />
+		<Unit filename="src/RedisClient.cpp" />
+		<Unit filename="src/Searcher.cpp" />
+		<Unit filename="src/Server.cpp" />
+		<Unit filename="src/Sphinx.cpp" />
+		<Unit filename="src/UrlParser.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
