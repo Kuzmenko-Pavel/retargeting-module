@@ -22,6 +22,8 @@ std::string time_t_to_string(time_t t)
 
 CgiService::CgiService()
 {
+    bcore = new BaseCore();
+
     FCGX_Init();
 
     mode_t old_mode = umask(0);
@@ -46,10 +48,10 @@ CgiService::CgiService()
         Log::err("pthread_sigmask  error");
     }
 */
-    int i;
+
     threads = new pthread_t[config->server_children_ + 1];
 
-    for(i = 0; i < config->server_children_; i++)
+    for(int i = 0; i < config->server_children_; i++)
     {
         if(pthread_create(&threads[i], attributes, &this->Serve, this))
         {
@@ -67,6 +69,17 @@ CgiService::~CgiService()
     }
 
    delete []threads;
+}
+
+void CgiService::run()
+{
+   //main loop
+    for(;;)
+    {
+        //read mq and process
+        bcore->ProcessMQ();
+        sleep(1);
+    }
 }
 
 void CgiService::Response(FCGX_Request *req,

@@ -8,6 +8,7 @@
 #include "shpinx_mode.h"
 #include "redis_server.h"
 #include "sphinx_field.h"
+#include "DataBase.h"
 
 extern unsigned long request_processed_;
 extern unsigned long last_time_request_processed;
@@ -22,11 +23,26 @@ public:
     std::vector<redis_server> redis_retargeting_;
     int redis_retargeting_ttl_;
 
+    std::vector<std::string> mongo_main_host_;
+    std::string mongo_main_db_;
+    std::string mongo_main_set_;
+    bool mongo_main_slave_ok_;
+    std::string mongo_main_login_;
+    std::string mongo_main_passwd_;
+
+    std::string mq_path_;
+
     //new params
     std::string server_ip_;
     std::string redirect_script_;
     std::string server_socket_path_;
     int server_children_;
+
+    std::string dbpath_;
+    std::string db_dump_path_;
+    DataBase *pDb;
+    std::string offerSqlAll;
+
     std::string cookie_name_;
     std::string cookie_domain_;
     std::string cookie_path_;
@@ -42,8 +58,6 @@ public:
     std::string sphinx_select_;
     std::vector<sphinx_field> sphinx_fields_;
     std::vector<shpinx_mode*> shpinx_modes_;
-    const char**sphinx_field_names_;
-    int *sphinx_field_weights_;
 
     int         instanceId;
     std::string lock_file_;

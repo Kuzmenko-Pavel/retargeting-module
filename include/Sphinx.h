@@ -25,6 +25,7 @@ public:
      */
     void addFilter(const std::string &columnName, const std::vector<sphinx_int64_t> &items);
     bool addQueryStrings(const std::string& query);
+    bool addUrlQueryStrings(const std::string& url);
     void processKeywords();
     virtual void postProcessKeywords(sphinx_result * res) = 0;
     void cleanFilter();

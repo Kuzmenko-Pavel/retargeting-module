@@ -40,10 +40,11 @@ std::list<std::string> &Searcher::run(const Params *params)
 
     UrlParser *parsed = new UrlParser(params->getLocation());
 
-    addQueryStrings(parsed->getLocation());
+    addUrlQueryStrings(params->getLocation());
     addQueryStrings(parsed->getHost());
     addQueryStrings(parsed->getPath());
     addQueryStrings(parsed->getSearch());
+    addQueryStrings(params->getContext());
 
     processKeywords();
 

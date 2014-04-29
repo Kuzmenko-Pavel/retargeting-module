@@ -8,8 +8,8 @@ Config *config;
 /*
 perl -MURI::Escape -e 'print uri_escape("http://www.google.com.ua")'
 
-http://127.0.0.1/adshow.fcgi?location=http%3A%2F%2Fwww.topshoptv.com.ua%2Fkyhnya%2Ftovary_za_tipom%2Fbullit-express.html%3Fcsu%3Dgeneral%26cex%3D1599765%26med%3Dom%26src%3Dua_gen_general_om_sa_yottos%26referrer%3Dyottos_om_1599765%26utm_source%3Dyottos_ext%26utm_medium%3DOff-Site_Merchandising_rem%26utm_campaign%3Dua_gen_general_om_sa_yottos_1599765%26utm_content%3DYottos_Remarketing_1599765&time=365&ac=762FA8DB-66A1-4C96-89F5-5E0C77E74F3A&rand=2353465&search=&context=
-
+http://127.0.0.1/adshow.fcgi?location=http%3A%2F%2Fwww.topshoptv.com.ua%2Fkyhnya%2Ftovary_za_tipom%2Fbullit-express.html%3Fcsu%3Dgeneral%26cex%3D1599765%26med%3Dom%26src%3Dua_gen_general_om_sa_yottos%26referrer%3Dyottos_om_1599765%26utm_source%3Dyottos_ext%26utm_medium%3DOff-Site_Merchandising_rem%26utm_campaign%3Dua_gen_general_om_sa_yottos_1599765%26utm_content%3DYottos_Remarketing_1599765&time=365&ac=762FA8DB-66A1-4C96-89F5-5E0C77E74F3A&rand=2353465&search=&context=Lenovo%20S820%20%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D1%82%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD
+http://127.0.0.1/adshow.fcgi?location=http%3A%2F%2Fwww.topshoptv.com.ua%2Fkyhnya%2Ftovary_za_tipom%2Fbullit-express.html%3Fcsu%3Dgeneral%26cex%3D1599765%26med%3Dom%26src%3Dua_gen_general_om_sa_yottos%26referrer%3Dyottos_om_1599765%26utm_source%3Dyottos_ext%26utm_medium%3DOff-Site_Merchandising_rem%26utm_campaign%3Dua_gen_general_om_sa_yottos_1599765%26utm_content%3DYottos_Remarketing_1599765&time=365&ac=762FA8DB-66A1-4C96-89F5-5E0C77E74F3A&rand=2353465&search=&context=%D0%9A%D1%83%D1%85%D0%BE%D0%BD%D0%BD%D0%B8%D0%B9%20%D0%BA%D0%BE%D0%BC%D0%B1%D0%B0%D0%B9%D0%BD
 */
 int main(int argc, char *argv[])
 {
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
         config->server_socket_path_ = sock_path;
     }
 
-    CgiService();
+    CgiService().run();
 
     return 0;
 }
