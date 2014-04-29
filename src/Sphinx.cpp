@@ -17,12 +17,18 @@ Sphinx::Sphinx() :
 
     sphinx_set_limits(client, 0, 3, 3, 3);
 
-    sphinx_set_field_weights( client,
-                              Config::Instance()->sphinx_fields_.size(),
-                              Config::Instance()->sphinx_field_names_,
-                              Config::Instance()->sphinx_field_weights_);
+    const char *field_names[Config::Instance()->sphinx_fields_.size()];
+    int field_weights[Config::Instance()->sphinx_fields_.size()];
 
-    sphinx_set_select(client,config->sphinx_select_.c_str());
+    for(u_int i=0; i<Config::Instance()->sphinx_fields_.size(); i++)
+    {
+        field_names[i] = strdupa(Config::Instance()->sphinx_fields_[i].name.c_str());
+        field_weights[i] = Config::Instance()->sphinx_fields_[i].weight;
+    }
+
+    sphinx_set_field_weights( client, Config::Instance()->sphinx_fields_.size(), field_names, field_weights );
+
+    sphinx_set_select(client, config->sphinx_select_.c_str());
 
     replaceSymbol = boost::make_u32regex("[^а-яА-Яa-zA-Z0-9-]");
     replaceExtraSpace = boost::make_u32regex("\\s+");
@@ -45,6 +51,9 @@ void Sphinx::setMode(int i)
 //-----------------------------------------------------------------------------------------------
 void Sphinx::setMode(const shpinx_mode *m)
 {
+#ifdef DEBUG
+        printf("sphinx mode: %s\n", m->match_.c_str());
+#endif // DEBUG
     sphinx_set_match_mode(client,map_match[m->match_]);
     sphinx_set_ranking_mode(client,map_rank[m->rank_], NULL);
     sphinx_set_sort_mode(client,map_sort[m->sort_], NULL);
@@ -99,6 +108,7 @@ bool Sphinx::addQueryStrings(const std::string& query)
         std::string qsn = stringWrapper(q, true);
         std::vector<std::string> strs;
         boost::split(strs,qs,boost::is_any_of("\t "),boost::token_compress_on);
+
         for(u_int i=0; i<Config::Instance()->sphinx_fields_.size(); i++)
         {
             std::string iret;
@@ -106,11 +116,11 @@ bool Sphinx::addQueryStrings(const std::string& query)
             {
                     if (it != strs.begin())
                     {
-                        iret += " | @"+std::string(Config::Instance()->sphinx_field_names_[i])+" "+*it;
+                        iret += " | @"+Config::Instance()->sphinx_fields_[i].name+" "+*it;
                     }
                     else
                     {
-                        iret += "@"+std::string(Config::Instance()->sphinx_field_names_[i])+" "+*it;
+                        iret += "@"+Config::Instance()->sphinx_fields_[i].name+" "+*it;
                     }
             }
             if(i)
@@ -122,7 +132,11 @@ bool Sphinx::addQueryStrings(const std::string& query)
                 ret += "("+iret+")";
             }
         }
+
         vSearchQuery.push_back(ret);
+#ifdef DEBUG
+        printf("query: %s\n",ret.c_str());
+#endif // DEBUG
         return true;
     }
     catch (std::exception const &ex)
@@ -130,6 +144,13 @@ bool Sphinx::addQueryStrings(const std::string& query)
         Log::err("exception %s: %s", typeid(ex).name(), ex.what());
         return false;
     }
+}
+//-----------------------------------------------------------------------------------------------
+bool Sphinx::addUrlQueryStrings(const std::string& url)
+{
+    vSearchQuery.push_back("(@title|@description) Lenovo S820 мобильный телефон");
+    //vSearchQuery.push_back("(@url|@urlpatch|@urlparam) 1599765");
+    return true;
 }
 //-----------------------------------------------------------------------------------------------
 //select 1 as doc, count(*) from worker group by doc;
@@ -151,8 +172,11 @@ void Sphinx::processKeywords()
             res = sphinx_run_queries(client);
             if(!res)
             {
-                Log::warn("unligal sphinx result: %s", sphinx_error(client));
-                return;
+                Log::warn("unligal sphinx(mode: %s) result: %s", (*mod)->match_.c_str(), sphinx_error(client));
+#ifdef DEBUG
+                printf("unligal sphinx result: %s\n", sphinx_error(client));
+#endif // DEBUG
+                continue;
             }
 
             //process sphinx results
@@ -177,9 +201,9 @@ void Sphinx::processKeywords()
                 if (res->num_matches > 0)
                 {
                     Log::info("sphinx num matches: %d", res->num_matches);
+                    postProcessKeywords(res);
+                    break;
                 }
-
-                postProcessKeywords(res);
             }
         }
     }

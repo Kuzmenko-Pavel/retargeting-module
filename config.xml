@@ -12,6 +12,17 @@
     <!--количество ниток-->
     <children>1</children>
 
+    <!--путь к фалу базы данных sqlite или :memory:-->
+    <sqlite>
+        <!--файл базы-->
+        <db>/run/alex/mem.db</db>
+        <!--путь к каталогу дампа sqlite базы-->
+        <schema>db_dump</schema>
+    </sqlite>
+
+    <!--путь к очереди сообщений-->
+    <mq_path>guest:guest@localhost//</mq_path>
+
     <!--Путь к файлу базы данных MaxMind GeoIP City Edition-->
     <geocity_path>/usr/share/GeoIP/GeoLiteCity.dat</geocity_path>
 
@@ -74,10 +85,10 @@
 
 <sphinx>
     <!--host>213.186.121.76</host-->
-    <host>127.0.0.1</host>
+    <host>srv-2.yottos.com</host>
     <port>9312</port>
     <index>retargeting</index>
-    <select>guidint</select>
+    <select>guid</select>
 
     <!--all from /usr/include/sphinxclient.h-->
     <mode id="0">
@@ -87,7 +98,7 @@
     </mode>
 
     <mode id="1">
-        <match>SPH_MATCH_ANY</match>
+        <match>SPH_MATCH_EXTENDED</match>
         <rank>SPH_RANK_SPH04</rank>
         <sort>SPH_SORT_RELEVANCE</sort>
     </mode>
@@ -105,5 +116,31 @@
     </fields>
 
 </sphinx>
+
+<!--Параметры подключения к базам данных-->
+<mongo>
+    <!--Параметры подключения к основной базе данных-->
+    <main>
+        <!--Адрес сервера баз данных-->
+        <host>212.113.32.146:27018</host>
+        <host>212.113.32.147:27018</host>
+        <host>srv-1.yottos.com:27017</host>
+        <host>srv-2.yottos.com:27018</host>
+        <host>srv-3.yottos.com:27018</host>
+        <!--Название базы данных-->
+        <db>getmyad_db</db>
+        <!--Название группы реплик (если база данных находится в Replica Set)-->
+        <!--set></set-->
+        <set>vsrv</set>
+        <!--Может ли сервис подключаться к slave серверам базам данных.
+        Это балансирует нагрузку в режиме только для чтения, но появляется
+        вероятность чтения не самых свежих данных (разница от мастера до
+        нескольких секунд).-->
+        <slave>true</slave>
+
+        <login></login>
+        <passwd></passwd>
+    </main>
+</mongo>
 
 </root>

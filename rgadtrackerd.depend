@@ -208,3 +208,398 @@
 
 1396613218 /home/alex/Projects/rgadtrackerd/libs/libredis/libredis/redis.h
 
+1398708111 source:/home/alex/Projects/retargeting-module/main.cpp
+	<unistd.h>
+	"CgiService.h"
+	"Log.h"
+	"Server.h"
+
+1398754444 /home/alex/Projects/retargeting-module/include/CgiService.h
+	<string>
+	<fcgiapp.h>
+	"Config.h"
+	"BaseCore.h"
+
+1398753789 /home/alex/Projects/retargeting-module/include/Config.h
+	<string>
+	<vector>
+	<tinyxml.h>
+	"shpinx_mode.h"
+	"redis_server.h"
+	"sphinx_field.h"
+	"DataBase.h"
+
+1398677376 /home/alex/Projects/retargeting-module/include/shpinx_mode.h
+	<string>
+
+1398677376 /home/alex/Projects/retargeting-module/include/redis_server.h
+	<string>
+
+1398677376 /home/alex/Projects/retargeting-module/include/sphinx_field.h
+	<string>
+
+1398677376 /home/alex/Projects/retargeting-module/include/Log.h
+	<stdio.h>
+	<syslog.h>
+	<stdarg.h>
+	<pthread.h>
+	<string>
+
+1398677376 /home/alex/Projects/retargeting-module/include/Server.h
+	<string>
+
+1398758893 source:/home/alex/Projects/retargeting-module/src/CgiService.cpp
+	<sys/stat.h>
+	<boost/algorithm/string.hpp>
+	"Log.h"
+	"CgiService.h"
+	"UrlParser.h"
+	"Core.h"
+	"Server.h"
+	"Cookie.h"
+	<fcgi_stdio.h>
+
+1398677376 /home/alex/Projects/retargeting-module/include/UrlParser.h
+	<map>
+	<string>
+
+1398677376 /home/alex/Projects/retargeting-module/include/Core.h
+	<list>
+	<vector>
+	<map>
+	<utility>
+	<algorithm>
+	<boost/date_time.hpp>
+	<boost/algorithm/string.hpp>
+	"Params.h"
+	"Searcher.h"
+	"RedisClient.h"
+
+1398677376 /home/alex/Projects/retargeting-module/include/Params.h
+	<sstream>
+	<string>
+	<boost/date_time.hpp>
+
+1398677376 /home/alex/Projects/retargeting-module/include/Searcher.h
+	<string>
+	<list>
+	<Sphinx.h>
+	<Params.h>
+
+1398693956 /home/alex/Projects/retargeting-module/include/Sphinx.h
+	<string>
+	<vector>
+	<map>
+	<boost/regex/icu.hpp>
+	<sphinxclient.h>
+	"Config.h"
+
+1398677376 /home/alex/Projects/retargeting-module/include/RedisClient.h
+	<string>
+	<vector>
+	<list>
+	<libredis/redis.h>
+
+1398677376 /home/alex/Projects/retargeting-module/libs/libredis/libredis/redis.h
+
+1398677376 /home/alex/Projects/retargeting-module/include/Cookie.h
+	<string>
+	<time.h>
+	<boost/date_time/posix_time/posix_time_types.hpp>
+
+1398754407 source:/home/alex/Projects/retargeting-module/src/Config.cpp
+	<iostream>
+	<fstream>
+	<boost/filesystem.hpp>
+	<boost/regex.hpp>
+	<boost/lexical_cast.hpp>
+	<string.h>
+	<stdlib.h>
+	<pwd.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<assert.h>
+	"Log.h"
+	"Config.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/Cookie.cpp
+	"Cookie.h"
+	<string.h>
+	<boost/date_time/posix_time/posix_time.hpp>
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/Core.cpp
+	<signal.h>
+	<boost/foreach.hpp>
+	<boost/date_time/posix_time/ptime.hpp>
+	<boost/date_time/posix_time/posix_time_io.hpp>
+	<boost/format.hpp>
+	<boost/algorithm/string.hpp>
+	"../config.h"
+	<ctime>
+	<cstdlib>
+	"Config.h"
+	"Log.h"
+	"Core.h"
+
+1398677376 /home/alex/Projects/retargeting-module/config.h
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/GeoIPTools.cpp
+	"GeoIPTools.h"
+
+1398677376 /home/alex/Projects/retargeting-module/include/GeoIPTools.h
+	<GeoIP.h>
+	<GeoIPCity.h>
+	<string>
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/GeoRerions.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<strings.h>
+	<string.h>
+	<vector>
+	<boost/algorithm/string.hpp>
+	"GeoRerions.h"
+	"Log.h"
+
+1398677376 /home/alex/Projects/retargeting-module/include/GeoRerions.h
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/Log.cpp
+	"Log.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/Params.cpp
+	<sstream>
+	<boost/algorithm/string/trim.hpp>
+	<boost/regex/icu.hpp>
+	<boost/date_time.hpp>
+	<string>
+	"Params.h"
+	"GeoIPTools.h"
+	"Log.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/RedisClient.cpp
+	<strings.h>
+	<string.h>
+	"RedisClient.h"
+	"Log.h"
+	"Config.h"
+
+1398750067 source:/home/alex/Projects/retargeting-module/src/Searcher.cpp
+	<boost/crc.hpp>
+	"Searcher.h"
+	"UrlParser.h"
+
+1398753201 source:/home/alex/Projects/retargeting-module/src/Server.cpp
+	<fstream>
+	<signal.h>
+	<pwd.h>
+	<syslog.h>
+	<fcntl.h>
+	<dirent.h>
+	<sys/types.h>
+	<unistd.h>
+	<string.h>
+	<sys/stat.h>
+	<math.h>
+	<sys/mman.h>
+	"Server.h"
+	"Config.h"
+	"Log.h"
+
+1398711279 source:/home/alex/Projects/retargeting-module/src/Sphinx.cpp
+	<typeinfo>
+	<boost/regex/icu.hpp>
+	<boost/algorithm/string.hpp>
+	"Log.h"
+	"Sphinx.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/UrlParser.cpp
+	<sstream>
+	<algorithm>
+	"UrlParser.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/redis_server.cpp
+	"redis_server.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/shpinx_mode.cpp
+	"shpinx_mode.h"
+
+1398677377 source:/home/alex/Projects/retargeting-module/src/sphinx_field.cpp
+	"sphinx_field.h"
+
+1398753125 source:/home/alex/Projects/retargeting-module/src/DataBase.cpp
+	<iostream>
+	<algorithm>
+	<fstream>
+	<signal.h>
+	<time.h>
+	<dirent.h>
+	<sys/stat.h>
+	<strings.h>
+	<stdlib.h>
+	<string.h>
+	<boost/filesystem.hpp>
+	"../config.h"
+	"Log.h"
+	"DataBase.h"
+	"KompexSQLiteException.h"
+	"GeoRerions.h"
+	"Config.h"
+
+1398753136 /home/alex/Projects/retargeting-module/include/DataBase.h
+	<string>
+	<vector>
+	<stdio.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<unistd.h>
+	"KompexSQLiteDatabase.h"
+	"KompexSQLiteStatement.h"
+
+1398750107 /home/alex/Projects/retargeting-module/include/KompexSQLiteDatabase.h
+	<string>
+	"sqlite3.h"
+	"KompexSQLitePrerequisites.h"
+
+1398750107 /home/alex/Projects/retargeting-module/include/KompexSQLitePrerequisites.h
+
+1398750107 /home/alex/Projects/retargeting-module/include/KompexSQLiteStatement.h
+	<map>
+	<string>
+	"sqlite3.h"
+	"KompexSQLitePrerequisites.h"
+
+1398750107 /home/alex/Projects/retargeting-module/include/KompexSQLiteException.h
+	<map>
+	<string>
+	<sstream>
+	<iostream>
+	"KompexSQLitePrerequisites.h"
+
+1398750095 source:/home/alex/Projects/retargeting-module/src/KompexSQLiteDatabase.cpp
+	<fstream>
+	<iostream>
+	<exception>
+	"KompexSQLiteDatabase.h"
+	"KompexSQLiteException.h"
+
+1398750095 source:/home/alex/Projects/retargeting-module/src/KompexSQLiteStatement.cpp
+	<iostream>
+	<iomanip>
+	<exception>
+	<sstream>
+	<string.h>
+	"KompexSQLiteStatement.h"
+	"KompexSQLiteDatabase.h"
+	"KompexSQLiteException.h"
+
+1398751279 source:/home/alex/Projects/retargeting-module/src/Campaign.cpp
+	<boost/algorithm/string/replace.hpp>
+	"Campaign.h"
+	"Log.h"
+	"Config.h"
+	"KompexSQLiteStatement.h"
+	"KompexSQLiteException.h"
+
+1398751272 /home/alex/Projects/retargeting-module/include/Campaign.h
+	<string>
+	"KompexSQLiteDatabase.h"
+
+1398751306 source:/home/alex/Projects/retargeting-module/src/EBranch.cpp
+	"EBranch.h"
+
+1398751299 /home/alex/Projects/retargeting-module/include/EBranch.h
+	<string>
+
+1398751291 source:/home/alex/Projects/retargeting-module/src/Informer.cpp
+	"Informer.h"
+
+1398751285 /home/alex/Projects/retargeting-module/include/Informer.h
+	<string>
+
+1398751217 source:/home/alex/Projects/retargeting-module/src/Offer.cpp
+	<sstream>
+	"Offer.h"
+	"Log.h"
+	"json.h"
+
+1398751208 /home/alex/Projects/retargeting-module/include/Offer.h
+	<string>
+	<list>
+	<map>
+	<vector>
+	"Campaign.h"
+	"EBranch.h"
+
+1398750231 /home/alex/Projects/retargeting-module/include/json.h
+	<string>
+
+1398758647 source:/home/alex/Projects/retargeting-module/src/ParentDB.cpp
+	<vector>
+	<boost/algorithm/string.hpp>
+	"ParentDB.h"
+	"Log.h"
+	"KompexSQLiteStatement.h"
+	"json.h"
+	"Config.h"
+	"Offer.h"
+
+1398750188 /home/alex/Projects/retargeting-module/include/ParentDB.h
+	<mongo/client/dbclient_rs.h>
+	"KompexSQLiteDatabase.h"
+	"KompexSQLiteException.h"
+
+1398751484 source:/home/alex/Projects/retargeting-module/src/json.cpp
+	"json.h"
+
+1398753725 source:/home/alex/Projects/retargeting-module/src/base64.cpp
+	"base64.h"
+	<iostream>
+
+1398753719 /home/alex/Projects/retargeting-module/include/base64.h
+	<string>
+
+1398759122 source:/home/alex/Projects/retargeting-module/src/BaseCore.cpp
+	"DB.h"
+	<boost/foreach.hpp>
+	<boost/date_time/posix_time/ptime.hpp>
+	<boost/date_time/posix_time/posix_time_io.hpp>
+	<boost/format.hpp>
+	<boost/regex.hpp>
+	<ctime>
+	<cstdlib>
+	<sstream>
+	<mongo/util/net/hostandport.h>
+	"../config.h"
+	"Log.h"
+	"BaseCore.h"
+	"base64.h"
+	"Informer.h"
+	"Campaign.h"
+	"Offer.h"
+	"Config.h"
+
+1398753637 /home/alex/Projects/retargeting-module/include/DB.h
+	"../config.h"
+	<mongo/client/connpool.h>
+	"Log.h"
+	<string>
+	<utility>
+
+1398753568 /home/alex/Projects/retargeting-module/include/BaseCore.h
+	"../config.h"
+	<list>
+	<vector>
+	<map>
+	<utility>
+	<boost/date_time.hpp>
+	<AMQPcpp.h>
+	<amqpcpp.h>
+	"DataBase.h"
+	"ParentDB.h"
+
+1398753940 source:/home/alex/Projects/retargeting-module/src/DB.cpp
+	"DB.h"
+	"Config.h"
+

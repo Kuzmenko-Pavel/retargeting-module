@@ -3,9 +3,10 @@
 
 #include <string>
 
-#include "Config.h"
-
 #include <fcgiapp.h>
+
+#include "Config.h"
+#include "BaseCore.h"
 
 class Core;
 
@@ -75,6 +76,7 @@ private:
     void ProcessRequest(FCGX_Request*, Core *);
 private:
     pthread_t *threads;
+    BaseCore *bcore;
 };
 
 #endif

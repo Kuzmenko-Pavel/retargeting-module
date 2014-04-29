@@ -35,9 +35,6 @@ Config::Config()
 {
     mIsInited = false;
     mDoc = NULL;
-
-    sphinx_field_names_ = (const char**)std::malloc(sizeof(const char**));
-    sphinx_field_weights_ = (int *)std::malloc(sizeof(int*));
 }
 
 bool Config::LoadConfig(const std::string fName)
@@ -226,6 +223,39 @@ bool Config::Load()
                 Log::warn("element cookie_path is not inited");
             }
         }
+
+        if( (mel = mElem->FirstChildElement("mq_path")) && (mel->GetText()) )
+        {
+            mq_path_ = mel->GetText();
+        }
+
+        if( (mel = mElem->FirstChildElement("sqlite")) )
+        {
+            if( (mels = mel->FirstChildElement("db")) && (mels->GetText()) )
+            {
+                dbpath_ = mels->GetText();
+
+                if(dbpath_!=":memory:" && !checkPath(dbpath_,true, true, mes))
+                {
+                    exit(mes);
+                }
+            }
+            else
+            {
+                Log::warn("element db is not inited: :memory:");
+                dbpath_ = ":memory:";
+            }
+
+            if( (mels = mel->FirstChildElement("schema")) && (mels->GetText()) )
+            {
+                db_dump_path_ = cfgFilePath + mels->GetText();
+
+                if(!checkPath(db_dump_path_,false, false, mes))
+                {
+                    exit(mes);
+                }
+            }
+        }
     }
     else
     {
@@ -341,23 +371,54 @@ bool Config::Load()
             }
         }
 
-
         if((mel = mElem->FirstChildElement("fields")))
         {
             for(mElem = mel->FirstChildElement(); mElem; mElem = mElem->NextSiblingElement())
             {
-                sphinx_fields_.push_back(sphinx_field(mElem->Value(), mElem->GetText()));
-
-                sphinx_field_names_[sphinx_fields_.size()] = mElem->Value();
-                sphinx_field_weights_[sphinx_fields_.size()] = atoi(mElem->GetText());
+                sphinx_fields_.push_back(sphinx_field(mElem->Value(),mElem->GetText()));
             }
         }
-
     }
     else
     {
         exit("no sphinx section in config file. exit");
     }
+
+    if( (mels = mRoot->FirstChildElement("mongo")) )
+    {
+        if( (mel = mels->FirstChildElement("main")) )
+        {
+            for(mElem = mel->FirstChildElement("host"); mElem; mElem = mElem->NextSiblingElement("host"))
+            {
+                mongo_main_host_.push_back(mElem->GetText());
+            }
+
+            if( (mElem = mel->FirstChildElement("db")) && (mElem->GetText()) )
+                mongo_main_db_ = mElem->GetText();
+
+            if( (mElem = mel->FirstChildElement("set")) && (mElem->GetText()) )
+                mongo_main_set_ = mElem->GetText();
+
+            if( (mElem = mel->FirstChildElement("slave")) && (mElem->GetText()) )
+                mongo_main_slave_ok_ = strncmp(mElem->GetText(),"false", 5) > 0 ? false : true;
+
+            if( (mElem = mel->FirstChildElement("login")) && (mElem->GetText()) )
+                mongo_main_login_ = mElem->GetText();
+
+            if( (mElem = mel->FirstChildElement("passwd")) && (mElem->GetText()) )
+                mongo_main_passwd_ = mElem->GetText();
+        }
+        else
+        {
+            exit("no main section in mongo in config file. exit");
+        }
+    }
+    else
+    {
+        exit("no mongo section in config file. exit");
+    }
+
+    pDb = new DataBase(true);
 
     request_processed_ = 0;
     last_time_request_processed = 0;
@@ -375,9 +436,8 @@ Config::~Config()
         mDoc = NULL;
     }
 
-    std::free(sphinx_field_names_);
-    std::free(sphinx_field_weights_);
-
+    //std::free(sphinx_field_names_);
+    //std::free(sphinx_field_weights_);
     mInstance = NULL;
 }
 //---------------------------------------------------------------------------------------------------------------
