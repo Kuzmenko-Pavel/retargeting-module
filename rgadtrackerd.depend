@@ -220,13 +220,11 @@
 	"Config.h"
 	"BaseCore.h"
 
-1398860363 /home/alex/Projects/retargeting-module/include/Config.h
+1398875914 /home/alex/Projects/retargeting-module/include/Config.h
 	<string>
 	<vector>
 	<tinyxml.h>
-	"shpinx_mode.h"
 	"redis_server.h"
-	"sphinx_field.h"
 	"DataBase.h"
 
 1398677376 /home/alex/Projects/retargeting-module/include/shpinx_mode.h
@@ -270,7 +268,7 @@
 	"Params.h"
 	"RedisClient.h"
 
-1398776392 /home/alex/Projects/retargeting-module/include/Params.h
+1398875656 /home/alex/Projects/retargeting-module/include/Params.h
 	<sstream>
 	<string>
 	<boost/date_time.hpp>
@@ -289,7 +287,7 @@
 	<sphinxclient.h>
 	"Config.h"
 
-1398859853 /home/alex/Projects/retargeting-module/include/RedisClient.h
+1398875586 /home/alex/Projects/retargeting-module/include/RedisClient.h
 	<string>
 	<vector>
 	<list>
@@ -302,7 +300,7 @@
 	<time.h>
 	<boost/date_time/posix_time/posix_time_types.hpp>
 
-1398860722 source:/home/alex/Projects/retargeting-module/src/Config.cpp
+1398876515 source:/home/alex/Projects/retargeting-module/src/Config.cpp
 	<iostream>
 	<fstream>
 	<boost/filesystem.hpp>
@@ -322,7 +320,7 @@
 	<string.h>
 	<boost/date_time/posix_time/posix_time.hpp>
 
-1398872136 source:/home/alex/Projects/retargeting-module/src/Core.cpp
+1398876456 source:/home/alex/Projects/retargeting-module/src/Core.cpp
 	<signal.h>
 	<boost/foreach.hpp>
 	<boost/date_time/posix_time/ptime.hpp>
@@ -338,7 +336,7 @@
 	"Log.h"
 	"Core.h"
 
-1398774442 /home/alex/Projects/retargeting-module/config.h
+1398872757 /home/alex/Projects/retargeting-module/config.h
 
 1398677377 source:/home/alex/Projects/retargeting-module/src/GeoIPTools.cpp
 	"GeoIPTools.h"
@@ -364,7 +362,7 @@
 1398677377 source:/home/alex/Projects/retargeting-module/src/Log.cpp
 	"Log.h"
 
-1398845765 source:/home/alex/Projects/retargeting-module/src/Params.cpp
+1398876381 source:/home/alex/Projects/retargeting-module/src/Params.cpp
 	<sstream>
 	<boost/algorithm/string/trim.hpp>
 	<boost/regex/icu.hpp>
@@ -375,7 +373,7 @@
 	"Log.h"
 	"Config.h"
 
-1398871640 source:/home/alex/Projects/retargeting-module/src/RedisClient.cpp
+1398875723 source:/home/alex/Projects/retargeting-module/src/RedisClient.cpp
 	<strings.h>
 	<string.h>
 	"RedisClient.h"

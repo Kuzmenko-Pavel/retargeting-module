@@ -64,22 +64,22 @@ Params &Params::time(const boost::posix_time::ptime &time)
     return *this;
 }
 /*
-время тракинга в секундах для редиса(expire)
+время тракинга в сутках
 */
 Params &Params::tracking_time(const std::string &d)
 {
     if(!d.empty())
     {
-        tracking_time_ = boost::lexical_cast<int>(d) * 24 * 3600;
+        tracking_time_ = boost::lexical_cast<int>(d);
     }
     else
     {
-        tracking_time_ = config->retargeting_time_ * 24 * 3600;
+        tracking_time_ = config->redis_retargeting_.ttl;
     }
     return *this;
 }
 
-int Params::trackingTime() const
+long Params::trackingTime() const
 {
     return tracking_time_;
 }

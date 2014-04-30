@@ -38,7 +38,7 @@ class RedisClient
         bool zadd(const std::string &key, int64_t score, const std::string &q);
         int zscore(const std::string &key, long id);
         bool zincrby(const std::string &key, long id, int inc);
-        bool expire(const std::string &key, int time);
+        bool expire(const std::string &key, long time);
         bool expire(const std::string &key, const std::string &time);
         bool del(const std::string &key);
         int zcount(const std::string &key) const;

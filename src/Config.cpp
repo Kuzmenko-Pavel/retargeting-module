@@ -164,11 +164,6 @@ bool Config::Load()
             user_ = mel->GetText();
         }
 
-        if( (mel = mElem->FirstChildElement("retargeting_time")) && (mel->GetText()) )
-        {
-            retargeting_time_ = strtol(mel->GetText(),NULL,10);
-        }
-
         if( (mel = mElem->FirstChildElement("templates")) )
         {
             if( (mels = mel->FirstChildElement("out")) && (mels->GetText()) )
@@ -276,7 +271,7 @@ bool Config::Load()
 
             if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
             {
-                redis_retargeting_.ttl = getTime(mel->GetText());
+                redis_retargeting_.ttl = strtol(mel->GetText(),NULL,10);
             }
         }
         else
@@ -304,7 +299,7 @@ bool Config::Load()
 
             if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
             {
-                redis_short_term_.ttl = getTime(mel->GetText());
+                redis_short_term_.ttl = strtol(mel->GetText(),NULL,10);
             }
         }
         else

@@ -350,10 +350,10 @@ bool RedisClient::zincrby(const std::string &key, long id, int inc)
     return execCmd(cmd);
 }
 
-bool RedisClient::expire(const std::string &key, int time)
+bool RedisClient::expire(const std::string &key, long time)
 {
     bzero(cmd,CMD_SIZE);
-    snprintf(cmd, CMD_SIZE, "EXPIRE %s %d\r\n", key.c_str(), time);
+    snprintf(cmd, CMD_SIZE, "EXPIRE %s %ld\r\n", key.c_str(), time);
     return execCmd(cmd);
 }
 
