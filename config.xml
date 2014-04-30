@@ -15,7 +15,7 @@
     <!--путь к фалу базы данных sqlite или :memory:-->
     <sqlite>
         <!--файл базы-->
-        <db>/run/alex/mem.db</db>
+        <db>:memory:</db>
         <!--путь к каталогу дампа sqlite базы-->
         <schema>db_dump</schema>
     </sqlite>
@@ -44,9 +44,8 @@
     </templates>
 </server>
 
-<!--ретаргетинг-->
+<!--Redis-сервер ретаргетинг-->
 <retargeting>
-    <!--Redis-сервер с БД о Ретаргетинге-->
     <redis>
             <!--IP-адрес-->
             <host>127.0.0.1</host>
@@ -57,8 +56,8 @@
     <ttl>14</ttl>
 </retargeting>
 
+<!--Redis-сервер история поиска и контекст страницы-->
 <short_term>
-    <!--Redis-сервер с БД о Ретаргетинге-->
     <redis>
             <!--IP-адрес-->
             <host>127.0.0.1</host>
