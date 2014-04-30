@@ -765,15 +765,7 @@ if (typeof yottos_remarketing_redirect == "object")
 {
 	if(window.location.host == 'www.topshoptv.com.ua')
 	{
-		var allComments = document.evaluate('//comment()', document, null, XPathResult.ANY_TYPE, null );
-		while (it = allComments.iterateNext())
-		{
-			var found = it.textContent.match(/PRODUCT ID (\d+)/);
-			if(found)
-			{
-				return found[1];
-			}
-		}
+		return product.identifier;
 	}
 	else if(window.location.host == 'ek.ua')
 	{
@@ -783,7 +775,6 @@ if (typeof yottos_remarketing_redirect == "object")
 	{
 		return dataLayer[3].productID;
 	}
-
 return;
 }
 ;var rand = Math.floor(Math.random() * 1000000);
