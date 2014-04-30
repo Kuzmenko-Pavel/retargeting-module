@@ -179,7 +179,6 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
     std::string cookie_value, cookie_value_tracking;
     std::string query, ip;
 
-
     if (!(tmp_str = FCGX_GetParam("QUERY_STRING", req->envp)))
     {
         Log::warn("query string is not set");
@@ -259,7 +258,7 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
 
     if (url.param("show") == "status")
     {
-        Response(req, core->Status(), "", "");
+        Response(req, bcore->Status(), "", "");
         return;
     }
 
@@ -304,6 +303,7 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
     catch (std::exception const &ex)
     {
         Response(req, 503);
-        Log::err("exception %s: name: %s while processing: %s", typeid(ex).name(), ex.what(), query.c_str());
+        Log::err("%s exception %s: name: %s while processing: %s",__func__,
+                 typeid(ex).name(), ex.what(), query.c_str());
     }
 }

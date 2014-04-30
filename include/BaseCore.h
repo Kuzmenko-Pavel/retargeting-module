@@ -82,17 +82,10 @@ private:
 
     /// Точка обмена
     AMQPExchange *exchange_;
-    /// Очередь сообщений об изменениях в кампаниях
-    AMQPQueue *mq_campaign_;
-
-    /// Очередь сообщений об изменениях в информерах
-    AMQPQueue *mq_informer_;
-
    /// Очередь сообщений об изменениях в offer
     AMQPQueue *mq_advertise_;
 
     /// История полученных сообщений MQ
-    std::string mq_log_;
     std::string toString(AMQPMessage *m);
     bool cmdParser(const std::string &cmd, std::string &offerId, std::string &campaignId);
     ParentDB *pdb;

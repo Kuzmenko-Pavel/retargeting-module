@@ -35,7 +35,6 @@ public:
      * пользователю.
      */
     void Process(Params *params);
-    std::string Status();
 
 private:
     /// Время запуска службы
