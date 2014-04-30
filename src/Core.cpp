@@ -29,21 +29,15 @@ Core::Core()
 
     cmd = new char[CMD_SIZE];
 
-    searcher = new Searcher();
+    rcRetargeting = new RedisClient(config->redis_retargeting_.host,
+                                    config->redis_retargeting_.port,
+                                    100);
+    rcRetargeting->connect();
 
-    for(auto i = config->redis_long_term_.begin(); i!= config->redis_long_term_.end(); ++i)
-    {
-        RedisClient *r = new RedisClient((*i).host, (*i).port, config->redis_long_term_ttl_);
-        r->connect();
-        rc.push_back(r);
-    }
-
-    for(auto i = config->redis_retargeting_.begin(); i!= config->redis_retargeting_.end(); ++i)
-    {
-        RedisClient *r = new RedisClient((*i).host, (*i).port, config->redis_retargeting_ttl_);
-        r->connect();
-        rc.push_back(r);
-    }
+    rcShortTerm = new RedisClient(config->redis_short_term_.host,
+                                    config->redis_short_term_.port,
+                                    100);
+    rcShortTerm->connect();
 
     Log::info("%s[%ld] start",__func__,tid);
 }
@@ -51,7 +45,6 @@ Core::Core()
 Core::~Core()
 {
     delete []cmd;
-    delete searcher;
 }
 
 /** Обработка запроса на показ рекламы с параметрами ``params``.
@@ -81,18 +74,16 @@ void Core::Process(Params *prms)
     {
         getOffer(result);
 
-        for(auto i = rc.begin(); i!= rc.end(); ++i)
-        {
             for(auto j = result.begin(); j!=result.end(); ++j)
             {
-                (*i)->zadd(key,-1,*j);
-                (*i)->expire(key, prms->trackingTime());
+                rcRetargeting->zadd(key,-1,*j);
+                rcRetargeting->expire(key, prms->trackingTime());
             }
-        }
     }
 
-    //result = searcher->run(params);
-
+    rcShortTerm->set(key, params->getSearch()+" "+params->getContext(),config->redis_short_term_.ttl);
+    std::string rr = rcShortTerm->get(key);
+    printf("redis: %s\n",rr.c_str());
 
     Log::info("%s[%ld]core time: %s found size: %d",__func__,
               tid, boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime).c_str(),

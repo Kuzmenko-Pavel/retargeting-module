@@ -105,15 +105,11 @@
 		<Unit filename="include/Params.h" />
 		<Unit filename="include/ParentDB.h" />
 		<Unit filename="include/RedisClient.h" />
-		<Unit filename="include/Searcher.h" />
 		<Unit filename="include/Server.h" />
-		<Unit filename="include/Sphinx.h" />
 		<Unit filename="include/UrlParser.h" />
 		<Unit filename="include/base64.h" />
 		<Unit filename="include/json.h" />
 		<Unit filename="include/redis_server.h" />
-		<Unit filename="include/shpinx_mode.h" />
-		<Unit filename="include/sphinx_field.h" />
 		<Unit filename="js/_t.js" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/BaseCore.cpp" />
@@ -135,15 +131,11 @@
 		<Unit filename="src/Params.cpp" />
 		<Unit filename="src/ParentDB.cpp" />
 		<Unit filename="src/RedisClient.cpp" />
-		<Unit filename="src/Searcher.cpp" />
 		<Unit filename="src/Server.cpp" />
-		<Unit filename="src/Sphinx.cpp" />
 		<Unit filename="src/UrlParser.cpp" />
 		<Unit filename="src/base64.cpp" />
 		<Unit filename="src/json.cpp" />
 		<Unit filename="src/redis_server.cpp" />
-		<Unit filename="src/shpinx_mode.cpp" />
-		<Unit filename="src/sphinx_field.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

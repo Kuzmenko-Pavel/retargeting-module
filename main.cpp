@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 {
     Log(LOG_LOCAL0);
 
+//    std::locale::global(std::locale("ru_RU.UTF-8"));
+
     std::string config_file = "config.xml";
     std::string sock_path;
     int ret;

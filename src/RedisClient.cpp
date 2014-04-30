@@ -1,9 +1,11 @@
 #include <strings.h>
 #include <string.h>
 
+
 #include "RedisClient.h"
 #include "Log.h"
 #include "Config.h"
+#include "base64.h"
 
 #define CMD_SIZE 4096
 
@@ -516,4 +518,62 @@ bool RedisClient::zremrangebyrank(const std::string &key, int start, int stop)
     bzero(cmd,CMD_SIZE);
     snprintf(cmd, CMD_SIZE, "ZREMRANGEBYRANK %s %d %d\r\n", key.c_str(), start, stop);
     return execCmd(cmd);
+}
+
+bool RedisClient::set(const std::string &key, const std::string &val, long expireSeconds)
+{
+    bzero(cmd,CMD_SIZE);
+    if(expireSeconds)
+    {
+        snprintf(cmd, CMD_SIZE, "SET %s %s EX %ld\r\n", key.c_str(), base64_encode(val).c_str(), expireSeconds);
+    }
+    else
+    {
+        snprintf(cmd, CMD_SIZE, "SET %s %s\r\n", base64_encode(key).c_str(), val.c_str());
+    }
+
+    execCmd(cmd);
+
+    return true;
+}
+
+std::string RedisClient::get(const std::string &key)
+{
+    std::string ret;
+
+    Batch *batch = Batch_new();
+
+    bzero(cmd,CMD_SIZE);
+    snprintf(cmd, CMD_SIZE, "GET %s\r\n", key.c_str());
+    Batch_write(batch, cmd, strlen(cmd), 1);
+
+    Executor *executor = Executor_new();
+    Executor_add(executor, connection, batch);
+    int rr = Executor_execute(executor, timeOutMSec);
+    Executor_free(executor);
+    if(rr <= 0)
+    {
+        Log::err("redis cmd false: %s",cmd);
+        Batch_free(batch);
+        return std::string();
+    }
+    //read out replies
+    ReplyType reply_type;
+    char *reply_data;
+    size_t reply_len;
+    int level;
+    while((level = Batch_next_reply(batch, &reply_type, &reply_data, &reply_len)))
+    {
+        if(reply_type == RT_ERROR)
+        {
+            Log::err("redis cmd: isConnected false: %s", reply_data);
+        }
+        else if(reply_type == RT_BULK)
+        {
+            ret = base64_decode(std::string(reply_data));
+        }
+    }
+
+    Batch_free(batch);
+    return ret;
 }
