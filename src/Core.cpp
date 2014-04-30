@@ -6,6 +6,9 @@
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include "KompexSQLiteStatement.h"
+#include "KompexSQLiteException.h"
+
 #include "../config.h"
 
 #include <ctime>
@@ -23,6 +26,8 @@ Core::Core()
     sigset_t es;
     sigfillset(&es);
     pthread_sigmask(SIG_BLOCK, &es, NULL);
+
+    cmd = new char[CMD_SIZE];
 
     searcher = new Searcher();
 
@@ -43,6 +48,7 @@ Core::Core()
 
 Core::~Core()
 {
+    delete []cmd;
     delete searcher;
 }
 
@@ -50,8 +56,10 @@ Core::~Core()
 	Изменён RealInvest Soft */
 void Core::Process(Params *prms)
 {
-    std::list<std::string> result;
+    std::vector<long> result;
     boost::posix_time::ptime startTime;
+
+    params = prms;
 
     startTime = boost::posix_time::microsec_clock::local_time();
     std::string key = prms->getUserKey();
@@ -60,7 +68,8 @@ void Core::Process(Params *prms)
               tid, key.c_str(),prms->accountId().c_str(),
               prms->getLocation().c_str());
 
-    result = searcher->run(prms);
+    getOffer(result);
+    //result = searcher->run(prms);
 
     for(auto i = rc.begin(); i!= rc.end(); ++i)
     {
@@ -81,6 +90,43 @@ void Core::Process(Params *prms)
     request_processed_++;
 
     return;
+}
+
+bool Core::getOffer(std::vector<long> &result)
+{
+    Kompex::SQLiteStatement *pStmt;
+    pStmt = new Kompex::SQLiteStatement(config->pDb->pDatabase);
+
+    sqlite3_snprintf(CMD_SIZE, cmd, config->offerSqlAll.c_str(),
+                        params->accountId().c_str(),
+                        params->retargetingId().c_str());
+
+#ifdef DEBUG
+    printf("%s\n",cmd);
+#endif // DEBUG
+
+    try
+    {
+        pStmt->Sql(cmd);
+
+        while(pStmt->FetchRow())
+        {
+            result.push_back(pStmt->GetColumnInt64(0));
+        }
+
+        pStmt->FreeQuery();
+    }
+    catch(Kompex::SQLiteException &ex)
+    {
+        printf("%s\n", cmd);
+        Log::err("Core::getOffer error: %s", ex.GetString().c_str());
+        delete pStmt;
+        return false;
+    }
+
+    delete pStmt;
+
+    return true;
 }
 
 std::string Core::Status()

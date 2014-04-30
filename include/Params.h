@@ -84,6 +84,8 @@ public:
     std::string getSearch() const;
     std::string accountId() const;
     int trackingTime() const;
+    std::string retargetingId() const;
+    Params &retargeting_id(const std::string &retargeting_id);
 
     friend class Core;
     friend class GenerateToken;
@@ -104,6 +106,7 @@ private:
     std::string search_;
     std::string account_id_;
     u_int tracking_time_;
+    std::string retargetingId_;
 };
 
 #endif // PARAMS_H

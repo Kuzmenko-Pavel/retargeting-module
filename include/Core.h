@@ -1,11 +1,7 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <list>
 #include <vector>
-#include <map>
-#include <utility>
-#include <algorithm>
 
 #include <boost/date_time.hpp>
 #include <boost/algorithm/string.hpp>
@@ -49,6 +45,10 @@ private:
     pthread_t tid;
     Searcher *searcher;
     std::list<RedisClient*> rc;
+    Params *params;
+    char *cmd;
+
+    bool getOffer(std::vector<long> &result);
 };
 
 #endif // CORE_H

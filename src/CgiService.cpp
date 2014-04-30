@@ -291,6 +291,8 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
                                 expires_tracking));
     try
     {
+        Response(req, config->template_out_, c.to_string(), c1.to_string());
+
         Params prm = Params()
                      .ip(ip)
                      .cookie_id(cookie_value)
@@ -301,11 +303,10 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
                      .location(url.param("location"))
                      .search(url.param("search"))
                      .context(url.param("context"))
-                     .tracking_time(url.param("time"));
+                     .tracking_time(url.param("time"))
+                     .retargeting_id(url.param("offer_id"));
 
         core->Process(&prm);
-
-        Response(req, config->template_out_, c.to_string(), c1.to_string());
     }
     catch (std::exception const &ex)
     {

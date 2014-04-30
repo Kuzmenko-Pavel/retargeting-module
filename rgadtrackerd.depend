@@ -208,7 +208,7 @@
 
 1396613218 /home/alex/Projects/rgadtrackerd/libs/libredis/libredis/redis.h
 
-1398708111 source:/home/alex/Projects/retargeting-module/main.cpp
+1398839723 source:/home/alex/Projects/retargeting-module/main.cpp
 	<unistd.h>
 	"CgiService.h"
 	"Log.h"
@@ -248,7 +248,7 @@
 1398677376 /home/alex/Projects/retargeting-module/include/Server.h
 	<string>
 
-1398758893 source:/home/alex/Projects/retargeting-module/src/CgiService.cpp
+1398776484 source:/home/alex/Projects/retargeting-module/src/CgiService.cpp
 	<sys/stat.h>
 	<boost/algorithm/string.hpp>
 	"Log.h"
@@ -263,19 +263,15 @@
 	<map>
 	<string>
 
-1398677376 /home/alex/Projects/retargeting-module/include/Core.h
-	<list>
+1398839282 /home/alex/Projects/retargeting-module/include/Core.h
 	<vector>
-	<map>
-	<utility>
-	<algorithm>
 	<boost/date_time.hpp>
 	<boost/algorithm/string.hpp>
 	"Params.h"
 	"Searcher.h"
 	"RedisClient.h"
 
-1398677376 /home/alex/Projects/retargeting-module/include/Params.h
+1398776392 /home/alex/Projects/retargeting-module/include/Params.h
 	<sstream>
 	<string>
 	<boost/date_time.hpp>
@@ -327,13 +323,15 @@
 	<string.h>
 	<boost/date_time/posix_time/posix_time.hpp>
 
-1398677377 source:/home/alex/Projects/retargeting-module/src/Core.cpp
+1398839219 source:/home/alex/Projects/retargeting-module/src/Core.cpp
 	<signal.h>
 	<boost/foreach.hpp>
 	<boost/date_time/posix_time/ptime.hpp>
 	<boost/date_time/posix_time/posix_time_io.hpp>
 	<boost/format.hpp>
 	<boost/algorithm/string.hpp>
+	"KompexSQLiteStatement.h"
+	"KompexSQLiteException.h"
 	"../config.h"
 	<ctime>
 	<cstdlib>
@@ -341,7 +339,7 @@
 	"Log.h"
 	"Core.h"
 
-1398677376 /home/alex/Projects/retargeting-module/config.h
+1398774442 /home/alex/Projects/retargeting-module/config.h
 
 1398677377 source:/home/alex/Projects/retargeting-module/src/GeoIPTools.cpp
 	"GeoIPTools.h"
@@ -367,7 +365,7 @@
 1398677377 source:/home/alex/Projects/retargeting-module/src/Log.cpp
 	"Log.h"
 
-1398677377 source:/home/alex/Projects/retargeting-module/src/Params.cpp
+1398776136 source:/home/alex/Projects/retargeting-module/src/Params.cpp
 	<sstream>
 	<boost/algorithm/string/trim.hpp>
 	<boost/regex/icu.hpp>
@@ -535,7 +533,7 @@
 1398750231 /home/alex/Projects/retargeting-module/include/json.h
 	<string>
 
-1398758647 source:/home/alex/Projects/retargeting-module/src/ParentDB.cpp
+1398775839 source:/home/alex/Projects/retargeting-module/src/ParentDB.cpp
 	<vector>
 	<boost/algorithm/string.hpp>
 	"ParentDB.h"

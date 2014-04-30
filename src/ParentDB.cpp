@@ -76,7 +76,7 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
 
     bzero(buf,sizeof(buf));
     snprintf(buf,sizeof(buf),"INSERT INTO Offer(id,guid,campaignId,categoryId,accountId,rating,retargeting,image,height,width,isOnClick,cost\
-             ,uniqueHits,swf,description,price,url,title,type,valid) VALUES(");
+             ,uniqueHits,swf,description,price,url,title,type,valid,retargetingId) VALUES(");
     sz = strlen(buf);
     pData = buf + sz;
     sz = sizeof(buf) - sz;
@@ -105,7 +105,7 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
 
         bzero(pData,sz);
         sqlite3_snprintf(sz,pData,
-                         "%lli,'%q',%lli,%lli,'%q',%f,%d,'%q',%d,%d,%d,%f,%d,'%q','%q','%q','%q','%q',%d,%d);",
+                         "%lli,'%q',%lli,%lli,'%q',%f,%d,'%q',%d,%d,%d,%f,%d,'%q','%q','%q','%q','%q',%d,%d,'%q');",
                          x.getField("guid_int").numberLong(),
                          id.c_str(),
                          x.getField("campaignId_int").numberLong(),
@@ -125,7 +125,8 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
                          x.getStringField("url"),
                          x.getStringField("title"),
                          Offer::typeFromString(x.getStringField("type")),
-                         1
+                         1,
+                         x.getStringField("retargetingId")
                         );
 
         try
