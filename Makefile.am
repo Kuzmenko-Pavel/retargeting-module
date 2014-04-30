@@ -3,8 +3,6 @@ ACLOCAL_AMFLAGS = -I m4
 SRC_ALL=\
 src/redis_server.cpp \
 src/EBranch.cpp \
-src/Sphinx.cpp \
-src/sphinx_field.cpp \
 src/Server.cpp \
 src/DB.cpp \
 src/KompexSQLiteStatement.cpp \
@@ -23,10 +21,8 @@ src/Core.cpp \
 src/Offer.cpp \
 src/RedisClient.cpp \
 src/json.cpp \
-src/Searcher.cpp \
 src/base64.cpp \
 src/Campaign.cpp \
-src/shpinx_mode.cpp \
 src/UrlParser.cpp \
 src/GeoRerions.cpp \
 main.cpp

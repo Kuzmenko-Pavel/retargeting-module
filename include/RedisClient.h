@@ -45,6 +45,10 @@ class RedisClient
         int zcount(const std::string &key, long Min, long Max) const;
         bool zremrangebyrank(const std::string &key, int start, int stop);
 
+        //string methods
+        bool set(const std::string &key, const std::string &val, long expireSeconds = 0);
+        std::string get(const std::string &key);
+
     protected:
     private:
         std::string host;

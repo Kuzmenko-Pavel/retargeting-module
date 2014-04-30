@@ -8,6 +8,7 @@ class redis_server
     public:
         std::string host;
         std::string port;
+        long ttl;
 
         redis_server();
         virtual ~redis_server();

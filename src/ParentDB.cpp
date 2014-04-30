@@ -126,7 +126,7 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
                          x.getStringField("title"),
                          Offer::typeFromString(x.getStringField("type")),
                          1,
-                         x.getStringField("retargetingId")
+                         x.getStringField("RetargetingID")
                         );
 
         try

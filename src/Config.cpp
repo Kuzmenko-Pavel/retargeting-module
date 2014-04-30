@@ -109,11 +109,6 @@ bool Config::Load()
             server_ip_ = mel->GetText();
         }
 
-        if( (mel = mElem->FirstChildElement("redirect_script")) && (mel->GetText()) )
-        {
-            redirect_script_ = mel->GetText();
-        }
-
         if( (mel = mElem->FirstChildElement("geocity_path")) && (mel->GetText()) )
         {
             geocity_path_ = mel->GetText();
@@ -268,23 +263,25 @@ bool Config::Load()
 
     if( (mElem = mRoot->FirstChildElement("retargeting")) )
     {
-        for(mel = mElem->FirstChildElement("redis"); mel; mel = mel->NextSiblingElement())
+        if( (mel = mElem->FirstChildElement("redis")) )
         {
             if( (mels = mel->FirstChildElement("host")) && (mels->GetText()) )
             {
-                redis_server srv;
-                srv.host = mels->GetText();
+                redis_retargeting_.host = mels->GetText();
                 if( (mels = mel->FirstChildElement("port")) && (mels->GetText()) )
                 {
-                    srv.port = mels->GetText();
-                    redis_retargeting_.push_back(srv);
+                    redis_retargeting_.port = mels->GetText();
                 }
             }
-        }
 
-        if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
+            if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
+            {
+                redis_retargeting_.ttl = getTime(mel->GetText());
+            }
+        }
+        else
         {
-            redis_retargeting_ttl_ = getTime(mel->GetText());
+            exit("no section: retargeting.redis");
         }
     }
     else
@@ -292,100 +289,32 @@ bool Config::Load()
         exit("no section: retargeting");
     }
 
-    if( (mElem = mRoot->FirstChildElement("long_term")) )
+    if( (mElem = mRoot->FirstChildElement("short_term")) )
     {
-        for(mel = mElem->FirstChildElement("redis"); mel; mel = mel->NextSiblingElement())
+        if( (mel = mElem->FirstChildElement("redis")) )
         {
             if( (mels = mel->FirstChildElement("host")) && (mels->GetText()) )
             {
-                redis_server srv;
-                srv.host = mels->GetText();
+                redis_short_term_.host = mels->GetText();
                 if( (mels = mel->FirstChildElement("port")) && (mels->GetText()) )
                 {
-                    srv.port = mels->GetText();
-                    redis_long_term_.push_back(srv);
+                    redis_short_term_.port = mels->GetText();
                 }
             }
-        }
 
-        if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
+            if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
+            {
+                redis_short_term_.ttl = getTime(mel->GetText());
+            }
+        }
+        else
         {
-            redis_long_term_ttl_ = getTime(mel->GetText());
+            exit("no section: short_term.redis");
         }
     }
     else
     {
-        exit("no section: long_term");
-    }
-
-
-    if( (mElem = mRoot->FirstChildElement("sphinx")) )
-    {
-        if( (mel = mElem->FirstChildElement("host")) && (mel->GetText()) )
-        {
-            sphinx_host_ = mel->GetText();
-        }
-
-        if( (mel = mElem->FirstChildElement("port")) && (mel->GetText()) )
-        {
-            sphinx_port_ = atoi(mel->GetText());
-        }
-
-        if( (mel = mElem->FirstChildElement("index")) && (mel->GetText()) )
-        {
-            sphinx_index_ = mel->GetText();
-        }
-
-        if( (mel = mElem->FirstChildElement("select")) && (mel->GetText()) )
-        {
-            sphinx_select_ = mel->GetText();
-        }
-
-        for(mel = mElem->FirstChildElement("mode"); mel; mel = mel->NextSiblingElement())
-        {
-            if( (mels = mel->FirstChildElement("match")) && (mels->GetText()) )
-            {
-                shpinx_mode *m = new shpinx_mode();
-
-                m->match_ = mels->GetText();
-
-                if( (mels = mel->FirstChildElement("rank")) && (mels->GetText()) )
-                {
-                    m->rank_ = mels->GetText();
-
-                    if( (mels = mel->FirstChildElement("sort")) && (mels->GetText()) )
-                    {
-                        m->sort_ = mels->GetText();
-
-                        shpinx_modes_.push_back(m);
-                        Log::info("sphinx mach: %s, rank: %s sort: %s",
-                                  m->match_.c_str(),
-                                  m->rank_.c_str(),
-                                  m->sort_.c_str());
-                    }
-                    else
-                    {
-                        delete m;
-                    }
-                }
-                else
-                {
-                    delete m;
-                }
-            }
-        }
-
-        if((mel = mElem->FirstChildElement("fields")))
-        {
-            for(mElem = mel->FirstChildElement(); mElem; mElem = mElem->NextSiblingElement())
-            {
-                sphinx_fields_.push_back(sphinx_field(mElem->Value(),mElem->GetText()));
-            }
-        }
-    }
-    else
-    {
-        exit("no sphinx section in config file. exit");
+        exit("no section: short_term");
     }
 
     if( (mels = mRoot->FirstChildElement("mongo")) )

@@ -7,7 +7,6 @@
 #include <boost/algorithm/string.hpp>
 
 #include "Params.h"
-#include "Searcher.h"
 #include "RedisClient.h"
 
 /// Класс, который связывает воедино все части системы.
@@ -42,8 +41,7 @@ private:
     /// Время начала последнего запроса
     boost::posix_time::ptime time_request_started_;
     pthread_t tid;
-    Searcher *searcher;
-    std::list<RedisClient*> rc;
+    RedisClient *rcRetargeting, *rcShortTerm;
     Params *params;
     char *cmd;
 

@@ -55,19 +55,11 @@
             <!--порт-->
             <port>6380</port>
     </redis>
-
-    <redis>
-            <!--IP-адрес-->
-            <host>127.0.0.1</host>
-            <!--порт-->
-            <port>6380</port>
-    </redis>
-
     <!--период жизни(ЧЧ:ММ:СС)-->
     <ttl>06:00:00</ttl>
 </retargeting>
 
-<long_term>
+<short_term>
     <!--Redis-сервер с БД о Ретаргетинге-->
     <redis>
             <!--IP-адрес-->
@@ -75,49 +67,9 @@
             <!--порт-->
             <port>6380</port>
     </redis>
-    <redis>
-            <!--IP-адрес-->
-            <host>127.0.0.1</host>
-            <!--порт-->
-            <port>6380</port>
-    </redis>
     <!--период жизни(ЧЧ:ММ:СС)-->
     <ttl>06:00:00</ttl>
-</long_term>
-
-<sphinx>
-    <!--host>213.186.121.76</host-->
-    <host>srv-2.yottos.com</host>
-    <port>9312</port>
-    <index>retargeting</index>
-    <select>guid</select>
-
-    <!--all from /usr/include/sphinxclient.h-->
-    <mode id="0">
-        <match>SPH_MATCH_EXTENDED2</match>
-        <rank>SPH_RANK_SPH04</rank>
-        <sort>SPH_SORT_RELEVANCE</sort>
-    </mode>
-
-    <mode id="1">
-        <match>SPH_MATCH_EXTENDED</match>
-        <rank>SPH_RANK_SPH04</rank>
-        <sort>SPH_SORT_RELEVANCE</sort>
-    </mode>
-
-    <fields>
-        <title>10</title>
-        <description>10</description>
-        <keywords>15</keywords>
-        <phrases>20</phrases>
-        <exactly_phrases>25</exactly_phrases>
-        <urlparam>50</urlparam>
-        <domain>60</domain>
-        <urlpatch>70</urlpatch>
-        <url>99</url>
-    </fields>
-
-</sphinx>
+</short_term>
 
 <!--Параметры подключения к базам данных-->
 <mongo>

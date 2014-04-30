@@ -5,9 +5,7 @@
 #include <vector>
 
 #include <tinyxml.h>
-#include "shpinx_mode.h"
 #include "redis_server.h"
-#include "sphinx_field.h"
 #include "DataBase.h"
 
 extern unsigned long request_processed_;
@@ -18,10 +16,7 @@ extern unsigned long social_processed_;
 class Config
 {
 public:
-    std::vector<redis_server> redis_long_term_;
-    int redis_long_term_ttl_;
-    std::vector<redis_server> redis_retargeting_;
-    int redis_retargeting_ttl_;
+    redis_server redis_short_term_, redis_retargeting_;
 
     std::vector<std::string> mongo_main_host_;
     std::string mongo_main_db_;
@@ -34,7 +29,6 @@ public:
 
     //new params
     std::string server_ip_;
-    std::string redirect_script_;
     std::string server_socket_path_;
     int server_children_;
     int retargeting_time_;
@@ -52,13 +46,6 @@ public:
     std::string cookie_tracking_path_;
 
     std::string geocity_path_;
-
-    std::string sphinx_host_;
-    int         sphinx_port_;
-    std::string sphinx_index_;
-    std::string sphinx_select_;
-    std::vector<sphinx_field> sphinx_fields_;
-    std::vector<shpinx_mode*> shpinx_modes_;
 
     int         instanceId;
     std::string lock_file_;
