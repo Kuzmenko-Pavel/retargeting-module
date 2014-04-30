@@ -37,6 +37,7 @@ public:
     std::string redirect_script_;
     std::string server_socket_path_;
     int server_children_;
+    int retargeting_time_;
 
     std::string dbpath_;
     std::string db_dump_path_;

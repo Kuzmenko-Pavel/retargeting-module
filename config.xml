@@ -11,6 +11,8 @@
     <socket_path>/tmp/rgadtrackerd.sock</socket_path>
     <!--количество ниток-->
     <children>1</children>
+    <!--количество дней ретаргетинга(по умолчанию), если нет данных с сайта-->
+    <retargeting_time>14</retargeting_time>
 
     <!--путь к фалу базы данных sqlite или :memory:-->
     <sqlite>

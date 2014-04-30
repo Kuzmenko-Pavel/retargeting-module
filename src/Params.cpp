@@ -9,7 +9,7 @@
 #include "Params.h"
 #include "GeoIPTools.h"
 #include "Log.h"
-
+#include "Config.h"
 
 Params::Params()
 {
@@ -68,7 +68,14 @@ Params &Params::time(const boost::posix_time::ptime &time)
 */
 Params &Params::tracking_time(const std::string &d)
 {
-    tracking_time_ = boost::lexical_cast<int>(d) * 24 * 3600;
+    if(!d.empty())
+    {
+        tracking_time_ = boost::lexical_cast<int>(d) * 24 * 3600;
+    }
+    else
+    {
+        tracking_time_ = config->retargeting_time_ * 24 * 3600;
+    }
     return *this;
 }
 

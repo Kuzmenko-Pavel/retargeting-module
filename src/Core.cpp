@@ -61,26 +61,37 @@ void Core::Process(Params *prms)
     std::vector<long> result;
     boost::posix_time::ptime startTime;
 
+    startTime = boost::posix_time::microsec_clock::local_time();
+
     params = prms;
 
-    startTime = boost::posix_time::microsec_clock::local_time();
-    std::string key = prms->getUserKey();
+    std::string key = params->getUserKey();
 
-    Log::info("[%ld]Core::Process start, key: %s, account id: %s, link: %s",
-              tid, key.c_str(),prms->accountId().c_str(),
-              prms->getLocation().c_str());
-
-    getOffer(result);
-    //result = searcher->run(prms);
-
-    for(auto i = rc.begin(); i!= rc.end(); ++i)
+    if(params->accountId().empty())
     {
-        for(auto j = result.begin(); j!=result.end(); ++j)
+        Log::warn("wrong input params: account id from: %s",params->getIP().c_str());
+        return;
+    }
+
+    if(params->retargetingId().empty())
+    {
+        Log::warn("wrong input params: retargeting id from: %s",params->getIP().c_str());
+    }
+    else
+    {
+        getOffer(result);
+
+        for(auto i = rc.begin(); i!= rc.end(); ++i)
         {
-            (*i)->zadd(key,-1,*j);
-            (*i)->expire(key, prms->trackingTime());
+            for(auto j = result.begin(); j!=result.end(); ++j)
+            {
+                (*i)->zadd(key,-1,*j);
+                (*i)->expire(key, prms->trackingTime());
+            }
         }
     }
+
+    //result = searcher->run(params);
 
 
     Log::info("[%ld]core time: %s found size: %d",
