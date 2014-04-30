@@ -82,8 +82,6 @@ void Core::Process(Params *prms)
     }
 
     rcShortTerm->set(key, params->getSearch()+" "+params->getContext(),config->redis_short_term_.ttl);
-    std::string rr = rcShortTerm->get(key);
-    printf("redis: %s\n",rr.c_str());
 
     Log::info("%s[%ld]core time: %s found size: %d",__func__,
               tid, boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime).c_str(),
