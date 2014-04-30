@@ -223,21 +223,18 @@ std::string Params::getSearch() const
 {
     return search_;
 }
-/*
-std::string Params::getUrl() const
+
+Params &Params::retargeting_id(const std::string &retargeting_id)
 {
-    std::stringstream url;
-    url << script_name_ <<"?";
-
-    if (!country_.empty())
-        url << "&country=" << country_;
-    if (!region_.empty())
-        url << "&region=" << region_;
-    url << "&";
-
-    return url.str();
+    retargetingId_ = boost::to_lower_copy(retargeting_id);
+    return *this;
 }
-*/
+
+std::string Params::retargetingId() const
+{
+    return retargetingId_;
+}
+
 Params &Params::account_id(const std::string &account_id)
 {
     account_id_ = boost::to_lower_copy(account_id);
