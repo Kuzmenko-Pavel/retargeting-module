@@ -35,8 +35,8 @@ Core::Core()
     rcRetargeting->connect();
 
     rcShortTerm = new RedisClient(config->redis_short_term_.host,
-                                    config->redis_short_term_.port,
-                                    100);
+                                  config->redis_short_term_.port,
+                                  100);
     rcShortTerm->connect();
 
     Log::info("%s[%ld] start",__func__,tid);
@@ -74,14 +74,14 @@ void Core::Process(Params *prms)
     {
         getOffer(result);
 
-            for(auto j = result.begin(); j!=result.end(); ++j)
-            {
-                rcRetargeting->zadd(key,-1,*j);
-                rcRetargeting->expire(key, prms->trackingTime());
-            }
+        for(auto j = result.begin(); j!=result.end(); ++j)
+        {
+            rcRetargeting->zadd(key,-1,*j);
+            rcRetargeting->expire(key, prms->trackingTime()*24*3600);
+        }
     }
 
-    rcShortTerm->set(key, params->getSearch()+" "+params->getContext(),config->redis_short_term_.ttl);
+    rcShortTerm->set(key, params->getSearch()+" "+params->getContext(),config->redis_short_term_.ttl*24*3600);
 
     Log::info("%s[%ld]core time: %s found size: %d",__func__,
               tid, boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime).c_str(),
@@ -100,8 +100,8 @@ bool Core::getOffer(std::vector<long> &result)
     pStmt = new Kompex::SQLiteStatement(config->pDb->pDatabase);
 
     sqlite3_snprintf(CMD_SIZE, cmd, config->offerSqlAll.c_str(),
-                        params->accountId().c_str(),
-                        params->retargetingId().c_str());
+                     params->accountId().c_str(),
+                     params->retargetingId().c_str());
 
 #ifdef DEBUG
     printf("%s\n",cmd);

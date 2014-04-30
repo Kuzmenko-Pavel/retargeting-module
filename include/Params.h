@@ -83,7 +83,7 @@ public:
     std::string getContext() const;
     std::string getSearch() const;
     std::string accountId() const;
-    int trackingTime() const;
+    long trackingTime() const;
     std::string retargetingId() const;
     Params &retargeting_id(const std::string &retargeting_id);
 
@@ -105,7 +105,7 @@ private:
     std::string context_;//строка содержашяя контекст страницы
     std::string search_;
     std::string account_id_;
-    u_int tracking_time_;
+    long tracking_time_;
     std::string retargetingId_;
 };
 
