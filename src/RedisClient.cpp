@@ -22,7 +22,10 @@ RedisClient::~RedisClient()
 {
     //dtor
     delete []cmd;
-    Connection_free(connection);
+    if(isConnected_)
+    {
+        Connection_free(connection);
+    }
 }
 
 bool RedisClient::connect()
