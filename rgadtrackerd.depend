@@ -248,7 +248,7 @@
 1398677376 /home/alex/Projects/retargeting-module/include/Server.h
 	<string>
 
-1398846639 source:/home/alex/Projects/retargeting-module/src/CgiService.cpp
+1398848302 source:/home/alex/Projects/retargeting-module/src/CgiService.cpp
 	<sys/stat.h>
 	<boost/algorithm/string.hpp>
 	"Log.h"
@@ -263,7 +263,7 @@
 	<map>
 	<string>
 
-1398839282 /home/alex/Projects/retargeting-module/include/Core.h
+1398847538 /home/alex/Projects/retargeting-module/include/Core.h
 	<vector>
 	<boost/date_time.hpp>
 	<boost/algorithm/string.hpp>
@@ -323,7 +323,7 @@
 	<string.h>
 	<boost/date_time/posix_time/posix_time.hpp>
 
-1398846472 source:/home/alex/Projects/retargeting-module/src/Core.cpp
+1398847737 source:/home/alex/Projects/retargeting-module/src/Core.cpp
 	<signal.h>
 	<boost/foreach.hpp>
 	<boost/date_time/posix_time/ptime.hpp>
@@ -559,7 +559,7 @@
 1398753719 /home/alex/Projects/retargeting-module/include/base64.h
 	<string>
 
-1398759122 source:/home/alex/Projects/retargeting-module/src/BaseCore.cpp
+1398848234 source:/home/alex/Projects/retargeting-module/src/BaseCore.cpp
 	"DB.h"
 	<boost/foreach.hpp>
 	<boost/date_time/posix_time/ptime.hpp>
@@ -573,9 +573,6 @@
 	"../config.h"
 	"Log.h"
 	"BaseCore.h"
-	"base64.h"
-	"Informer.h"
-	"Campaign.h"
 	"Offer.h"
 	"Config.h"
 
@@ -586,7 +583,7 @@
 	<string>
 	<utility>
 
-1398753568 /home/alex/Projects/retargeting-module/include/BaseCore.h
+1398847945 /home/alex/Projects/retargeting-module/include/BaseCore.h
 	"../config.h"
 	<list>
 	<vector>
