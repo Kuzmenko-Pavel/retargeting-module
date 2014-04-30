@@ -169,6 +169,10 @@ bool Config::Load()
             user_ = mel->GetText();
         }
 
+        if( (mel = mElem->FirstChildElement("retargeting_time")) && (mel->GetText()) )
+        {
+            retargeting_time_ = strtol(mel->GetText(),NULL,10);
+        }
 
         if( (mel = mElem->FirstChildElement("templates")) )
         {

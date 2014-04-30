@@ -47,7 +47,7 @@ CgiService::CgiService()
     {
         Log::err("pthread_sigmask  error");
     }
-*/
+    */
 
     threads = new pthread_t[config->server_children_ + 1];
 
@@ -63,17 +63,17 @@ CgiService::CgiService()
 
 CgiService::~CgiService()
 {
-   for(int i = 0; i < config->server_children_; i++)
+    for(int i = 0; i < config->server_children_; i++)
     {
         pthread_join(threads[i], 0);
     }
 
-   delete []threads;
+    delete []threads;
 }
 
 void CgiService::run()
 {
-   //main loop
+    //main loop
     for(;;)
     {
         //read mq and process
@@ -101,34 +101,35 @@ void CgiService::Response(FCGX_Request *req, int status)
     FCGX_FPrintF(req->out,"Content-type: text/html\r\n");
 
     FCGX_FPrintF(req->out,"Status: ");
-    switch (status) {
-        case 200:
-            FCGX_FPrintF(req->out,"200 OK");
-            break;
-        case 301:
-            FCGX_FPrintF(req->out,"301 Moved Permanently");
-            break;
-        case 302:
-            FCGX_FPrintF(req->out,"302 Found");
-            break;
-        case 307:
-            FCGX_FPrintF(req->out,"307 Temporary Redirect");
-            break;
-        case 400:
-            FCGX_FPrintF(req->out,"400 Bad Request");
-            break;
-        case 403:
-            FCGX_FPrintF(req->out,"403 Forbidden");
-            break;
-        case 500:
-            FCGX_FPrintF(req->out,"500 Internal Server Error");
-            break;
-        case 503:
-            FCGX_FPrintF(req->out,"503 Service Unavailable");
-            break;
-        default:
-            FCGX_FPrintF(req->out,"200 OK");
-            break;
+    switch (status)
+    {
+    case 200:
+        FCGX_FPrintF(req->out,"200 OK");
+        break;
+    case 301:
+        FCGX_FPrintF(req->out,"301 Moved Permanently");
+        break;
+    case 302:
+        FCGX_FPrintF(req->out,"302 Found");
+        break;
+    case 307:
+        FCGX_FPrintF(req->out,"307 Temporary Redirect");
+        break;
+    case 400:
+        FCGX_FPrintF(req->out,"400 Bad Request");
+        break;
+    case 403:
+        FCGX_FPrintF(req->out,"403 Forbidden");
+        break;
+    case 500:
+        FCGX_FPrintF(req->out,"500 Internal Server Error");
+        break;
+    case 503:
+        FCGX_FPrintF(req->out,"503 Service Unavailable");
+        break;
+    default:
+        FCGX_FPrintF(req->out,"200 OK");
+        break;
     }
     FCGX_FPrintF(req->out,"\r\n");
     FCGX_FFlush(req->out);
@@ -204,18 +205,18 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
     {
         ip = std::string(tmp_str);
     }
-/*
-    tmp_str = nullptr;
-    if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
-    {
-        Log::warn("script name is not set");
-        return;
-    }
-    else
-    {
-        script_name = std::string(tmp_str);
-    }
-*/
+    /*
+        tmp_str = nullptr;
+        if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
+        {
+            Log::warn("script name is not set");
+            return;
+        }
+        else
+        {
+            script_name = std::string(tmp_str);
+        }
+    */
     tmp_str = nullptr;
     if (!(tmp_str = FCGX_GetParam("HTTP_COOKIE", req->envp)))
     {
@@ -262,50 +263,42 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
         return;
     }
 
+    Params prm = Params()
+                 .ip(ip)
+                 .cookie_id(cookie_value)
+                 .cookie_tracking_id(cookie_value_tracking)
+                 .country(url.param("country"))
+                 .region(url.param("region"))
+                 .account_id(url.param("ac"))
+                 .location(url.param("location"))
+                 .search(url.param("search"))
+                 .context(url.param("context"))
+                 .tracking_time(url.param("time"))
+                 .retargeting_id(url.param("offer_id"));
+
     ClearSilver::Cookie c = ClearSilver::Cookie(config->cookie_name_,
-                      cookie_value,
-                      ClearSilver::Cookie::Credentials(
+                            cookie_value,
+                            ClearSilver::Cookie::Credentials(
                                 ClearSilver::Cookie::Authority(config->cookie_domain_),
                                 ClearSilver::Cookie::Path(config->cookie_path_),
-                            ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::years(1))));
+                                ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::years(1))));
 
-    ClearSilver::Cookie::Expires expires_tracking;
-
-    try
-    {
-        expires_tracking = ClearSilver::Cookie::Expires(
+    ClearSilver::Cookie::Expires expires_tracking =
+        ClearSilver::Cookie::Expires(
             boost::posix_time::second_clock::local_time() +
-            boost::gregorian::days(boost::lexical_cast<int>(url.param("time"))));
-    }
-    catch (boost::bad_lexical_cast &)
-    {
-        expires_tracking = ClearSilver::Cookie::Expires(
-            boost::posix_time::second_clock::local_time() + boost::gregorian::years(1));
-    }
+            boost::gregorian::days(prm.trackingTime()));
 
     ClearSilver::Cookie c1 = ClearSilver::Cookie(config->cookie_name_,
-                      cookie_value,
-                      ClearSilver::Cookie::Credentials(
-                                ClearSilver::Cookie::Authority(config->cookie_tracking_domain_),
-                                ClearSilver::Cookie::Path(config->cookie_tracking_path_),
-                                expires_tracking));
+                             cookie_value,
+                             ClearSilver::Cookie::Credentials(
+                                 ClearSilver::Cookie::Authority(config->cookie_tracking_domain_),
+                                 ClearSilver::Cookie::Path(config->cookie_tracking_path_),
+                                 expires_tracking));
+
+    Response(req, config->template_out_, c.to_string(), c1.to_string());
+
     try
     {
-        Response(req, config->template_out_, c.to_string(), c1.to_string());
-
-        Params prm = Params()
-                     .ip(ip)
-                     .cookie_id(cookie_value)
-                     .cookie_tracking_id(cookie_value_tracking)
-                     .country(url.param("country"))
-                     .region(url.param("region"))
-                     .account_id(url.param("ac"))
-                     .location(url.param("location"))
-                     .search(url.param("search"))
-                     .context(url.param("context"))
-                     .tracking_time(url.param("time"))
-                     .retargeting_id(url.param("offer_id"));
-
         core->Process(&prm);
     }
     catch (std::exception const &ex)
