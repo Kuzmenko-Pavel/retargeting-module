@@ -19,12 +19,12 @@ static inline void *_Alloc_alloc(size_t size)
 {
 	GET_MODULE()->allocated += size;
 	DEBUG(("alloc real: %d total now: %d\n", size, GET_MODULE()->allocated));
-	return GET_MODULE()->alloc_malloc(size);
+	return malloc(size);
 }
 
 static inline void _Alloc_free(void *obj, size_t size)
 {
-	GET_MODULE()->alloc_free(obj);
+	free(obj);
 	GET_MODULE()->allocated -= size;
 	DEBUG(("dealloc real: %d total now: %d\n", size, GET_MODULE()->allocated));
 }

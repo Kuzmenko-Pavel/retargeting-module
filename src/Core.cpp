@@ -34,12 +34,14 @@ Core::Core()
     for(auto i = config->redis_long_term_.begin(); i!= config->redis_long_term_.end(); ++i)
     {
         RedisClient *r = new RedisClient((*i).host, (*i).port, config->redis_long_term_ttl_);
+        r->connect();
         rc.push_back(r);
     }
 
     for(auto i = config->redis_retargeting_.begin(); i!= config->redis_retargeting_.end(); ++i)
     {
         RedisClient *r = new RedisClient((*i).host, (*i).port, config->redis_retargeting_ttl_);
+        r->connect();
         rc.push_back(r);
     }
 
