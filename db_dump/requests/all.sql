@@ -1,4 +1,4 @@
 SELECT id
 FROM Offer
-WHERE accountId=lower('%q') AND retargetingId=%q
+WHERE accountId=lower('%q') AND retargetingId like '%%%q%%'
 ;
