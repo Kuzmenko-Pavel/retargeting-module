@@ -29,15 +29,19 @@ Core::Core()
 
     cmd = new char[CMD_SIZE];
 
-    rcRetargeting = new RedisClient(config->redis_retargeting_.host,
-                                    config->redis_retargeting_.port,
-                                    100);
-    rcRetargeting->connect();
+    for(auto i = config->redis_retargeting_.begin(); i != config->redis_retargeting_.end(); ++i)
+    {
+        RedisClient *rc = new RedisClient((*i).host,(*i).port,(*i).ttl*24*3600);
+        rc->connect();
+        rcRetargeting.push_back(rc);
+    }
 
-    rcShortTerm = new RedisClient(config->redis_short_term_.host,
-                                  config->redis_short_term_.port,
-                                  100);
-    rcShortTerm->connect();
+    for(auto i = config->redis_short_term_.begin(); i != config->redis_short_term_.end(); ++i)
+    {
+        RedisClient *rc = new RedisClient((*i).host,(*i).port,(*i).ttl*24*3600);
+        rc->connect();
+        rcShortTerm.push_back(rc);
+    }
 
     Log::info("%s[%ld] start",__func__,tid);
 }
@@ -74,14 +78,19 @@ void Core::Process(Params *prms)
     {
         getOffer(result);
 
-        for(auto j = result.begin(); j!=result.end(); ++j)
+        for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
         {
-            rcRetargeting->zadd(key,-1,*j);
-            rcRetargeting->expire(key, prms->trackingTime()*24*3600);
+            for(auto j = result.begin(); j!=result.end(); ++j)
+            {
+                (*i)->zadd(key,0,*j);
+            }
         }
     }
 
-    rcShortTerm->set(key, params->getSearch()+" "+params->getContext(),config->redis_short_term_.ttl*24*3600);
+    for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
+    {
+        (*i)->set(key, params->getSearch()+" "+params->getContext());
+    }
 
     Log::info("%s[%ld]core time: %s found size: %d",__func__,
               tid, boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime).c_str(),

@@ -74,7 +74,7 @@ Params &Params::tracking_time(const std::string &d)
     }
     else
     {
-        tracking_time_ = config->redis_retargeting_.ttl;
+        tracking_time_ = config->redis_retargeting_.begin()->ttl;
     }
     return *this;
 }

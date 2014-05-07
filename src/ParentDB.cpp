@@ -63,7 +63,6 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
     if(!fConnectedToMainDatabase)
         return;
 
-    //mongo::DB db;
     Kompex::SQLiteStatement *pStmt;
     char *pData;
     int sz, i = 0;
