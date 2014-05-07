@@ -16,7 +16,7 @@ extern unsigned long social_processed_;
 class Config
 {
 public:
-    redis_server redis_short_term_, redis_retargeting_;
+    std::vector<redis_server> redis_short_term_, redis_retargeting_;
 
     std::vector<std::string> mongo_main_host_;
     std::string mongo_main_db_;

@@ -113,7 +113,7 @@ void BaseCore::LoadAllEntities()
     }
 
     //Загрузили все предложения
-    pdb->OfferLoad(mongo::Query());
+    pdb->OfferLoad(mongo::Query("{\"retargeting\":true}"));
 
     Config::Instance()->pDb->indexRebuild();
 }

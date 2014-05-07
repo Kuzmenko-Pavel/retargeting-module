@@ -22,3 +22,8 @@ Makefile.in
 config.h
 config.h.in
 rgadtrackerd
+libs/libredis/lib/
+yottos0829.xml
+yottos_rem.xml
+yottos_rem.xml.1
+yottos_rem.xml.old

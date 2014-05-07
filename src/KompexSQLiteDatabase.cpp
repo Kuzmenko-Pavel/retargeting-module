@@ -27,9 +27,9 @@ namespace Kompex
 
 SQLiteDatabase::SQLiteDatabase():
     mDatabaseHandle(0),
+    mIsMemoryDatabaseActive(false),
     mDatabaseFilenameUtf8(""),
-    mDatabaseFilenameUtf16(L""),
-    mIsMemoryDatabaseActive(false)
+    mDatabaseFilenameUtf16(L"")
 {
 }
 

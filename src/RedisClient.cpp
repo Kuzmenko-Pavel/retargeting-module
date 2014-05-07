@@ -9,7 +9,7 @@
 
 #define CMD_SIZE 4096
 
-RedisClient::RedisClient(const std::string &host, const std::string &port, int expireTime) :
+RedisClient::RedisClient(const std::string &host, const std::string &port, long expireTime) :
     timeOutMSec(1000),
     expireTime(expireTime),
     host(host),
@@ -520,18 +520,10 @@ bool RedisClient::zremrangebyrank(const std::string &key, int start, int stop)
     return execCmd(cmd);
 }
 
-bool RedisClient::set(const std::string &key, const std::string &val, long expireSeconds)
+bool RedisClient::set(const std::string &key, const std::string &val)
 {
     bzero(cmd,CMD_SIZE);
-    if(expireSeconds)
-    {
-        snprintf(cmd, CMD_SIZE, "SET %s %s EX %ld\r\n", key.c_str(), base64_encode(val).c_str(), expireSeconds);
-    }
-    else
-    {
-        snprintf(cmd, CMD_SIZE, "SET %s %s\r\n", base64_encode(key).c_str(), val.c_str());
-    }
-
+    snprintf(cmd, CMD_SIZE, "SET %s %s EX %ld\r\n", key.c_str(), base64_encode(val).c_str(), expireTime);
     execCmd(cmd);
 
     return true;

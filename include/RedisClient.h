@@ -11,9 +11,9 @@ class RedisClient
 {
     public:
         int timeOutMSec;
-        int expireTime;
+        long expireTime;
 
-        RedisClient(const std::string &host, const std::string &port, int expireTime);
+        RedisClient(const std::string &host, const std::string &port, long expireTime);
         virtual ~RedisClient();
 
         bool connect();
@@ -46,7 +46,7 @@ class RedisClient
         bool zremrangebyrank(const std::string &key, int start, int stop);
 
         //string methods
-        bool set(const std::string &key, const std::string &val, long expireSeconds = 0);
+        bool set(const std::string &key, const std::string &val);
         std::string get(const std::string &key);
 
     protected:

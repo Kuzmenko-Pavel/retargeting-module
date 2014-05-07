@@ -258,25 +258,26 @@ bool Config::Load()
 
     if( (mElem = mRoot->FirstChildElement("retargeting")) )
     {
-        if( (mel = mElem->FirstChildElement("redis")) )
+        int redis_retargeting_ttl;
+        if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
+        {
+                redis_retargeting_ttl = strtol(mel->GetText(),NULL,10);
+        }
+
+        for(mel = mElem->FirstChildElement("redis"); mel; mel = mel->NextSiblingElement())
         {
             if( (mels = mel->FirstChildElement("host")) && (mels->GetText()) )
             {
-                redis_retargeting_.host = mels->GetText();
+                redis_server srv;
+                srv.host = mels->GetText();
+                srv.ttl = redis_retargeting_ttl;
                 if( (mels = mel->FirstChildElement("port")) && (mels->GetText()) )
                 {
-                    redis_retargeting_.port = mels->GetText();
+                    srv.port = mels->GetText();
                 }
+                redis_retargeting_.push_back(srv);
             }
 
-            if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
-            {
-                redis_retargeting_.ttl = strtol(mel->GetText(),NULL,10);
-            }
-        }
-        else
-        {
-            exit("no section: retargeting.redis");
         }
     }
     else
@@ -286,25 +287,25 @@ bool Config::Load()
 
     if( (mElem = mRoot->FirstChildElement("short_term")) )
     {
-        if( (mel = mElem->FirstChildElement("redis")) )
+        int redis_short_term_ttl;
+        if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
+        {
+            redis_short_term_ttl = strtol(mel->GetText(),NULL,10);
+        }
+
+        for(mel = mElem->FirstChildElement("redis"); mel; mel = mel->NextSiblingElement())
         {
             if( (mels = mel->FirstChildElement("host")) && (mels->GetText()) )
             {
-                redis_short_term_.host = mels->GetText();
+                redis_server srv;
+                srv.host = mels->GetText();
+                srv.ttl = redis_short_term_ttl;
                 if( (mels = mel->FirstChildElement("port")) && (mels->GetText()) )
                 {
-                    redis_short_term_.port = mels->GetText();
+                    srv.port = mels->GetText();
                 }
+                redis_short_term_.push_back(srv);
             }
-
-            if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
-            {
-                redis_short_term_.ttl = strtol(mel->GetText(),NULL,10);
-            }
-        }
-        else
-        {
-            exit("no section: short_term.redis");
         }
     }
     else

@@ -41,7 +41,7 @@ private:
     /// Время начала последнего запроса
     boost::posix_time::ptime time_request_started_;
     pthread_t tid;
-    RedisClient *rcRetargeting, *rcShortTerm;
+    std::vector<RedisClient *> rcRetargeting, rcShortTerm;
     Params *params;
     char *cmd;
 
