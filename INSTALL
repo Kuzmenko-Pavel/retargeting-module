@@ -2,7 +2,7 @@ git clone git@gitlab.yottos.com:rgadworker/retargeting-module.git
 $libtoolize
 $autoheader
 $automake --add-missing
-$aclocal
+$aclocal -Im4
 $autoconf
 $./configure
 $make
