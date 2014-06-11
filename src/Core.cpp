@@ -92,9 +92,11 @@ void Core::Process(Params *prms)
         (*i)->set(key, params->getSearch()+" "+params->getContext());
     }
 
-    Log::info("%s[%ld]core time: %s found size: %d",__func__,
-              tid, boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime).c_str(),
-              result.size());
+    std::clog<<"["<<tid<<"]"
+    <<"core time:"<<boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime)
+    <<" key:"<<key
+    <<" found:"<<result.size()
+    <<std::endl;
 
     result.clear();
 
