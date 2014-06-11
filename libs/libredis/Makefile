@@ -12,9 +12,9 @@ ifeq ($(UNAME), Darwin)
  LIBS=-lm
 endif
 
-ifdef SINGLETHREADED
+#ifdef SINGLETHREADED
  CFLAGS += -DSINGLETHREADED
-endif
+#endif
 
 libredis: libredis/batch.o libredis/connection.o libredis/ketama.o libredis/md5.o libredis/module.o libredis/parser.o libredis/buffer.o
 	mkdir -p lib
