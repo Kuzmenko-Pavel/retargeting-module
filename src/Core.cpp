@@ -43,7 +43,7 @@ Core::Core()
         rcShortTerm.push_back(rc);
     }
 
-    Log::info("%s[%ld] start",__func__,tid);
+    std::clog<<"["<<tid<<"]start"<<std::endl;
 }
 
 Core::~Core()
@@ -66,13 +66,17 @@ void Core::Process(Params *prms)
 
     if(params->accountId().empty())
     {
-        Log::warn("%s wrong input params: account id from: %s",__func__,params->getIP().c_str());
+        std::clog<<"["<<tid<<"]"<<__func__
+        <<" wrong input params: retargeting id from: "<<params->getIP()
+        <<std::endl;
         return;
     }
 
     if(params->retargetingId().empty())
     {
-        Log::warn("%s wrong input params: retargeting id from: %s",__func__,params->getIP().c_str());
+        std::clog<<"["<<tid<<"]"<<__func__
+        <<" wrong input params: retargeting id from: "<<params->getIP()
+        <<std::endl;
     }
     else
     {
@@ -133,8 +137,10 @@ bool Core::getOffer(std::vector<long> &result)
     }
     catch(Kompex::SQLiteException &ex)
     {
-        printf("%s\n", cmd);
-        Log::err("%s error: %s",__func__,ex.GetString().c_str());
+        std::clog<<"["<<tid<<"]"<<__func__
+        <<" error: "<<ex.GetString()
+        <<std::endl;
+
         delete pStmt;
         return false;
     }
