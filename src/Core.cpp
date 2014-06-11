@@ -95,7 +95,7 @@ void Core::Process(Params *prms)
     std::clog<<"["<<tid<<"]"
     <<"core time:"<<boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime)
     <<" account id:"<<params->accountId()
-    <<" offer id"<<params->retargetingId()
+    <<" offer id:"<<params->retargetingId()
     <<" key:"<<key
     <<" found:"<<result.size()
     <<std::endl;
