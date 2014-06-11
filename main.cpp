@@ -13,7 +13,7 @@ http://127.0.0.1/adshow.fcgi?location=http%3A%2F%2Fwww.topshoptv.com.ua%2Fkyhnya
 */
 int main(int argc, char *argv[])
 {
-    Log(LOG_LOCAL0);
+    std::clog.rdbuf(new Log(LOG_LOCAL0));
 
 //    std::locale::global(std::locale("ru_RU.UTF-8"));
 
