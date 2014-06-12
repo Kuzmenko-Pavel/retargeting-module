@@ -388,13 +388,19 @@ bool Config::Load()
         logCoretime = logKey = logCountry = logRegion = logContext = logSearch = logAccountId = logOutPutOfferIds = false;
     }
 
+    if(!mIsInited)
+    {
+        if(!pDb)
+        {
+            pDb = new DataBase(true);
+        }
 
-    pDb = new DataBase(true);
+        request_processed_ = 0;
+        last_time_request_processed = 0;
 
-    request_processed_ = 0;
-    last_time_request_processed = 0;
+        mIsInited = true;
+    }
 
-    mIsInited = true;
     return mIsInited;
 }
 
