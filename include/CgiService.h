@@ -74,6 +74,7 @@ private:
      *                  порцию предложений.
      */
     void ProcessRequest(FCGX_Request*, Core *);
+    static void SignalHandler(int signum);
 private:
     pthread_t *threads;
     BaseCore *bcore;

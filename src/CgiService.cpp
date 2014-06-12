@@ -40,14 +40,13 @@ CgiService::CgiService()
     pthread_attr_init(attributes);
     pthread_attr_setstacksize(attributes, THREAD_STACK_SIZE);
 
-    /*
-    sigemptyset(&es); //BLOCK all signals
+    struct sigaction actions;
+    sigemptyset(&actions.sa_mask);
+    actions.sa_flags = 0;
+    actions.sa_handler = SignalHandler;
 
-    if (pthread_sigmask(SIG_BLOCK, &es, NULL) != 0)
-    {
-        Log::err("pthread_sigmask  error");
-    }
-    */
+    sigaction(SIGHUP,&actions,NULL);
+    sigaction(SIGPIPE,&actions,NULL);
 
     threads = new pthread_t[config->server_children_ + 1];
 
@@ -317,5 +316,19 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
         Response(req, 503);
         Log::err("%s exception %s: name: %s while processing: %s",__func__,
                  typeid(ex).name(), ex.what(), query.c_str());
+    }
+}
+
+void CgiService::SignalHandler(int signum)
+{
+    switch(signum)
+    {
+    case SIGHUP:
+        std::clog<<"CgiService: sig hup"<<std::endl;
+        config->Load();
+        break;
+    case SIGPIPE:
+        std::clog<<"CgiService: sig pipe"<<std::endl;
+        break;
     }
 }
