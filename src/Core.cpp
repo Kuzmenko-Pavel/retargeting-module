@@ -114,8 +114,13 @@ void Core::Process(Params *prms)
             }
         }
     }
-    std::clog<<" search:"<<params->getSearch()
-    <<" context:"<<params->getContext()
+
+    if(!params->getSearch().empty())
+    {
+        std::clog<<" search:"<<params->getSearch();
+    }
+
+    std::clog<<" context:"<<params->getContext()
     <<std::endl;
 
     result.clear();
