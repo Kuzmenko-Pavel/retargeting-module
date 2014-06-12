@@ -209,8 +209,6 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
     tmp_str = nullptr;
     if( !(tmp_str = FCGX_GetParam("REMOTE_HOST", req->envp)) )
     {
-        std::clog<<"remote host is not set"<<std::endl;
-        return;
     }
     else
     {
