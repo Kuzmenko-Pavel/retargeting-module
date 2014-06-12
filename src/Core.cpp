@@ -96,32 +96,49 @@ void Core::Process(Params *prms)
         (*i)->set(key, params->getSearch()+" "+params->getContext());
     }
 
-    std::clog<<"["<<tid<<"]"
-    <<" key:"<<key
-//    <<" user ip:"<<params->getIP()
-    <<" account id:"<<params->accountId()
-    <<" offer id:"<<params->retargetingId();
+    std::clog<<"["<<tid<<"]";
 
-    if(result.size())
+    if(config->logCoretime)
+        std::clog<<" core time:"<< boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime);
+
+    if(config->logAccountId)
+        std::clog<<" account id:"<<params->accountId();
+
+    if(config->logKey)
+        std::clog<<" key:"<<key;
+
+    if(config->logCountry)
+        std::clog<<" country:"<<params->getCountry();
+
+    if(config->logRegion)
+        std::clog<<" region:"<<params->getRegion();
+
+    if(config->logSearch && !params->getSearch().empty())
+        std::clog<<" search:"<<params->getSearch();
+
+    if(config->logContext && !params->getContext().empty())
+        std::clog<<" context:"<<params->getContext();
+
+    if(config->logOutPutOfferIds)
     {
-        std::clog<<"found offer ids:";
-        for(auto o = result.begin(); o != result.end(); ++o)
+        if(result.size())
         {
-            std::clog<<(*o);
-            if(o != result.end())
+            std::clog<<"found offer ids:";
+            for(auto o = result.begin(); o != result.end(); ++o)
             {
-                std::clog<<",";
+                std::clog<<(*o);
+                if(o != result.end())
+                {
+                    std::clog<<",";
+                }
             }
         }
+        else
+        {
+            std::clog<<"not found offers";
+        }
     }
-
-    if(!params->getSearch().empty())
-    {
-        std::clog<<" search:"<<params->getSearch();
-    }
-
-    std::clog<<" context:"<<params->getContext()
-    <<std::endl;
+    std::clog<<std::endl;
 
     result.clear();
 
