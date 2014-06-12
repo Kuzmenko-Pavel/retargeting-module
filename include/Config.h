@@ -54,6 +54,7 @@ public:
     std::string template_out_;
     std::string template_error_;
     int time_update_;
+    bool logCoretime, logKey, logCountry, logRegion, logContext, logSearch, logAccountId, logOutPutOfferIds;
 
     static Config* Instance();
     bool LoadConfig(const std::string fName);

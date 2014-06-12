@@ -347,6 +347,48 @@ bool Config::Load()
         exit("no mongo section in config file. exit");
     }
 
+
+    if( (mel = mRoot->FirstChildElement("log")) )
+    {
+        if( (mel = mElem->FirstChildElement("coretime")) && (mel->GetText()) )
+        {
+            logCoretime = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("key")) && (mel->GetText()) )
+        {
+            logKey = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("country")) && (mel->GetText()) )
+        {
+            logCountry = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("region")) && (mel->GetText()) )
+        {
+            logRegion = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("context")) && (mel->GetText()) )
+        {
+            logContext = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("search")) && (mel->GetText()) )
+        {
+            logSearch = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("accountId")) && (mel->GetText()) )
+        {
+            logAccountId = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+        if( (mel = mElem->FirstChildElement("OutPutOfferIds")) && (mel->GetText()) )
+        {
+            logOutPutOfferIds = strncmp(mel->GetText(),"1",1)>=0 ? true : false;
+        }
+    }
+    else
+    {
+        logCoretime = logKey = logCountry = logRegion = logContext = logSearch = logAccountId = logOutPutOfferIds = false;
+    }
+
+
     pDb = new DataBase(true);
 
     request_processed_ = 0;

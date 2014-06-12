@@ -106,4 +106,15 @@
     </main>
 </mongo>
 
+<log>
+    <coretime>1</coretime>
+    <key>1</key>
+    <country>0</country>
+    <region>0</region>
+    <context>1</context>
+    <search>1</search>
+    <accountId>1</accountId>
+    <OutPutOfferIds>1</OutPutOfferIds>
+</log>
+
 </root>

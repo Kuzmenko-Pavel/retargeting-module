@@ -97,16 +97,14 @@ void Core::Process(Params *prms)
     }
 
     std::clog<<"["<<tid<<"]"
-    <<"core time:"<<boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime)
-    <<" ip:"<<params->getIP()
-    <<" host:"<<params->getHost()
-    <<" account id:"<<params->accountId()
-    <<" offer id:"<<params->retargetingId()
     <<" key:"<<key
-    <<" found:"<<result.size();
+//    <<" user ip:"<<params->getIP()
+    <<" account id:"<<params->accountId()
+    <<" offer id:"<<params->retargetingId();
+
     if(result.size())
     {
-        std::clog<<"offer ids:";
+        std::clog<<"found offer ids:";
         for(auto o = result.begin(); o != result.end(); ++o)
         {
             std::clog<<(*o);
