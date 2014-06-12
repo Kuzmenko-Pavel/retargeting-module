@@ -37,10 +37,10 @@ Server::Server(const std::string &lockFileName, const std::string &pidFileName) 
 	{
 	    if (stat(m_lockFileName.c_str(), &sb) != -1)
 	    {
-			syslog(LOG_ERR, "another process running?\n");
+			syslog(LOG_ERR, "lock file(%s) is",m_lockFileName.c_str());
 			if( getProcIdByName(__progname) > 0)
             {
-                syslog(LOG_ERR, "exit\n");
+                syslog(LOG_ERR, "another process running? exit");
                 exit(EXIT_FAILURE);
             }
             else
