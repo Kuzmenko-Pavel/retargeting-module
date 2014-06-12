@@ -246,7 +246,9 @@ void BaseCore::signal_handler(int signum)
     {
     case SIGHUP:
         config->Load();
+        break;
     case SIGPIPE:
-        Log::err("sig pipe");
+        std::clog<<"BaseCore: sig pipe"<<std::endl;
+        break;
     }
 }
