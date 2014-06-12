@@ -34,7 +34,6 @@ Config* Config::Instance()
 Config::Config()
 {
     mIsInited = false;
-    mDoc = NULL;
 }
 
 bool Config::LoadConfig(const std::string fName)
@@ -52,6 +51,9 @@ void Config::exit(const std::string &mes)
 
 bool Config::Load()
 {
+    TiXmlDocument *mDoc;
+    TiXmlElement *mRoot;
+    TiXmlElement *mElem;
     TiXmlElement *mel, *mels;
     boost::filesystem::path p;
 
@@ -62,7 +64,7 @@ bool Config::Load()
         exit("does not regular file: "+mFileName);
     }
 
-    Log::info("Config::Load: load file: %s",mFileName.c_str());
+    std::clog<<"config file: "<<mFileName<<std::endl;
 
     mIsInited = false;
     mDoc = new TiXmlDocument(mFileName);
@@ -401,20 +403,14 @@ bool Config::Load()
         mIsInited = true;
     }
 
+    delete mDoc;
+
     return mIsInited;
 }
 
 //---------------------------------------------------------------------------------------------------------------
 Config::~Config()
 {
-    if (mDoc != NULL)
-    {
-        delete mDoc;
-        mDoc = NULL;
-    }
-
-    //std::free(sphinx_field_names_);
-    //std::free(sphinx_field_weights_);
     mInstance = NULL;
 }
 //---------------------------------------------------------------------------------------------------------------

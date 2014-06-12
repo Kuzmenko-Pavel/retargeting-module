@@ -83,10 +83,6 @@ private:
     std::string mFileName;
     std::string cfgFilePath;
 
-    TiXmlDocument *mDoc;
-    TiXmlElement* mRoot;
-    TiXmlElement* mElem;
-
     int getTime(const char *p);
     std::string getFileContents(const std::string &fileName);
     void exit(const std::string &mes);

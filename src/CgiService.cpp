@@ -41,7 +41,8 @@ CgiService::CgiService()
     pthread_attr_setstacksize(attributes, THREAD_STACK_SIZE);
 
     struct sigaction actions;
-    sigemptyset(&actions.sa_mask);
+
+    memset(&actions, 0, sizeof(actions));
     actions.sa_flags = 0;
     actions.sa_handler = SignalHandler;
 
