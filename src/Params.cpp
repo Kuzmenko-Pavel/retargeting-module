@@ -231,6 +231,17 @@ std::string Params::getSearch() const
     return search_;
 }
 
+Params &Params::host(const std::string &host)
+{
+    host_ = host;
+    return *this;
+}
+
+std::string Params::getHost() const
+{
+    return host_;
+}
+
 Params &Params::retargeting_id(const std::string &retargeting_id)
 {
     retargetingId_ = boost::to_lower_copy(retargeting_id);

@@ -64,6 +64,7 @@ public:
     Params &context(const std::string &context);
     Params &context(const char *context);
     Params &account_id(const std::string &account_id);
+    Params &host(const std::string &host);
     /**
      * строка, содержашяя поисковый запрос
      */
@@ -72,6 +73,7 @@ public:
     Params &tracking_time(const std::string &);
     //*********************************************************************************************//
     std::string getIP() const;
+    std::string getHost() const;
     std::string getCookieId() const;
     std::string getUserKey() const;
     unsigned long long getUserKeyLong() const;
@@ -94,6 +96,7 @@ public:
 private:
     unsigned long long key_long, key_tracking_long;
     std::string ip_;
+    std::string host_;
     std::string cookie_id_;
     std::string cookie_tracking_id_;
     std::string country_;
