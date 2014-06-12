@@ -55,8 +55,8 @@ Core::~Core()
 	Изменён RealInvest Soft */
 void Core::Process(Params *prms)
 {
-    std::vector<long> result;
     boost::posix_time::ptime startTime;
+    std::vector<long> result;
 
     startTime = boost::posix_time::microsec_clock::local_time();
 
@@ -101,7 +101,21 @@ void Core::Process(Params *prms)
     <<" account id:"<<params->accountId()
     <<" offer id:"<<params->retargetingId()
     <<" key:"<<key
-    <<" found:"<<result.size()
+    <<" found:"<<result.size();
+    if(result.size())
+    {
+        std::clog<<"offer ids:";
+        for(auto o = result.begin(); o != result.end(); ++o)
+        {
+            std::clog<<(*o);
+            if(o != result.end())
+            {
+                std::clog<<",";
+            }
+        }
+    }
+    std::clog<<" search:"<<params->getSearch()
+    <<" context:"<<params->getContext()
     <<std::endl;
 
     result.clear();
@@ -109,6 +123,11 @@ void Core::Process(Params *prms)
     request_processed_++;
 
     return;
+}
+
+void Core::PostProcess()
+{
+
 }
 
 bool Core::getOffer(std::vector<long> &result)
