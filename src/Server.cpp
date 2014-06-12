@@ -75,8 +75,6 @@ Server::Server(const std::string &lockFileName, const std::string &pidFileName) 
 
 	signal(SIGCHLD,child_handler);
 	signal(SIGUSR1,child_handler);
-	signal(SIGALRM,child_handler);
-	signal(SIGHUP,child_handler);
 
 	pid = fork();
 
@@ -95,6 +93,8 @@ Server::Server(const std::string &lockFileName, const std::string &pidFileName) 
 
 	parent = getppid();
 
+	signal(SIGALRM,SIG_IGN);
+	signal(SIGHUP,SIG_IGN);
 	signal(SIGCHLD,SIG_DFL);
 	signal(SIGTSTP,SIG_IGN);
 	signal(SIGTTOU,SIG_IGN);
@@ -172,7 +172,8 @@ void Server::child_handler(int signum)
 		exit(EXIT_FAILURE);
 		break;
     case SIGHUP:
-        config->Load();
+        //config->Load();
+        break;
 	}
 }
 //###########################################################################
