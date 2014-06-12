@@ -114,10 +114,13 @@ void Core::Process(Params *prms)
         {
             for(auto o = result.begin(); o != result.end(); ++o)
             {
-                std::clog<<(*o);
-                if(o != result.end())
+                if(o != result.begin())
                 {
-                    std::clog<<",";
+                    std::clog<<","<<(*o);
+                }
+                else
+                {
+                    std::clog<<(*o);
                 }
             }
         }
