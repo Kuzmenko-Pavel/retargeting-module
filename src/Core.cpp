@@ -123,7 +123,7 @@ void Core::Process(Params *prms)
     {
         if(result.size())
         {
-            std::clog<<"found offer ids:";
+            std::clog<<" found offer ids:";
             for(auto o = result.begin(); o != result.end(); ++o)
             {
                 std::clog<<(*o);
@@ -135,7 +135,7 @@ void Core::Process(Params *prms)
         }
         else
         {
-            std::clog<<"not found offers";
+            std::clog<<" not found offers";
         }
     }
     std::clog<<std::endl;
