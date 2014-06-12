@@ -177,11 +177,11 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
 {
     char *tmp_str = nullptr;
     std::string cookie_value, cookie_value_tracking;
-    std::string query, ip;
+    std::string query, ip, host;
 
     if (!(tmp_str = FCGX_GetParam("QUERY_STRING", req->envp)))
     {
-        Log::warn("query string is not set");
+        std::clog<<"query string is not set"<<std::endl;
         return;
     }
     else
@@ -197,13 +197,26 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
     tmp_str = nullptr;
     if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
     {
-        Log::warn("remote address is not set");
+        std::clog<<"remote address is not set"<<std::endl;
         return;
     }
     else
     {
         ip = std::string(tmp_str);
     }
+
+
+    tmp_str = nullptr;
+    if( !(tmp_str = FCGX_GetParam("REMOTE_HOST", req->envp)) )
+    {
+        std::clog<<"remote host is not set"<<std::endl;
+        return;
+    }
+    else
+    {
+        host = std::string(tmp_str);
+    }
+
     /*
         tmp_str = nullptr;
         if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
@@ -219,7 +232,7 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
     tmp_str = nullptr;
     if (!(tmp_str = FCGX_GetParam("HTTP_COOKIE", req->envp)))
     {
-        Log::warn("cookie is not set");
+        std::clog<<"cookie is not set"<<std::endl;
         cookie_value = time_t_to_string(time(NULL));
         cookie_value_tracking = cookie_value;
     }
@@ -264,6 +277,7 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
 
     Params prm = Params()
                  .ip(ip)
+                 .host(host)
                  .cookie_id(cookie_value)
                  .cookie_tracking_id(cookie_value_tracking)
                  .country(url.param("country"))
