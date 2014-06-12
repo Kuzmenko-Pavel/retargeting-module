@@ -123,7 +123,7 @@ void Core::Process(Params *prms)
         }
         else
         {
-            std::clog<<"not found";
+            std::clog<<"0";
         }
     }
 
