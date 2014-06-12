@@ -348,7 +348,7 @@ bool Config::Load()
     }
 
 
-    if( (mel = mRoot->FirstChildElement("log")) )
+    if( (mElem = mRoot->FirstChildElement("log")) )
     {
         if( (mel = mElem->FirstChildElement("coretime")) && (mel->GetText()) )
         {
