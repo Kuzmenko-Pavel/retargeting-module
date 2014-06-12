@@ -107,18 +107,6 @@ void Core::Process(Params *prms)
     if(config->logKey)
         std::clog<<" key:"<<key;
 
-    if(config->logCountry)
-        std::clog<<" country:"<<params->getCountry();
-
-    if(config->logRegion)
-        std::clog<<" region:"<<params->getRegion();
-
-    if(config->logSearch && !params->getSearch().empty())
-        std::clog<<" search:"<<params->getSearch();
-
-    if(config->logContext && !params->getContext().empty())
-        std::clog<<" context:"<<params->getContext();
-
     if(config->logOutPutOfferIds)
     {
         if(result.size())
@@ -138,6 +126,19 @@ void Core::Process(Params *prms)
             std::clog<<" not found offers";
         }
     }
+
+    if(config->logCountry)
+        std::clog<<" country:"<<params->getCountry();
+
+    if(config->logRegion)
+        std::clog<<" region:"<<params->getRegion();
+
+    if(config->logSearch && !params->getSearch().empty())
+        std::clog<<" search:"<<params->getSearch();
+
+    if(config->logContext && !params->getContext().empty())
+        std::clog<<" context:"<<params->getContext();
+
     std::clog<<std::endl;
 
     result.clear();
