@@ -39,7 +39,18 @@ Config::Config()
 bool Config::LoadConfig(const std::string fName)
 {
     mFileName = fName;
-    return Load();
+
+    bool ret = Load();
+
+    if(!pDb)
+    {
+        pDb = new DataBase(true);
+    }
+
+    request_processed_ = 0;
+    last_time_request_processed = 0;
+
+    return ret;
 }
 
 void Config::exit(const std::string &mes)
@@ -67,6 +78,7 @@ bool Config::Load()
     std::clog<<"config file: "<<mFileName<<std::endl;
 
     mIsInited = false;
+
     mDoc = new TiXmlDocument(mFileName);
 
     if(!mDoc)
@@ -390,20 +402,11 @@ bool Config::Load()
         logCoretime = logKey = logCountry = logRegion = logContext = logSearch = logAccountId = logOutPutOfferIds = false;
     }
 
-    if(!mIsInited)
-    {
-        if(!pDb)
-        {
-            pDb = new DataBase(true);
-        }
-
-        request_processed_ = 0;
-        last_time_request_processed = 0;
-
-        mIsInited = true;
-    }
-
     delete mDoc;
+
+    mIsInited = true;
+
+    std::clog<<"config file loaded"<<std::endl;
 
     return mIsInited;
 }
