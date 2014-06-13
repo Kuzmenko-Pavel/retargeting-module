@@ -89,11 +89,11 @@ bool Config::Load()
     if(!mDoc->LoadFile())
     {
         std::clog<<"load file: "<<mFileName
-             <<" error: "<<mDoc->ErrorDesc()
-             <<" row: "<<mDoc->ErrorRow()
-             <<" col: "<<mDoc->ErrorCol()
-             <<". exit."
-             <<std::endl;
+                 <<" error: "<<mDoc->ErrorDesc()
+                 <<" row: "<<mDoc->ErrorRow()
+                 <<" col: "<<mDoc->ErrorCol()
+                 <<". exit."
+                 <<std::endl;
         ::exit(1);
     }
 
@@ -278,7 +278,7 @@ bool Config::Load()
         int redis_retargeting_ttl = REDIS_DEFAULT_TTL;
         if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
         {
-                redis_retargeting_ttl = strtol(mel->GetText(),NULL,10);
+            redis_retargeting_ttl = strtol(mel->GetText(),NULL,10);
         }
 
         for(mel = mElem->FirstChildElement("redis"); mel; mel = mel->NextSiblingElement())
@@ -648,11 +648,11 @@ bool Config::checkPath(const std::string &path_, bool checkWrite, bool isFile, s
     {
         int lfp = open((path_+"test").c_str(),O_RDWR|O_CREAT,0640);
 
-		if(lfp < 0)
-		{
-			exit("unable to create file: "+path_+", "+strerror(errno));
-		}
-		else
+        if(lfp < 0)
+        {
+            exit("unable to create file: "+path_+", "+strerror(errno));
+        }
+        else
         {
             close(lfp);
             unlink((path_+"test").c_str());
