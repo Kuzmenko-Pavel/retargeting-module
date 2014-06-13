@@ -58,7 +58,7 @@ public:
 
     static Config* Instance();
     bool LoadConfig(const std::string fName);
-    bool Load();
+    bool ReLoad();
     virtual ~Config();
 
     bool to_bool(std::string const& s)
@@ -87,6 +87,7 @@ private:
     std::string getFileContents(const std::string &fileName);
     void exit(const std::string &mes);
     bool checkPath(const std::string &path_, bool checkWrite, bool isFile, std::string &mes);
+    bool Load();
 };
 
 extern Config *config;

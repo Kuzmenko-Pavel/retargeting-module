@@ -326,7 +326,7 @@ void CgiService::SignalHandler(int signum)
     {
     case SIGHUP:
         std::clog<<"CgiService: sig hup"<<std::endl;
-        config->Load();
+        config->ReLoad();
         break;
     case SIGPIPE:
         std::clog<<"CgiService: sig pipe"<<std::endl;

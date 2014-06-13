@@ -231,16 +231,3 @@ bool BaseCore::cmdParser(const std::string &cmd, std::string &offerId, std::stri
     }
     return false;
 }
-
-void BaseCore::signal_handler(int signum)
-{
-    switch(signum)
-    {
-    case SIGHUP:
-        config->Load();
-        break;
-    case SIGPIPE:
-        std::clog<<"BaseCore: sig pipe"<<std::endl;
-        break;
-    }
-}
