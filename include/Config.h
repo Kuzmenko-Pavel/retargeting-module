@@ -13,6 +13,8 @@ extern unsigned long last_time_request_processed;
 extern unsigned long offer_processed_;
 extern unsigned long social_processed_;
 
+#define REDIS_DEFAULT_TTL 3600*14
+
 class Config
 {
 public:

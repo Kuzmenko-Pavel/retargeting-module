@@ -275,7 +275,7 @@ bool Config::Load()
 
     if( (mElem = mRoot->FirstChildElement("retargeting")) )
     {
-        int redis_retargeting_ttl;
+        int redis_retargeting_ttl = REDIS_DEFAULT_TTL;
         if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
         {
                 redis_retargeting_ttl = strtol(mel->GetText(),NULL,10);
@@ -304,7 +304,7 @@ bool Config::Load()
 
     if( (mElem = mRoot->FirstChildElement("short_term")) )
     {
-        int redis_short_term_ttl;
+        int redis_short_term_ttl = REDIS_DEFAULT_TTL;
         if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
         {
             redis_short_term_ttl = strtol(mel->GetText(),NULL,10);
@@ -886,7 +886,7 @@ bool Config::ReLoad()
 
     if( (mElem = mRoot->FirstChildElement("retargeting")) )
     {
-        int redis_retargeting_ttl;
+        int redis_retargeting_ttl = REDIS_DEFAULT_TTL;
         if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
         {
             redis_retargeting_ttl = strtol(mel->GetText(),NULL,10);
@@ -917,7 +917,7 @@ bool Config::ReLoad()
 
     if( (mElem = mRoot->FirstChildElement("short_term")) )
     {
-        int redis_short_term_ttl;
+        int redis_short_term_ttl = REDIS_DEFAULT_TTL;
         if( (mel = mElem->FirstChildElement("ttl")) && (mel->GetText()) )
         {
             redis_short_term_ttl = strtol(mel->GetText(),NULL,10);
