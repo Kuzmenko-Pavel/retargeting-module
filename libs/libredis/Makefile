@@ -13,7 +13,7 @@ ifeq ($(UNAME), Darwin)
 endif
 
 #ifdef SINGLETHREADED
- CFLAGS += -DSINGLETHREADED
+# CFLAGS += -DSINGLETHREADED
 #endif
 
 libredis: libredis/batch.o libredis/connection.o libredis/ketama.o libredis/md5.o libredis/module.o libredis/parser.o libredis/buffer.o
