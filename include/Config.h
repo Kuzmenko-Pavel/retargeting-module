@@ -7,6 +7,7 @@
 #include <tinyxml.h>
 #include "redis_server.h"
 #include "DataBase.h"
+#include "RedisClient.h"
 
 extern unsigned long request_processed_;
 extern unsigned long last_time_request_processed;
@@ -37,6 +38,7 @@ public:
     std::string dbpath_;
     std::string db_dump_path_;
     DataBase *pDb;
+    Module *module;
     std::string offerSqlAll;
 
     std::string cookie_name_;

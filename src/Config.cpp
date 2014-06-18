@@ -33,6 +33,8 @@ Config* Config::Instance()
 
 Config::Config()
 {
+    Module_free(module);
+
     mIsInited = false;
 }
 
@@ -46,6 +48,10 @@ bool Config::LoadConfig(const std::string fName)
     {
         pDb = new DataBase(true);
     }
+
+    module = Module_new();
+    Module_init(module);
+
 
     request_processed_ = 0;
     last_time_request_processed = 0;
