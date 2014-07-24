@@ -93,7 +93,8 @@ void Core::Process(Params *prms)
 
     for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
     {
-        (*i)->set(key, params->getSearch()+" "+params->getContext());
+        //(*i)->set(key, params->getSearch()+" "+params->getContext());
+        (*i)->set(key, params->getSearch());
     }
 
     std::clog<<"["<<tid<<"]";
