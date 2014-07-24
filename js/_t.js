@@ -775,6 +775,10 @@ if (typeof yottos_remarketing_redirect == "object")
 	{
 		return dataLayer[3].productID;
 	}
+	else if(window.location.host == 'http://mirposudy.com.ua')
+	{
+		return location.pathname.match(/\/catalog\/i\/(\d+).*/)[1];
+	}
 return;
 }
 ;var rand = Math.floor(Math.random() * 1000000);
