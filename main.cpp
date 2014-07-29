@@ -3,8 +3,11 @@
 #include "CgiService.h"
 #include "Log.h"
 #include "Server.h"
+#include "GeoIPTools.h"
 
 Config *config;
+GeoIPTools *geoip;
+
 /*
 perl -MURI::Escape -e 'print uri_escape("762FA8DB-66A1-4C96-89F5-5E0C77E74F3A")'
 
