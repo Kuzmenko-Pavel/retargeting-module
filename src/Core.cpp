@@ -84,15 +84,22 @@ void Core::Process(Params *prms)
         {
             for(auto j = result.begin(); j!=result.end(); ++j)
             {
-                (*i)->zadd(params->getUserKey(),0,*j);
+                if(!params->getSearch().empty())
+                {
+                    (*i)->zadd(params->getUserKey(),0,*j);
+                }
+
             }
         }
     }
 
     for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
     {
-        //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
-        (*i)->set(params->getUserKey(), params->getSearch());
+        if(!params->getSearch().empty())
+        {
+            //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
+            (*i)->set(params->getUserKey(), params->getSearch());
+        }
     }
 
     std::clog<<"["<<tid<<"]";
