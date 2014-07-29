@@ -65,37 +65,34 @@ void Core::Process(Params *prms)
     if(params->account_id_.empty())
     {
         std::clog<<"["<<tid<<"]"<<__func__
-        <<" wrong input params: retargeting id from: "<<params->getIP()
-        <<std::endl;
+                 <<" wrong input params: retargeting id from: "<<params->getIP()
+                 <<std::endl;
         return;
     }
 
     if(params->retargeting_offer_id_.empty())
     {
         std::clog<<"["<<tid<<"]"<<__func__
-        <<" wrong input params: retargeting id from: "<<params->getIP()
-        <<std::endl;
+                 <<" wrong input params: retargeting id from: "<<params->getIP()
+                 <<std::endl;
     }
     else
     {
-        getOffer(result);
-
-        for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
+        if(getOffer(result))
         {
-            for(auto j = result.begin(); j!=result.end(); ++j)
+            for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
             {
-                if(!params->getSearch().empty())
+                for(auto j = result.begin(); j!=result.end(); ++j)
                 {
                     (*i)->zadd(params->getUserKey(),0,*j);
                 }
-
             }
         }
     }
 
-    for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
+    if(!params->getSearch().empty())
     {
-        if(!params->getSearch().empty())
+        for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
         {
             //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
             (*i)->set(params->getUserKey(), params->getSearch());
@@ -189,8 +186,8 @@ bool Core::getOffer(std::vector<long> &result)
     catch(Kompex::SQLiteException &ex)
     {
         std::clog<<"["<<tid<<"]"<<__func__
-        <<" error: "<<ex.GetString()
-        <<std::endl;
+                 <<" error: "<<ex.GetString()
+                 <<std::endl;
 
         delete pStmt;
         return false;
@@ -198,5 +195,6 @@ bool Core::getOffer(std::vector<long> &result)
 
     delete pStmt;
 
-    return true;
+    return result.size() ? true : false;
 }
+
