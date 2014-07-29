@@ -5,20 +5,31 @@
 #include <string>
 #include <boost/date_time.hpp>
 
-//#include "utils/GeoIPTools.h"
-
 /** \brief Параметры, которые определяют показ рекламы */
 class Params
 {
 public:
+    bool newClient;
+    bool test_mode_;
+    bool json_;
+    std::string ip_;
+    std::string cookie_id_;
+    std::string location_;
+    boost::posix_time::ptime time_;
+    std::string informer_id_;
+    std::string account_id_;
+    std::string retargeting_offer_id_;
+
     Params();
     /// IP посетителя.
-    Params &ip(const std::string &ip);
+    Params &ip(const std::string &);
     /// ID посетителя, взятый из cookie
-    Params &cookie_id(const std::string &cookie_id);
-    Params &cookie_tracking_id(const std::string &cookie_tracking_id);
-    /// Время. По умолчанию равно текущему моменту.
-    Params &time(const boost::posix_time::ptime &time);
+    Params &cookie_id(const std::string &);
+    /// ID информера.
+    Params &informer_id(const std::string &);
+    Params &account_id(const std::string &);
+    Params &retargeting_offer_id(const std::string &);
+
     /** \brief  Двухбуквенный код страны посетителя.
 
         Если не задан, то страна будет определена по IP.
@@ -42,6 +53,14 @@ public:
         \see ip()
     */
     Params &region(const std::string &region);
+    /** \brief  Тестовый режим работы, в котором показы не записываются и переходы не записываються.
+        По умолчанию равен false.
+    */
+    Params &test_mode(bool test_mode);
+    /// Выводить ли предложения в формате json.
+    Params &json(bool json);
+    /// ID предложений, которые следует исключить из показа.
+    Params &excluded_offers(const std::vector<std::string> &excluded);
     /** \brief  Виртуальный путь и имя вызываемого скрипта.
 
         Используется для построения ссылок на самого себя. Фактически,
@@ -58,58 +77,48 @@ public:
         Обычно передаётся javascript загрузчиком.
     */
     Params &location(const std::string &location);
+    Params &w(const std::string &w);
+    Params &h(const std::string &h);
     /**
      * строка, содержашяя контекст страницы
      */
     Params &context(const std::string &context);
     Params &context(const char *context);
-    Params &account_id(const std::string &account_id);
-    Params &host(const std::string &host);
     /**
      * строка, содержашяя поисковый запрос
      */
     Params &search(const std::string &search);
-    Params &search(const char *search);
-    Params &tracking_time(const std::string &);
     //*********************************************************************************************//
     std::string getIP() const;
-    std::string getHost() const;
     std::string getCookieId() const;
     std::string getUserKey() const;
     unsigned long long getUserKeyLong() const;
     std::string getCountry() const;
     std::string getRegion() const;
+    std::string getInformerId() const;
     boost::posix_time::ptime getTime() const;
+    bool isTestMode() const;
+    bool isJson() const;
+    std::vector<std::string> getExcludedOffers();
     std::string getScriptName() const;
     std::string getLocation() const;
+    std::string getW() const;
+    std::string getH() const;
     std::string getContext() const;
     std::string getSearch() const;
-    std::string accountId() const;
-    long trackingTime() const;
-    std::string retargetingId() const;
-    Params &retargeting_id(const std::string &retargeting_id);
-
-    friend class Core;
-    friend class GenerateToken;
-    friend class HistoryManager;//добавлено RealInvest Soft
+    std::string getUrl() const;
 
 private:
-    unsigned long long key_long, key_tracking_long;
-    std::string ip_;
-    std::string host_;
-    std::string cookie_id_;
-    std::string cookie_tracking_id_;
+    unsigned long long key_long;
     std::string country_;
     std::string countryByIp_;
     std::string region_;
-    boost::posix_time::ptime time_;
+    std::vector<std::string> excluded_offers_;
     std::string script_name_;
-    std::string location_;
+    std::string w_;
+    std::string h_;
     std::string context_;//строка содержашяя контекст страницы
     std::string search_;
-    std::string account_id_;
-    long tracking_time_;
-    std::string retargetingId_;
 };
 
 #endif // PARAMS_H

@@ -62,9 +62,7 @@ void Core::Process(Params *prms)
 
     params = prms;
 
-    std::string key = params->getUserKey();
-
-    if(params->accountId().empty())
+    if(params->account_id_.empty())
     {
         std::clog<<"["<<tid<<"]"<<__func__
         <<" wrong input params: retargeting id from: "<<params->getIP()
@@ -72,7 +70,7 @@ void Core::Process(Params *prms)
         return;
     }
 
-    if(params->retargetingId().empty())
+    if(params->retargeting_offer_id_.empty())
     {
         std::clog<<"["<<tid<<"]"<<__func__
         <<" wrong input params: retargeting id from: "<<params->getIP()
@@ -86,15 +84,15 @@ void Core::Process(Params *prms)
         {
             for(auto j = result.begin(); j!=result.end(); ++j)
             {
-                (*i)->zadd(key,0,*j);
+                (*i)->zadd(params->getUserKey(),0,*j);
             }
         }
     }
 
     for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
     {
-        //(*i)->set(key, params->getSearch()+" "+params->getContext());
-        (*i)->set(key, params->getSearch());
+        //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
+        (*i)->set(params->getUserKey(), params->getSearch());
     }
 
     std::clog<<"["<<tid<<"]";
@@ -103,10 +101,10 @@ void Core::Process(Params *prms)
         std::clog<<" core time:"<< boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime);
 
     if(config->logAccountId)
-        std::clog<<" account id:"<<params->accountId();
+        std::clog<<" account id:"<<params->account_id_;
 
     if(config->logKey)
-        std::clog<<" key:"<<key;
+        std::clog<<" key:"<<params->getUserKey();
 
     if(config->logOutPutOfferIds)
     {
@@ -163,8 +161,8 @@ bool Core::getOffer(std::vector<long> &result)
     pStmt = new Kompex::SQLiteStatement(config->pDb->pDatabase);
 
     sqlite3_snprintf(CMD_SIZE, cmd, config->offerSqlAll.c_str(),
-                     params->accountId().c_str(),
-                     params->retargetingId().c_str());
+                     params->account_id_.c_str(),
+                     params->retargeting_offer_id_.c_str());
 
 #ifdef DEBUG
     printf("%s\n",cmd);
