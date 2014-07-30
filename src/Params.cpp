@@ -3,12 +3,15 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/regex/icu.hpp>
 #include <boost/date_time.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <string>
 
 #include "Params.h"
 #include "GeoIPTools.h"
 #include "Log.h"
+#include "UrlParser.h"
+#include "Config.h"
 
 
 Params::Params() :
@@ -19,31 +22,125 @@ Params::Params() :
     time_ = boost::posix_time::second_clock::local_time();
 }
 
-/// IP посетителя.
-Params &Params::ip(const std::string &ip)
+bool Params::parse(FCGX_Request *req)
 {
-    ip_ = ip;
+    char *tmp_str = nullptr;
+    UrlParser *query_parser;
 
-    country_ = geoip->country_code_by_addr(ip_);
-    region_ = geoip->region_code_by_addr(ip_);
-
-    return *this;
-}
-
-std::string time_t_to_string(time_t t)
-{
-    std::stringstream sstr;
-    sstr << t;
-    return sstr.str();
-}
-
-/// ID посетителя, взятый из cookie
-Params &Params::cookie_id(const std::string &cookie_id)
-{
-    struct in_addr ipval;
-
-    if(cookie_id.empty())
+    if (!(tmp_str = FCGX_GetParam("QUERY_STRING", req->envp)))
     {
+        std::clog<<"query string is not set"<<std::endl;
+        return false;
+    }
+    else
+    {
+        query_parser = new UrlParser(tmp_str);
+    }
+
+    if(query_parser->param("show") == "status")
+    {
+        status = true;
+        delete query_parser;
+        return true;
+    }
+    else
+    {
+        status = false;
+    }
+
+    account_id_ = query_parser->param("ac");
+    if(account_id_.empty())
+    {
+        std::clog<<__func__<<" miss account id"<<std::endl;
+        delete query_parser;
+        return false;
+    }
+
+    retargeting_offer_id_ = query_parser->param("offer_id");
+    if(account_id_.empty())
+    {
+        std::clog<<__func__<<" miss offer id"<<std::endl;
+        delete query_parser;
+        return false;
+    }
+
+    if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
+    {
+        std::clog<<"remote address is not set"<<std::endl;
+        delete query_parser;
+        return false;
+    }
+    else
+    {
+        ip_ = std::string(tmp_str);
+    }
+/*
+    tmp_str = nullptr;
+    if( (tmp_str = FCGX_GetParam("REMOTE_HOST", req->envp)) )
+    {
+        host = std::string(tmp_str);
+    }
+*/
+    /*
+        tmp_str = nullptr;
+        if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
+        {
+            Log::warn("script name is not set");
+            return;
+        }
+        else
+        {
+            script_name = std::string(tmp_str);
+        }
+    */
+    if((tmp_str = FCGX_GetParam("HTTP_COOKIE", req->envp)))
+    {
+        std::string visitor_cookie = std::string(tmp_str);
+
+        std::vector<std::string> strs;
+        boost::split(strs, visitor_cookie, boost::is_any_of(";"));
+
+        for (unsigned int i=0; i<strs.size(); i++)
+        {
+            if(strs[i].find(config->cookie_name_) != std::string::npos)
+            {
+                std::vector<std::string> name_value;
+
+                boost::split(name_value, strs[i], boost::is_any_of("="));
+
+                if (name_value.size() == 2)
+                {
+                    cookie_id_ = name_value[1];
+                    newClient = false;
+                    break;
+                }
+
+            }
+        }
+    }
+
+    //get country code
+    country_ = query_parser->param("country");
+    if(country_.empty())
+    {
+        country_ = geoip->country_code_by_addr(ip_);
+    }
+
+    //get region name
+    region_ = query_parser->param("region");
+    if(region_.empty())
+    {
+        region_ = geoip->region_code_by_addr(ip_);
+    }
+
+    search_ = query_parser->param("search");
+    //context_ = query_parser->param("context");
+    //location_ = query_parser->param("location");
+
+    /// ID посетителя, cookie
+    if(cookie_id_.empty())
+    {
+        struct in_addr ipval;
         //make new session id
         if(inet_pton(AF_INET, ip_.c_str(), &ipval))
         {
@@ -60,167 +157,18 @@ Params &Params::cookie_id(const std::string &cookie_id)
 
         newClient = true;
     }
-    else
-    {
-        cookie_id_ = cookie_id;
-        newClient = false;
-    }
 
-    return *this;
+    delete query_parser;
+    return true;
 }
 
-/// ID информера.
-Params &Params::informer_id(const std::string &informer_id)
+std::string time_t_to_string(time_t t)
 {
-    informer_id_ = informer_id;
-    boost::to_lower(informer_id_);
-    return *this;
-}
-/** \brief  Двухбуквенный код страны посетителя.
-
-    Если не задан, то страна будет определена по IP.
-
-    Этот параметр используется служебными проверками работы информеров
-    в разных странах и в обычной работе не должен устанавливаться.
-
-    \see region()
-    \see ip()
-*/
-Params &Params::country(const std::string &country)
-{
-    if(!country.empty())
-    {
-        country_ = country;
-    }
-    return *this;
+    std::stringstream sstr;
+    sstr << t;
+    return sstr.str();
 }
 
-/** \brief  Гео-политическая область в написании MaxMind GeoCity.
-
-    Если не задана, то при необходимости будет определена по IP.
-
-    Вместе с параметром country() используется служебными проверками
-    работы информеров в разных странах и в обычной работе не должен
-    устанавливаться.
-
-    \see country()
-    \see ip()
-*/
-Params &Params::region(const std::string &region)
-{
-    if(!region.empty())
-    {
-        region_ = region;
-    }
-    return *this;
-}
-
-/** \brief  Тестовый режим работы, в котором показы не записываются и переходы не записываються.
-
-    По умолчанию равен false.
-*/
-Params &Params::test_mode(bool test_mode)
-{
-    test_mode_ = test_mode;
-    return *this;
-}
-
-Params &Params::account_id(const std::string &account_id)
-{
-    account_id_ = account_id;
-    return *this;
-}
-
-Params &Params::retargeting_offer_id(const std::string &retargeting_offer_id)
-{
-    retargeting_offer_id_ = retargeting_offer_id;
-    return *this;
-}
-
-
-/// Выводить ли предложения в формате json.
-Params &Params::json(bool json)
-{
-    json_ = json;
-    return *this;
-}
-
-/// ID предложений, которые следует исключить из показа.
-Params &Params::excluded_offers(const std::vector<std::string> &excluded)
-{
-    excluded_offers_ = excluded;
-    return *this;
-}
-
-/** \brief  Виртуальный путь и имя вызываемого скрипта.
-
-    Используется для построения ссылок на самого себя. Фактически,
-    сюда должна передаваться сервреная переменная SCRIPT_NAME.
-*/
-Params &Params::script_name(const char *script_name)
-{
-    script_name_ = script_name? script_name : "";
-    return *this;
-}
-
-/** \brief  Адрес страницы, на которой показывается информер.
-
-    Обычно передаётся javascript загрузчиком.
-*/
-Params &Params::location(const char *location)
-{
-    return this->location(location? location : "");
-}
-
-/** \brief  Адрес страницы, на которой показывается информер.
-
-    Обычно передаётся javascript загрузчиком.
-*/
-Params &Params::location(const std::string &location)
-{
-    location_ = location;
-    return *this;
-}
-
-Params &Params::w(const std::string &w)
-{
-    w_ = w;
-    return *this;
-}
-
-Params &Params::h(const std::string &h)
-{
-    h_ = h;
-    return *this;
-}
-
-
-/**
- * строка, содержашяя контекст страницы
- */
-Params &Params::context(const std::string &context)
-{
-    context_ = context;
-    return *this;
-}
-Params &Params::context(const char *context)
-{
-    return this->context(context? context : "");
-}
-/**
- * строка, содержашяя поисковый запрос
- */
-Params &Params::search(const std::string &search)
-{
-    search_ = search;
-    return *this;
-}
-/*
-Params &Params::search(const char *search)
-{
-    return this->search(search? search : "");
-}
-*/
 std::string Params::getIP() const
 {
     return ip_;
@@ -319,4 +267,3 @@ std::string Params::getUrl() const
 
     return url.str();
 }
-

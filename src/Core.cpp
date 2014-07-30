@@ -17,6 +17,7 @@
 #include "Config.h"
 #include "Log.h"
 #include "Core.h"
+#include "base64.h"
 
 #define CMD_SIZE 8192
 Core::Core()
@@ -31,15 +32,15 @@ Core::Core()
 
     for(auto i = config->redis_retargeting_.begin(); i != config->redis_retargeting_.end(); ++i)
     {
-        RedisClient *rc = new RedisClient((*i).host,(*i).port,(*i).ttl*24*3600);
-        rc->connect();
+        SimpleRedisClient *rc = new SimpleRedisClient((*i).host,(*i).port,"ret");
+        rc->setTimeout((*i).ttl*24*3600);
         rcRetargeting.push_back(rc);
     }
 
     for(auto i = config->redis_short_term_.begin(); i != config->redis_short_term_.end(); ++i)
     {
-        RedisClient *rc = new RedisClient((*i).host,(*i).port,(*i).ttl*24*3600);
-        rc->connect();
+        SimpleRedisClient *rc = new SimpleRedisClient((*i).host,(*i).port,"short");
+        rc->setTimeout((*i).ttl*24*3600);
         rcShortTerm.push_back(rc);
     }
 
@@ -95,7 +96,7 @@ void Core::Process(Params *prms)
         for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
         {
             //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
-            (*i)->set(params->getUserKey(), params->getSearch());
+            (*i)->setex(params->getUserKey(), base64_encode(params->getSearch()),24*3600*14);
         }
     }
 
@@ -136,7 +137,7 @@ void Core::Process(Params *prms)
     if(config->logCountry)
         std::clog<<" country:"<<params->getCountry();
 
-    if(config->logRegion)
+    if(config->logRegion && !params->getRegion().empty())
         std::clog<<" region:"<<params->getRegion();
 
     if(config->logSearch && !params->getSearch().empty())
