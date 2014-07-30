@@ -19,20 +19,17 @@ src/Params.cpp \
 src/Cookie.cpp \
 src/Core.cpp \
 src/Offer.cpp \
-src/RedisClient.cpp \
 src/json.cpp \
 src/base64.cpp \
 src/Campaign.cpp \
 src/UrlParser.cpp \
 src/GeoRerions.cpp \
+src/SimpleRedisClient.cpp \
 main.cpp
 
 
 CMN_CPPFLAGS=-std=c++11 -Iinclude
 CMN_LDADD = $(BOOST_DATE_TIME_LIBS) $(BOOST_FILESYSTEM_LIBS) $(BOOST_THREAD_LIBS) $(BOOST_SYSTEM_LIBS) $(BOOST_REGEX_LIBS)
-
-
-SUBDIRS = libs/libredis
 
 if DEBUG
 bin_PROGRAMS = rgadtrackerd-dev

@@ -1,7 +1,5 @@
 #include <sys/stat.h>
 
-#include <boost/algorithm/string.hpp>
-
 #include "Log.h"
 #include "CgiService.h"
 #include "UrlParser.h"
@@ -176,100 +174,24 @@ void *CgiService::Serve(void *data)
 
 void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
 {
-    char *tmp_str = nullptr;
-    std::string cookie_value;
-    std::string query, ip, host;
+    Params *prm = new Params();
 
-    if (!(tmp_str = FCGX_GetParam("QUERY_STRING", req->envp)))
+    if(!prm->parse(req))
     {
-        std::clog<<"query string is not set"<<std::endl;
+        Response(req, 503);
+        delete prm;
         return;
     }
-    else
-    {
-        query = std::string(tmp_str);
-        if(!query.size() || query == "/favicon.ico")
-        {
-            Response(req, "favicon.ico", "");
-            return;
-        }
-    }
 
-    tmp_str = nullptr;
-    if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
-    {
-        std::clog<<"remote address is not set"<<std::endl;
-        return;
-    }
-    else
-    {
-        ip = std::string(tmp_str);
-    }
-
-
-    tmp_str = nullptr;
-    if( !(tmp_str = FCGX_GetParam("REMOTE_HOST", req->envp)) )
-    {
-    }
-    else
-    {
-        host = std::string(tmp_str);
-    }
-
-    /*
-        tmp_str = nullptr;
-        if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
-        {
-            Log::warn("script name is not set");
-            return;
-        }
-        else
-        {
-            script_name = std::string(tmp_str);
-        }
-    */
-    tmp_str = nullptr;
-    if((tmp_str = FCGX_GetParam("HTTP_COOKIE", req->envp)))
-    {
-        std::string visitor_cookie = std::string(tmp_str);
-
-        std::vector<std::string> strs;
-        boost::split(strs, visitor_cookie, boost::is_any_of(";"));
-
-        for (unsigned int i=0; i<strs.size(); i++)
-        {
-            if(strs[i].find(config->cookie_name_) != std::string::npos)
-            {
-                std::vector<std::string> name_value;
-                boost::split(name_value, strs[i], boost::is_any_of("="));
-                if (name_value.size() == 2)
-                    cookie_value = name_value[1];
-            }
-        }
-    }
-
-    UrlParser url(query);
-
-    if (url.param("show") == "status")
+    if(prm->status)
     {
         Response(req, bcore->Status(), "");
+        delete prm;
         return;
     }
 
-    Params prm = Params()
-                 .ip(ip)
-//                 .host(host)
-                 .cookie_id(cookie_value)
-                 .country(url.param("country"))
-                 .region(url.param("region"))
-                 .account_id(url.param("ac"))
-                 .location(url.param("location"))
-                 .search(url.param("search"))
-                 .context(url.param("context"))
-                 .retargeting_offer_id(url.param("offer_id"));
-
     ClearSilver::Cookie c = ClearSilver::Cookie(config->cookie_name_,
-                            cookie_value,
+                            prm->cookie_id_,
                             ClearSilver::Cookie::Credentials(
                                 ClearSilver::Cookie::Authority(config->cookie_domain_),
                                 ClearSilver::Cookie::Path(config->cookie_path_),
@@ -277,16 +199,9 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
 
     Response(req, config->template_out_, c.to_string());
 
-    try
-    {
-        core->Process(&prm);
-    }
-    catch (std::exception const &ex)
-    {
-        Response(req, 503);
-        Log::err("%s exception %s: name: %s while processing: %s",__func__,
-                 typeid(ex).name(), ex.what(), query.c_str());
-    }
+    core->Process(prm);
+
+    delete prm;
 }
 
 void CgiService::SignalHandler(int signum)

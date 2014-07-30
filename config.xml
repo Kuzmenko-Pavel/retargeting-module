@@ -15,7 +15,8 @@
     <!--путь к фалу базы данных sqlite или :memory:-->
     <sqlite>
         <!--файл базы-->
-        <db>:memory:</db>
+        <!--db>:memory:</db-->
+        <db>/run/alex/ret.db</db>
         <!--путь к каталогу дампа sqlite базы-->
         <schema>db_dump</schema>
     </sqlite>
