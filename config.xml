@@ -3,21 +3,19 @@
 <!--настройки сервера-->
 <server>
     <!--IP сервера. Ссылка на редирект по рекламному предложению содержит в себе адрес сервера, который её создал-->
-    <ip>127.0.0.1</ip>
-    <lock_file>/tmp/rgadtrackerd.lock</lock_file>
-    <pid_file>/tmp/rgadtrackerd.pid</pid_file>
-    <user>alex</user>
+    <ip>212.113.32.149</ip>
+    <lock_file>/run/workerd-track/lock</lock_file>
+    <pid_file>/run/workerd-track/pid</pid_file>
+    <user>www-data</user>
     <!--путь к файлу сокета-->
-    <socket_path>/tmp/rgadtrackerd.sock</socket_path>
+    <socket_path>/run/workerd-track/sock</socket_path>
     <!--количество ниток-->
-    <children>1</children>
+    <children>10</children>
 
     <!--путь к фалу базы данных sqlite или :memory:-->
     <sqlite>
         <!--файл базы-->
-        <!--db>:memory:</db-->
-        <db>/run/alex/ret.db</db>
-        <!--путь к каталогу дампа sqlite базы-->
+        <db>:memory:</db>
         <schema>db_dump</schema>
     </sqlite>
 
@@ -51,13 +49,7 @@
             <!--IP-адрес-->
             <host>127.0.0.1</host>
             <!--порт-->
-            <port>6380</port>
-    </redis>
-    <redis>
-            <!--IP-адрес-->
-            <host>127.0.0.1</host>
-            <!--порт-->
-            <port>6378</port>
+            <port>6385</port>
     </redis>
     <!--количество суток ретаргетинга(по умолчанию), если нет данных с сайта(период жизни ключа)-->
     <ttl>14</ttl>
@@ -69,13 +61,7 @@
             <!--IP-адрес-->
             <host>127.0.0.1</host>
             <!--порт-->
-            <port>6377</port>
-    </redis>
-    <redis>
-            <!--IP-адрес-->
-            <host>127.0.0.1</host>
-            <!--порт-->
-            <port>6376</port>
+            <port>6380</port>
     </redis>
     <!--период жизни ключа в сутках-->
     <ttl>30</ttl>
@@ -108,13 +94,13 @@
 </mongo>
 
 <log>
-    <coretime>1</coretime>
+    <coretime>0</coretime>
     <key>1</key>
-    <country>0</country>
-    <region>0</region>
+    <country>1</country>
+    <region>1</region>
     <context>1</context>
     <search>1</search>
-    <accountId>1</accountId>
+    <accountId>0</accountId>
     <OutPutOfferIds>1</OutPutOfferIds>
 </log>
 
