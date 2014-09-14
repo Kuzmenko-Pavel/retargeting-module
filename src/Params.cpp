@@ -3,179 +3,170 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/regex/icu.hpp>
 #include <boost/date_time.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <string>
 
 #include "Params.h"
 #include "GeoIPTools.h"
 #include "Log.h"
+#include "UrlParser.h"
 #include "Config.h"
 
-Params::Params()
+
+Params::Params() :
+    newClient(false),
+    test_mode_(false),
+    json_(false)
 {
     time_ = boost::posix_time::second_clock::local_time();
-    tracking_time_ = 365;
 }
 
-/// IP посетителя.
-Params &Params::ip(const std::string &ip)
+bool Params::parse(FCGX_Request *req)
 {
-    struct in_addr ipval;
+    char *tmp_str = nullptr;
+    UrlParser *query_parser;
 
-    ip_ = ip;
-    country_ = country_code_by_addr(ip_);
-    region_ = region_code_by_addr(ip_);
-
-    if(inet_pton(AF_INET, ip_.c_str(), &ipval))
+    if (!(tmp_str = FCGX_GetParam("QUERY_STRING", req->envp)))
     {
-        key_long = ipval.s_addr;
+        std::clog<<"query string is not set"<<std::endl;
+        return false;
     }
     else
     {
-        key_long = 0;
+        query_parser = new UrlParser(tmp_str);
     }
 
-    return *this;
-}
+    if(query_parser->param("show") == "status")
+    {
+        status = true;
+        delete query_parser;
+        return true;
+    }
+    else
+    {
+        status = false;
+    }
 
-/// ID посетителя, взятый из cookie
-Params &Params::cookie_id(const std::string &cookie_id)
-{
+    account_id_ = query_parser->param("ac");
+    if(account_id_.empty())
+    {
+        std::clog<<__func__<<" miss account id"<<std::endl;
+        delete query_parser;
+        return false;
+    }
 
-    cookie_id_ = cookie_id;
-    key_long = key_long << 32;
-    key_long = key_long | strtol(cookie_id_.c_str(),NULL,10);
-    return *this;
-}
+    retargeting_offer_id_ = query_parser->param("offer_id");
+    if(account_id_.empty())
+    {
+        std::clog<<__func__<<" miss offer id"<<std::endl;
+        delete query_parser;
+        return false;
+    }
 
-Params &Params::cookie_tracking_id(const std::string &cookie_tracking_id)
-{
-
-    cookie_tracking_id_ = cookie_tracking_id;
-    key_tracking_long = key_tracking_long << 32;
-    key_tracking_long = key_tracking_long | strtol(cookie_tracking_id_.c_str(),NULL,10);
-    return *this;
-}
-
-/// Время. По умолчанию равно текущему моменту.
-Params &Params::time(const boost::posix_time::ptime &time)
-{
-    time_ = time;
-    return *this;
-}
+    if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
+    {
+        std::clog<<"remote address is not set"<<std::endl;
+        delete query_parser;
+        return false;
+    }
+    else
+    {
+        ip_ = std::string(tmp_str);
+    }
 /*
-время тракинга в сутках
-*/
-Params &Params::tracking_time(const std::string &d)
-{
-    if(!d.empty())
+    tmp_str = nullptr;
+    if( (tmp_str = FCGX_GetParam("REMOTE_HOST", req->envp)) )
     {
-        tracking_time_ = boost::lexical_cast<int>(d);
+        host = std::string(tmp_str);
     }
-    else
+*/
+    /*
+        tmp_str = nullptr;
+        if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
+        {
+            Log::warn("script name is not set");
+            return;
+        }
+        else
+        {
+            script_name = std::string(tmp_str);
+        }
+    */
+    if((tmp_str = FCGX_GetParam("HTTP_COOKIE", req->envp)))
     {
-        tracking_time_ = config->redis_retargeting_.begin()->ttl;
+        std::string visitor_cookie = std::string(tmp_str);
+
+        std::vector<std::string> strs;
+        boost::split(strs, visitor_cookie, boost::is_any_of(";"));
+
+        for (unsigned int i=0; i<strs.size(); i++)
+        {
+            if(strs[i].find(config->cookie_name_) != std::string::npos)
+            {
+                std::vector<std::string> name_value;
+
+                boost::split(name_value, strs[i], boost::is_any_of("="));
+
+                if (name_value.size() == 2)
+                {
+                    cookie_id_ = name_value[1];
+                    newClient = false;
+                    break;
+                }
+
+            }
+        }
     }
-    return *this;
-}
 
-long Params::trackingTime() const
-{
-    return tracking_time_;
-}
-
-/** \brief  Двухбуквенный код страны посетителя.
-
-    Если не задан, то страна будет определена по IP.
-
-    Этот параметр используется служебными проверками работы информеров
-    в разных странах и в обычной работе не должен устанавливаться.
-
-    \see region()
-    \see ip()
-*/
-Params &Params::country(const std::string &country)
-{
-    if(!country_.size())
+    //get country code
+    country_ = query_parser->param("country");
+    if(country_.empty())
     {
-        country_ = country;
+        country_ = geoip->country_code_by_addr(ip_);
     }
-    return *this;
-}
 
-/** \brief  Гео-политическая область в написании MaxMind GeoCity.
-
-    Если не задана, то при необходимости будет определена по IP.
-
-    Вместе с параметром country() используется служебными проверками
-    работы информеров в разных странах и в обычной работе не должен
-    устанавливаться.
-
-    \see country()
-    \see ip()
-*/
-Params &Params::region(const std::string &region)
-{
-    if(!region_.size())
+    //get region name
+    region_ = query_parser->param("region");
+    if(region_.empty())
     {
-        region_ = region;
+        region_ = geoip->region_code_by_addr(ip_);
     }
-    return *this;
-}
-/** \brief  Виртуальный путь и имя вызываемого скрипта.
 
-    Используется для построения ссылок на самого себя. Фактически,
-    сюда должна передаваться сервреная переменная SCRIPT_NAME.
-*/
-Params &Params::script_name(const char *script_name)
-{
-    script_name_ = script_name? script_name : "";
-    return *this;
-}
+    search_ = query_parser->param("search");
+    //context_ = query_parser->param("context");
+    //location_ = query_parser->param("location");
 
-/** \brief  Адрес страницы, на которой показывается информер.
+    /// ID посетителя, cookie
+    if(cookie_id_.empty())
+    {
+        struct in_addr ipval;
+        //make new session id
+        if(inet_pton(AF_INET, ip_.c_str(), &ipval))
+        {
+            key_long = ipval.s_addr;
+        }
+        else
+        {
+            key_long = 0;
+        }
 
-    Обычно передаётся javascript загрузчиком.
-*/
-Params &Params::location(const char *location)
-{
-    return this->location(location? location : "");
-}
+        key_long = key_long << 32;
+        key_long = key_long | ::time(NULL);
+        cookie_id_ = std::to_string(key_long);
 
-/** \brief  Адрес страницы, на которой показывается информер.
+        newClient = true;
+    }
 
-    Обычно передаётся javascript загрузчиком.
-*/
-Params &Params::location(const std::string &location)
-{
-    location_ = location;
-    return *this;
+    delete query_parser;
+    return true;
 }
 
-/**
- * строка, содержашяя контекст страницы
- */
-Params &Params::context(const std::string &context)
+std::string time_t_to_string(time_t t)
 {
-    context_ = context;
-    return *this;
-}
-Params &Params::context(const char *context)
-{
-    return this->context(context? context : "");
-}
-/**
- * строка, содержашяя поисковый запрос
- */
-Params &Params::search(const std::string &search)
-{
-    search_ = search;
-    return *this;
-}
-
-Params &Params::search(const char *search)
-{
-    return this->search(search? search : "");
+    std::stringstream sstr;
+    sstr << t;
+    return sstr.str();
 }
 
 std::string Params::getIP() const
@@ -189,7 +180,7 @@ std::string Params::getCookieId() const
 
 std::string Params::getUserKey() const
 {
-    return cookie_id_ + "-" + ip_;
+    return cookie_id_;
 }
 
 unsigned long long Params::getUserKeyLong() const
@@ -206,9 +197,29 @@ std::string Params::getRegion() const
     return region_;
 }
 
+std::string Params::getInformerId() const
+{
+    return informer_id_;
+}
+
 boost::posix_time::ptime Params::getTime() const
 {
     return time_;
+}
+
+bool Params::isTestMode() const
+{
+    return test_mode_;
+}
+
+bool Params::isJson() const
+{
+    return json_;
+}
+
+std::vector<std::string> Params::getExcludedOffers()
+{
+    return excluded_offers_;
 }
 
 std::string Params::getScriptName() const
@@ -221,6 +232,16 @@ std::string Params::getLocation() const
     return location_;
 }
 
+std::string Params::getW() const
+{
+    return w_;
+}
+
+std::string Params::getH() const
+{
+    return h_;
+}
+
 std::string Params::getContext() const
 {
     return context_;
@@ -231,24 +252,18 @@ std::string Params::getSearch() const
     return search_;
 }
 
-Params &Params::retargeting_id(const std::string &retargeting_id)
+std::string Params::getUrl() const
 {
-    retargetingId_ = boost::to_lower_copy(retargeting_id);
-    return *this;
-}
+    std::stringstream url;
+    url << script_name_ <<"?scr=" << informer_id_ <<"&show=json";
 
-std::string Params::retargetingId() const
-{
-    return retargetingId_;
-}
+    if (test_mode_)
+        url << "&test=true";
+    if (!country_.empty())
+        url << "&country=" << country_;
+    if (!region_.empty())
+        url << "&region=" << region_;
+    url << "&";
 
-Params &Params::account_id(const std::string &account_id)
-{
-    account_id_ = boost::to_lower_copy(account_id);
-    return *this;
-}
-
-std::string Params::accountId() const
-{
-    return account_id_;
+    return url.str();
 }

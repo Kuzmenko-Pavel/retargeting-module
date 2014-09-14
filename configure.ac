@@ -2,7 +2,11 @@ dnl Process this file with autoconf
 
 AC_INIT([rgadtrackerd], [0.1.0], [wvdial@gmail.com])
 
+<<<<<<< HEAD
 AM_INIT_AUTOMAKE([1.11.6 foreign no-define])
+=======
+AM_INIT_AUTOMAKE([1.11 foreign no-define])
+>>>>>>> 8c4e02b0bfc5cd7def7deb164dd351e8223fb7d1
 
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
@@ -51,7 +55,6 @@ AC_CHECK_HEADER_STDBOOL
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
 AC_FUNC_MALLOC
-AC_PROG_RANLIB
 AC_TYPE_INT64_T
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
@@ -59,7 +62,6 @@ AC_TYPE_SIZE_T
 AC_TYPE_UID_T
 AC_TYPE_UINT64_T
 
-AC_CONFIG_LIBOBJ_DIR([libs/libredis])
 AC_CHECK_LIB([amqpcpp],[main],[],[AC_MSG_ERROR([amqpcpp library missing])])
 AC_CHECK_LIB([mongoclient],[main],[],[AC_MSG_ERROR([mongoclient(mongodb build with client shared library) missing])])
 

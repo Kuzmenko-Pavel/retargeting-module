@@ -8,7 +8,6 @@ UrlParser::UrlParser(const std::string &url)
     : url_(url)
 {
     parse();
-    //parseReferrer();//добавлено RealInvest Soft
 }
 
 /** Возвращает параметр par или пустую строку, если параметр не найден */
@@ -25,8 +24,6 @@ std::string UrlParser::param(const std::string &par) const
 /** Разбор URL-строки */
 void UrlParser::parse()
 {
-    port = 80;
-
     mainParse(url_);
 
     // Ищем первый вопросительный знак

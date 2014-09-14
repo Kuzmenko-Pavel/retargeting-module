@@ -523,7 +523,7 @@ bool RedisClient::zremrangebyrank(const std::string &key, int start, int stop)
 bool RedisClient::set(const std::string &key, const std::string &val)
 {
     bzero(cmd,CMD_SIZE);
-    snprintf(cmd, CMD_SIZE, "SET %s %s EX %ld\r\n", key.c_str(), base64_encode(val).c_str(), expireTime);
+    snprintf(cmd, CMD_SIZE, "SETEX %s %ld %s\r\n", key.c_str(), expireTime, base64_encode(val).c_str());
     execCmd(cmd);
 
     return true;

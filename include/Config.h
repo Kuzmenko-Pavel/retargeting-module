@@ -13,6 +13,8 @@ extern unsigned long last_time_request_processed;
 extern unsigned long offer_processed_;
 extern unsigned long social_processed_;
 
+#define REDIS_DEFAULT_TTL 3600*14
+
 class Config
 {
 public:
@@ -54,10 +56,11 @@ public:
     std::string template_out_;
     std::string template_error_;
     int time_update_;
+    bool logCoretime, logKey, logCountry, logRegion, logContext, logSearch, logAccountId, logOutPutOfferIds;
 
     static Config* Instance();
     bool LoadConfig(const std::string fName);
-    bool Load();
+    bool ReLoad();
     virtual ~Config();
 
     bool to_bool(std::string const& s)
@@ -82,14 +85,11 @@ private:
     std::string mFileName;
     std::string cfgFilePath;
 
-    TiXmlDocument *mDoc;
-    TiXmlElement* mRoot;
-    TiXmlElement* mElem;
-
     int getTime(const char *p);
     std::string getFileContents(const std::string &fileName);
     void exit(const std::string &mes);
     bool checkPath(const std::string &path_, bool checkWrite, bool isFile, std::string &mes);
+    bool Load();
 };
 
 extern Config *config;
