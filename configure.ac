@@ -2,7 +2,7 @@ dnl Process this file with autoconf
 
 AC_INIT([rgadtrackerd], [0.1.0], [wvdial@gmail.com])
 
-AM_INIT_AUTOMAKE([1.12 foreign no-define])
+AM_INIT_AUTOMAKE([1.11.6 foreign no-define])
 
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
