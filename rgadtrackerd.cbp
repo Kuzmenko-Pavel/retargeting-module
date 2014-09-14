@@ -35,7 +35,6 @@
 			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
-			<Add directory="libs/libredis" />
 		</Compiler>
 		<Linker>
 			<Add library="fcgi" />
@@ -48,7 +47,6 @@
 			<Add library="boost_regex" />
 			<Add library="GeoIP" />
 			<Add library="sphinxclient" />
-			<Add library="libs/libredis/lib/libredis.a" />
 			<Add library="sqlite3" />
 			<Add library="mongoclient" />
 			<Add library="rabbitmq" />
@@ -104,8 +102,8 @@
 		<Unit filename="include/Offer.h" />
 		<Unit filename="include/Params.h" />
 		<Unit filename="include/ParentDB.h" />
-		<Unit filename="include/RedisClient.h" />
 		<Unit filename="include/Server.h" />
+		<Unit filename="include/SimpleRedisClient.h" />
 		<Unit filename="include/UrlParser.h" />
 		<Unit filename="include/base64.h" />
 		<Unit filename="include/json.h" />
@@ -130,8 +128,8 @@
 		<Unit filename="src/Offer.cpp" />
 		<Unit filename="src/Params.cpp" />
 		<Unit filename="src/ParentDB.cpp" />
-		<Unit filename="src/RedisClient.cpp" />
 		<Unit filename="src/Server.cpp" />
+		<Unit filename="src/SimpleRedisClient.cpp" />
 		<Unit filename="src/UrlParser.cpp" />
 		<Unit filename="src/base64.cpp" />
 		<Unit filename="src/json.cpp" />

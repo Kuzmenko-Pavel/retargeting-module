@@ -7,7 +7,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "Params.h"
-#include "RedisClient.h"
+#include "SimpleRedisClient.h"
 
 /// Класс, который связывает воедино все части системы.
 class Core
@@ -34,14 +34,11 @@ public:
      * пользователю.
      */
     void Process(Params *params);
+    void PostProcess();
 
 private:
-    /// Время запуска службы
-    boost::posix_time::ptime time_service_started_;
-    /// Время начала последнего запроса
-    boost::posix_time::ptime time_request_started_;
     pthread_t tid;
-    std::vector<RedisClient *> rcRetargeting, rcShortTerm;
+    std::vector<SimpleRedisClient *> rcRetargeting, rcShortTerm;
     Params *params;
     char *cmd;
 
