@@ -17,6 +17,7 @@
 #include "Config.h"
 #include "Log.h"
 #include "Core.h"
+#include "base64.h"
 
 #define CMD_SIZE 8192
 Core::Core()
@@ -31,19 +32,19 @@ Core::Core()
 
     for(auto i = config->redis_retargeting_.begin(); i != config->redis_retargeting_.end(); ++i)
     {
-        RedisClient *rc = new RedisClient((*i).host,(*i).port,(*i).ttl*24*3600);
-        rc->connect();
+        SimpleRedisClient *rc = new SimpleRedisClient((*i).host,(*i).port,"ret");
+        rc->setTimeout((*i).ttl*24*3600);
         rcRetargeting.push_back(rc);
     }
 
     for(auto i = config->redis_short_term_.begin(); i != config->redis_short_term_.end(); ++i)
     {
-        RedisClient *rc = new RedisClient((*i).host,(*i).port,(*i).ttl*24*3600);
-        rc->connect();
+        SimpleRedisClient *rc = new SimpleRedisClient((*i).host,(*i).port,"short");
+        rc->setTimeout((*i).ttl*24*3600);
         rcShortTerm.push_back(rc);
     }
 
-    Log::info("%s[%ld] start",__func__,tid);
+    std::clog<<"["<<tid<<"]start"<<std::endl;
 }
 
 Core::~Core()
@@ -55,46 +56,97 @@ Core::~Core()
 	Изменён RealInvest Soft */
 void Core::Process(Params *prms)
 {
-    std::vector<long> result;
     boost::posix_time::ptime startTime;
+    std::vector<long> result;
 
     startTime = boost::posix_time::microsec_clock::local_time();
 
     params = prms;
 
-    std::string key = params->getUserKey();
-
-    if(params->accountId().empty())
+    if(params->account_id_.empty())
     {
-        Log::warn("%s wrong input params: account id from: %s",__func__,params->getIP().c_str());
+        std::clog<<"["<<tid<<"]"<<__func__
+                 <<" wrong input params: retargeting id from: "<<params->getIP()
+                 <<std::endl;
         return;
     }
 
-    if(params->retargetingId().empty())
+    if(params->retargeting_offer_id_.empty())
     {
-        Log::warn("%s wrong input params: retargeting id from: %s",__func__,params->getIP().c_str());
+        std::clog<<"["<<tid<<"]"<<__func__
+                 <<" wrong input params: retargeting id from: "<<params->getIP()
+                 <<std::endl;
     }
     else
     {
-        getOffer(result);
-
-        for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
+        if(getOffer(result))
         {
-            for(auto j = result.begin(); j!=result.end(); ++j)
+            for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
             {
-                (*i)->zadd(key,0,*j);
+                for(auto j = result.begin(); j!=result.end(); ++j)
+                {
+                    (*i)->zadd(params->getUserKey(),0,*j);
+                }
             }
         }
     }
 
-    for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
+    if(!params->getSearch().empty())
     {
-        (*i)->set(key, params->getSearch()+" "+params->getContext());
+        for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
+        {
+            //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
+            (*i)->setex(params->getUserKey(), base64_encode(params->getSearch()),24*3600*14);
+        }
     }
 
-    Log::info("%s[%ld]core time: %s found size: %d",__func__,
-              tid, boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime).c_str(),
-              result.size());
+    std::clog<<"["<<tid<<"]";
+
+    if(config->logCoretime)
+        std::clog<<" core time:"<< boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time() - startTime);
+
+    if(config->logAccountId)
+        std::clog<<" account id:"<<params->account_id_;
+
+    if(config->logKey)
+        std::clog<<" key:"<<params->getUserKey();
+
+    if(config->logOutPutOfferIds)
+    {
+        std::clog<<" offer ids:";
+        if(result.size())
+        {
+            for(auto o = result.begin(); o != result.end(); ++o)
+            {
+                if(o != result.begin())
+                {
+                    std::clog<<","<<(*o);
+                }
+                else
+                {
+                    std::clog<<(*o);
+                }
+            }
+        }
+        else
+        {
+            std::clog<<"0";
+        }
+    }
+
+    if(config->logCountry)
+        std::clog<<" country:"<<params->getCountry();
+
+    if(config->logRegion && !params->getRegion().empty())
+        std::clog<<" region:"<<params->getRegion();
+
+    if(config->logSearch && !params->getSearch().empty())
+        std::clog<<" search:"<<params->getSearch();
+
+    if(config->logContext && !params->getContext().empty())
+        std::clog<<" context:"<<params->getContext();
+
+    std::clog<<std::endl;
 
     result.clear();
 
@@ -103,14 +155,19 @@ void Core::Process(Params *prms)
     return;
 }
 
+void Core::PostProcess()
+{
+
+}
+
 bool Core::getOffer(std::vector<long> &result)
 {
     Kompex::SQLiteStatement *pStmt;
     pStmt = new Kompex::SQLiteStatement(config->pDb->pDatabase);
 
     sqlite3_snprintf(CMD_SIZE, cmd, config->offerSqlAll.c_str(),
-                     params->accountId().c_str(),
-                     params->retargetingId().c_str());
+                     params->account_id_.c_str(),
+                     params->retargeting_offer_id_.c_str());
 
 #ifdef DEBUG
     printf("%s\n",cmd);
@@ -129,13 +186,16 @@ bool Core::getOffer(std::vector<long> &result)
     }
     catch(Kompex::SQLiteException &ex)
     {
-        printf("%s\n", cmd);
-        Log::err("%s error: %s",__func__,ex.GetString().c_str());
+        std::clog<<"["<<tid<<"]"<<__func__
+                 <<" error: "<<ex.GetString()
+                 <<std::endl;
+
         delete pStmt;
         return false;
     }
 
     delete pStmt;
 
-    return true;
+    return result.size() ? true : false;
 }
+

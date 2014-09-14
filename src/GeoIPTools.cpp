@@ -1,50 +1,47 @@
+#include "Config.h"
 #include "GeoIPTools.h"
 
-/** Возвращает объект GeoIP для определения страны по ip */
-GeoIP *GeoCountry()
+GeoIPTools* GeoIPTools::mInstance = NULL;
+
+GeoIPTools::GeoIPTools()
 {
-    static GeoIP *geo = 0;
-    if (geo)
-        return geo;
-    geo = GeoIP_new(GEOIP_MEMORY_CACHE);
-    return geo;
+    mGeoCountry = GeoIP_new(GEOIP_MEMORY_CACHE);
+    mGeoCity = GeoIP_open(config->geocity_path_.c_str(), GEOIP_MEMORY_CACHE);
 }
 
-/** Возвращает объект GeoIP для определения города по ip.
-
-    При первом вызове пытается открыть файл с базой данных, указанный в
-    параметре ``filename``. Если ``filename`` не задан
- */
-GeoIP *GeoCity(const char *filename)
+GeoIPTools::~GeoIPTools()
 {
-    static GeoIP *geo = 0;
-    static bool open_failed = false;
-
-    if (open_failed)
-        return 0;
-    if (geo)
-        return geo;
-
-    if (filename)
-        geo = GeoIP_open(filename, GEOIP_MEMORY_CACHE);
-    else
-        geo = GeoIP_open("/usr/share/GeoIP/GeoLiteCity.dat",
-                         GEOIP_MEMORY_CACHE);
-    open_failed = geo? false : true;
-    return geo;
+    GeoIP_delete(mGeoCountry);
+    GeoIP_delete(mGeoCity);
 }
+
+GeoIPTools* GeoIPTools::Instance()
+{
+    if (!mInstance)   // Only allow one instance of class to be generated.
+        mInstance = new GeoIPTools();
+
+    return mInstance;
+}
+
 
 /** Возвращает двухбуквенный код страны по ``ip``.
     Если по какой-либо причине страну определить не удалось, возвращается
     пустая строка
 */
-std::string country_code_by_addr(const std::string &ip)
+std::string GeoIPTools::country_code_by_addr(const std::string &ip) const
 {
-    if (!GeoCountry())
-        return "";
+    std::string ret;
+    const char *country;
 
-    const char *country = GeoIP_country_code_by_addr(GeoCountry(), ip.c_str());
-    return country? country : "";
+    if (!mGeoCountry)
+        return ret;
+
+    if((country = GeoIP_country_code_by_addr(mGeoCountry, ip.c_str())))
+    {
+        ret = country;
+    }
+
+    return ret;
 }
 
 
@@ -52,28 +49,46 @@ std::string country_code_by_addr(const std::string &ip)
     Если по какой-либо причине область определить не удалось, возвращается
     пустая строка.
 */
-std::string region_code_by_addr(const std::string &ip)
+std::string GeoIPTools::region_code_by_addr(const std::string &ip) const
 {
-    if (!GeoCity())
-        return "";
+    std::string ret;
+    const char *region_name;
+    GeoIPRecord *record;
 
-    GeoIPRecord *record = GeoIP_record_by_addr(GeoCity(), ip.c_str());
-    if (!record)
-        return "";
+    if (!mGeoCity)
+        return ret;
 
-    const char *region_name =
-        GeoIP_region_name_by_code(record->country_code, record->region);
-    return region_name? region_name : "";
+    if (!(record = GeoIP_record_by_addr(mGeoCity, ip.c_str())))
+    {
+        return ret;
+    }
+    else
+    {
+        if((region_name =
+            GeoIP_region_name_by_code(record->country_code, record->region)))
+        {
+            ret = region_name;
+        }
+
+        GeoIPRecord_delete(record);
+    }
+
+    return ret;
 }
 
-std::string city_code_by_addr(const std::string &ip)
+std::string GeoIPTools::city_code_by_addr(const std::string &ip) const
 {
-    if (!GeoCity())
-        return "";
+    std::string ret;
+    GeoIPRecord *record;
 
-    GeoIPRecord *record = GeoIP_record_by_addr(GeoCity(), ip.c_str());
-    if (!record)
-        return "";
+    if (!mGeoCity)
+        return ret;
 
-    return record->city ? record->city : "";
+    if((record = GeoIP_record_by_addr(mGeoCity, ip.c_str())))
+    {
+        ret = record->city;
+        GeoIPRecord_delete(record);
+    }
+
+    return ret;
 }

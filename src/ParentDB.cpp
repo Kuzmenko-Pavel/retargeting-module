@@ -104,7 +104,7 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
 
         bzero(pData,sz);
         sqlite3_snprintf(sz,pData,
-                         "%lli,'%q',%lli,%lli,'%q',%f,%d,'%q',%d,%d,%d,%f,%d,'%q','%q','%q','%q','%q',%d,%d,'%q');",
+                         "%llu,'%q',%llu,%llu,'%q',%f,%d,'%q',%d,%d,%d,%f,%d,'%q','%q','%q','%q','%q',%d,%d,%lu);",
                          x.getField("guid_int").numberLong(),
                          id.c_str(),
                          x.getField("campaignId_int").numberLong(),
@@ -125,7 +125,7 @@ void ParentDB::OfferLoad(mongo::Query q_correct)
                          x.getStringField("title"),
                          Offer::typeFromString(x.getStringField("type")),
                          1,
-                         x.getStringField("RetargetingID")
+                         strtol(x.getStringField("RetargetingID"),NULL,10)
                         );
 
         try
