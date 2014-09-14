@@ -20,7 +20,7 @@ price VARCHAR(35),
 url VARCHAR(2048),
 title  VARCHAR(70),
 valid SMALLINT DEFAULT 1,
-retargetingId  VARCHAR(20),
+retargetingId INT8,
 UNIQUE (id) ON CONFLICT IGNORE,
 UNIQUE (guid) ON CONFLICT IGNORE,
 UNIQUE (accountId,retargetingId) ON CONFLICT IGNORE,
@@ -29,9 +29,4 @@ FOREIGN KEY(categoryId) REFERENCES Category(id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_Offer_id ON Offer (id);
-CREATE INDEX IF NOT EXISTS idx_Offer_guid ON Offer (guid);
-CREATE INDEX IF NOT EXISTS idx_Offer_rating ON Offer (rating);
-CREATE INDEX IF NOT EXISTS idx_Offer_campaignId ON Offer (campaignId);
-CREATE INDEX IF NOT EXISTS idx_Offer_id_rating ON Offer (id,rating);
-CREATE INDEX IF NOT EXISTS idx_Offer_valid ON Offer (valid);
-CREATE INDEX IF NOT EXISTS idx_Offer_accountId_retargetingId ON Offer (accountId,retargetingId);
+CREATE INDEX IF NOT EXISTS idx_Offer_id_accountId_retargetingId ON Offer (id,accountId,retargetingId);
