@@ -30,9 +30,7 @@ public:
 private:
     std::string url_;
     std::map<std::string, std::string> params_;
-
     std::string protocol_, host_, path_, query_;
-    int port;
 
     void parse();
     std::string percent_decode(const std::string &str) const;
