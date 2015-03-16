@@ -37,12 +37,14 @@ Core::Core()
         rcRetargeting.push_back(rc);
     }
 
+    /* 
     for(auto i = config->redis_short_term_.begin(); i != config->redis_short_term_.end(); ++i)
     {
         SimpleRedisClient *rc = new SimpleRedisClient((*i).host,(*i).port,"short");
         rc->setTimeout((*i).ttl*24*3600);
         rcShortTerm.push_back(rc);
     }
+    */
 
     std::clog<<"["<<tid<<"]start"<<std::endl;
 }
@@ -54,10 +56,11 @@ Core::~Core()
 
 /** Обработка запроса на показ рекламы с параметрами ``params``.
 	Изменён RealInvest Soft */
-void Core::Process(Params *prms)
+bool Core::Process(Params *prms)
 {
     boost::posix_time::ptime startTime;
     std::vector<long> result;
+    bool is_find = false;
 
     startTime = boost::posix_time::microsec_clock::local_time();
 
@@ -68,7 +71,7 @@ void Core::Process(Params *prms)
         std::clog<<"["<<tid<<"]"<<__func__
                  <<" wrong input params: retargeting id from: "<<params->getIP()
                  <<std::endl;
-        return;
+        return is_find;
     }
 
     if(params->retargeting_offer_id_.empty())
@@ -81,17 +84,19 @@ void Core::Process(Params *prms)
     {
         if(getOffer(result))
         {
+            is_find = true;
             for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
             {
                 for(auto j = result.begin(); j!=result.end(); ++j)
                 {
                     (*i)->zadd(params->getUserKey(),0,*j);
+                    (*i)->expire(params->getUserKey().c_str(), params->getSecondTimeCookie());
                 }
             }
         }
     }
 
-    if(!params->getSearch().empty())
+    /* if(!params->getSearch().empty())
     {
         for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
         {
@@ -99,6 +104,7 @@ void Core::Process(Params *prms)
             (*i)->setex(params->getUserKey(), base64_encode(params->getSearch()),24*3600*14);
         }
     }
+    */
 
     std::clog<<"["<<tid<<"]";
 
@@ -152,7 +158,7 @@ void Core::Process(Params *prms)
 
     request_processed_++;
 
-    return;
+    return is_find;
 }
 
 void Core::PostProcess()

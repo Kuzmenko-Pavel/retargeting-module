@@ -235,6 +235,30 @@ bool Config::Load()
             }
         }
 
+        if( (mel = mElem->FirstChildElement("cookie_tracking")) )
+        {
+            if( (mels = mel->FirstChildElement("name")) && (mels->GetText()) )
+                cookie_tracking_name_ = mels->GetText();
+            else
+            {
+                Log::warn("element cookie_tracking_name is not inited");
+            }
+            if( (mels = mel->FirstChildElement("domain")) && (mels->GetText()) )
+                cookie_tracking_domain_ = mels->GetText();
+            else
+            {
+                Log::warn("element cookie_tracking_domain is not inited");
+            }
+
+            if( (mels = mel->FirstChildElement("path")) && (mels->GetText()) )
+                cookie_tracking_path_ = mels->GetText();
+            else
+            {
+                Log::warn("element cookie_tracking_path is not inited");
+            }
+        }
+
+
         if( (mel = mElem->FirstChildElement("mq_path")) && (mel->GetText()) )
         {
             mq_path_ = mel->GetText();
