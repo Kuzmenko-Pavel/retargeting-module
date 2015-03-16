@@ -87,10 +87,12 @@ void CgiService::run()
 
 void CgiService::Response(FCGX_Request *req,
                           const std::string &out,
-                          const std::string &cookie)
+                          const std::string &c,
+                          const std::string &rc)
 {
     FCGX_FPrintF(req->out,"Content-type: text/html\r\n");
-    FCGX_FPrintF(req->out,"Set-Cookie: %s\r\n", cookie.c_str());
+    FCGX_FPrintF(req->out,"Set-Cookie: %s\r\n", c.c_str());
+    FCGX_FPrintF(req->out,"Set-Cookie: %s\r\n", rc.c_str());
     FCGX_FPrintF(req->out,"Status: 200 OK\r\n");
     FCGX_FFlush(req->out);
     FCGX_FPrintF(req->out,"\r\n%s\n", out.c_str());
@@ -197,9 +199,20 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
                                 ClearSilver::Cookie::Path(config->cookie_path_),
                                 ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::years(1))));
 
-    Response(req, config->template_out_, c.to_string());
-
-    core->Process(prm);
+    if (core->Process(prm))
+    {
+        ClearSilver::Cookie rc = ClearSilver::Cookie(config->cookie_tracking_name_,
+                                prm->cookie_id_,
+                                ClearSilver::Cookie::Credentials(
+                                    ClearSilver::Cookie::Authority(config->cookie_tracking_domain_),
+                                    ClearSilver::Cookie::Path(config->cookie_tracking_path_),
+                                    ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::days(prm->time_cookies_))));
+        Response(req, config->template_out_, c.to_string(), rc.to_string());
+    }
+    else
+    {
+        Response(req, config->template_out_, c.to_string());
+    }
 
     delete prm;
 }

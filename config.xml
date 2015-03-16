@@ -3,14 +3,14 @@
 <!--настройки сервера-->
 <server>
     <!--IP сервера. Ссылка на редирект по рекламному предложению содержит в себе адрес сервера, который её создал-->
-    <ip>212.113.32.149</ip>
+    <ip>212.113.34.132</ip>
     <lock_file>/run/workerd-track/lock</lock_file>
     <pid_file>/run/workerd-track/pid</pid_file>
     <user>www-data</user>
     <!--путь к файлу сокета-->
     <socket_path>/run/workerd-track/sock</socket_path>
     <!--количество ниток-->
-    <children>10</children>
+    <children>2</children>
 
     <!--путь к фалу базы данных sqlite или :memory:-->
     <sqlite>
@@ -25,17 +25,17 @@
     <!--Путь к файлу базы данных MaxMind GeoIP City Edition-->
     <geocity_path>/usr/share/GeoIP/GeoLiteCity.dat</geocity_path>
 
-    <cookie id="unique">
+    <cookie>
         <name>yottos_unique_id</name>
-        <domain>.yottos.com.</domain>
+        <domain>.yottos.com</domain>
         <path>/</path>
     </cookie>
 
-    <cookie id="tracking">
+    <cookie_tracking>
         <name>yottos_tracking_id</name>
-        <domain>.yottos.com.</domain>
+        <domain>.yottos.com</domain>
         <path>/</path>
-    </cookie>
+    </cookie_tracking>
 
     <templates>
         <out>templates/out.html</out>
@@ -49,7 +49,7 @@
             <!--IP-адрес-->
             <host>127.0.0.1</host>
             <!--порт-->
-            <port>6385</port>
+            <port>6379</port>
     </redis>
     <!--количество суток ретаргетинга(по умолчанию), если нет данных с сайта(период жизни ключа)-->
     <ttl>14</ttl>
@@ -72,8 +72,8 @@
     <!--Параметры подключения к основной базе данных-->
     <main>
         <!--Адрес сервера баз данных-->
-        <host>212.113.32.146:27018</host>
-        <host>212.113.32.147:27018</host>
+        <host>srv-9.yottos.com:27018</host>
+        <host>srv-8.yottos.com:27018</host>
         <host>srv-1.yottos.com:27017</host>
         <host>srv-2.yottos.com:27018</host>
         <host>srv-3.yottos.com:27018</host>
