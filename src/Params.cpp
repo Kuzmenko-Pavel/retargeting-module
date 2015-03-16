@@ -14,10 +14,7 @@
 #include "Config.h"
 
 
-Params::Params() :
-    newClient(false),
-    test_mode_(false),
-    json_(false)
+Params::Params()
 {
     time_ = boost::posix_time::second_clock::local_time();
 }
@@ -56,6 +53,17 @@ bool Params::parse(FCGX_Request *req)
         return false;
     }
 
+    std::string s_time_cookies_ = query_parser->param("time");
+    if(s_time_cookies_.empty())
+    {
+        std::clog<<__func__<<" miss time"<<std::endl;
+        time_cookies_ = 365;
+    }
+    else
+    {
+        time_cookies_ = atoi(s_time_cookies_.c_str());
+    }
+
     retargeting_offer_id_ = query_parser->param("offer_id");
     if(account_id_.empty())
     {
@@ -74,25 +82,7 @@ bool Params::parse(FCGX_Request *req)
     {
         ip_ = std::string(tmp_str);
     }
-/*
-    tmp_str = nullptr;
-    if( (tmp_str = FCGX_GetParam("REMOTE_HOST", req->envp)) )
-    {
-        host = std::string(tmp_str);
-    }
-*/
-    /*
-        tmp_str = nullptr;
-        if (!(tmp_str = FCGX_GetParam("SCRIPT_NAME", req->envp)))
-        {
-            Log::warn("script name is not set");
-            return;
-        }
-        else
-        {
-            script_name = std::string(tmp_str);
-        }
-    */
+    
     if((tmp_str = FCGX_GetParam("HTTP_COOKIE", req->envp)))
     {
         std::string visitor_cookie = std::string(tmp_str);
@@ -111,7 +101,6 @@ bool Params::parse(FCGX_Request *req)
                 if (name_value.size() == 2)
                 {
                     cookie_id_ = name_value[1];
-                    newClient = false;
                     break;
                 }
 
@@ -155,7 +144,6 @@ bool Params::parse(FCGX_Request *req)
         key_long = key_long | ::time(NULL);
         cookie_id_ = std::to_string(key_long);
 
-        newClient = true;
     }
 
     delete query_parser;
@@ -183,6 +171,16 @@ std::string Params::getUserKey() const
     return cookie_id_;
 }
 
+int Params::getTimeCookie() const
+{
+    return time_cookies_;
+}
+
+int Params::getSecondTimeCookie() const
+{
+    return time_cookies_ * 24 * 60 * 60;
+}
+
 unsigned long long Params::getUserKeyLong() const
 {
     return key_long;
@@ -197,31 +195,10 @@ std::string Params::getRegion() const
     return region_;
 }
 
-std::string Params::getInformerId() const
-{
-    return informer_id_;
-}
-
 boost::posix_time::ptime Params::getTime() const
 {
     return time_;
 }
-
-bool Params::isTestMode() const
-{
-    return test_mode_;
-}
-
-bool Params::isJson() const
-{
-    return json_;
-}
-
-std::vector<std::string> Params::getExcludedOffers()
-{
-    return excluded_offers_;
-}
-
 std::string Params::getScriptName() const
 {
     return script_name_;
@@ -230,16 +207,6 @@ std::string Params::getScriptName() const
 std::string Params::getLocation() const
 {
     return location_;
-}
-
-std::string Params::getW() const
-{
-    return w_;
-}
-
-std::string Params::getH() const
-{
-    return h_;
 }
 
 std::string Params::getContext() const
@@ -255,10 +222,6 @@ std::string Params::getSearch() const
 std::string Params::getUrl() const
 {
     std::stringstream url;
-    url << script_name_ <<"?scr=" << informer_id_ <<"&show=json";
-
-    if (test_mode_)
-        url << "&test=true";
     if (!country_.empty())
         url << "&country=" << country_;
     if (!region_.empty())
