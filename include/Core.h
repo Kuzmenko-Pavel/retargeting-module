@@ -33,7 +33,7 @@ public:
      * Самый главный метод. Возвращает HTML-строку, которую нужно вернуть
      * пользователю.
      */
-    void Process(Params *params);
+    bool Process(Params *params);
     void PostProcess();
 
 private:
