@@ -1,6 +1,7 @@
 #include <signal.h>
 
 #include <boost/foreach.hpp>
+#include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 #include <boost/format.hpp>
@@ -89,7 +90,7 @@ bool Core::Process(Params *prms)
             {
                 for(auto j = result.begin(); j!=result.end(); ++j)
                 {
-                    (*i)->zadd(params->getUserKey(),0,*j);
+                    (*i)->zadd(params->getUserKey(),::time(NULL),*j);
                     (*i)->expire(params->getUserKey().c_str(), params->getSecondTimeCookie());
                 }
             }
