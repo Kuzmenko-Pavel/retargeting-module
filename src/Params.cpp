@@ -2,6 +2,7 @@
 
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/regex/icu.hpp>
+#include <boost/regex.hpp>
 #include <boost/date_time.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -18,6 +19,14 @@ Params::Params()
 {
     time_ = boost::posix_time::second_clock::local_time();
 }
+
+std::string time_t_to_string(time_t t)
+{
+    std::stringstream sstr;
+    sstr << t;
+    return sstr.str();
+}
+
 
 bool Params::parse(FCGX_Request *req)
 {
@@ -129,32 +138,31 @@ bool Params::parse(FCGX_Request *req)
     /// ID посетителя, cookie
     if(cookie_id_.empty())
     {
-        struct in_addr ipval;
         //make new session id
-        if(inet_pton(AF_INET, ip_.c_str(), &ipval))
-        {
-            key_long = ipval.s_addr;
-        }
-        else
-        {
-            key_long = 0;
-        }
+        //if(inet_pton(AF_INET, ip_.c_str(), &ipval))
+        //{
+        //    key_long = ipval.s_addr;
+        //}
+        //else
+        //{
+        //    key_long = 0;
+        //}
 
-        key_long = key_long << 32;
-        key_long = key_long | ::time(NULL);
-        cookie_id_ = std::to_string(key_long);
-
+        //key_long = key_long << 32;
+        key_long = time(NULL);
+        cookie_id_ = time_t_to_string(key_long);
+    }
+    else
+    {
+        cookie_id_ = cookie_id_;
+        boost::u32regex replaceSymbol = boost::make_u32regex("[^0-9]");
+        cookie_id_ = boost::u32regex_replace(cookie_id_ ,replaceSymbol,"");
+        boost::trim(cookie_id_);
+        key_long = atol(cookie_id_.c_str());
     }
 
     delete query_parser;
     return true;
-}
-
-std::string time_t_to_string(time_t t)
-{
-    std::stringstream sstr;
-    sstr << t;
-    return sstr.str();
 }
 
 std::string Params::getIP() const
