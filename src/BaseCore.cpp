@@ -76,6 +76,7 @@ bool BaseCore::ProcessMQ()
                     pdb->OfferRemove(ofrId);
                 }
             }
+            mq_advertise_->Get(AMQP_NOACK);
             m = mq_advertise_->getMessage();
         }
     }
