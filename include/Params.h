@@ -30,20 +30,14 @@ public:
     int getTimeCookie() const;
     int getSecondTimeCookie() const;
     unsigned long long getUserKeyLong() const;
-    std::string getCountry() const;
-    std::string getRegion() const;
     boost::posix_time::ptime getTime() const;
     std::string getScriptName() const;
     std::string getLocation() const;
     std::string getContext() const;
     std::string getSearch() const;
-    std::string getUrl() const;
 
 private:
     unsigned long long key_long;
-    std::string country_;
-    std::string countryByIp_;
-    std::string region_;
     std::string script_name_;
     std::string context_;//строка содержашяя контекст страницы
     std::string search_;
