@@ -2,15 +2,12 @@ ACLOCAL_AMFLAGS = -I m4
 
 SRC_ALL=\
 src/redis_server.cpp \
-src/EBranch.cpp \
 src/Server.cpp \
 src/DB.cpp \
 src/KompexSQLiteStatement.cpp \
-src/GeoIPTools.cpp \
 src/DataBase.cpp \
 src/BaseCore.cpp \
 src/Config.cpp \
-src/Informer.cpp \
 src/Log.cpp \
 src/CgiService.cpp \
 src/ParentDB.cpp \
@@ -18,12 +15,8 @@ src/KompexSQLiteDatabase.cpp \
 src/Params.cpp \
 src/Cookie.cpp \
 src/Core.cpp \
-src/Offer.cpp \
-src/json.cpp \
 src/base64.cpp \
-src/Campaign.cpp \
 src/UrlParser.cpp \
-src/GeoRerions.cpp \
 src/SimpleRedisClient.cpp \
 main.cpp
 
@@ -61,31 +54,7 @@ dist_doc_DATA=README
 
 sysconf_DATA= \
 db_dump/requests/all.sql \
-db_dump/tables/11_GeoCountries.sql \
-db_dump/tables/00_Campaign.sql \
-db_dump/tables/17_Retargeting.sql \
-db_dump/tables/12_GeoRerions.sql \
-db_dump/tables/20_GeoLiteCity.sql \
-db_dump/tables/06_Accounts.sql \
-db_dump/tables/02_Offer.sql \
-db_dump/tables/07_Campaign2Accounts.sql \
-db_dump/tables/15_CampaignNow.sql \
-db_dump/tables/16_Informer.sql \
-db_dump/tables/18_Informer2OfferRating.sql \
-db_dump/tables/10_CronCampaign.sql \
-db_dump/tables/05_Campaign2Informer.sql \
-db_dump/tables/14_regionTargeting.sql \
-db_dump/tables/08_Domains.sql \
-db_dump/tables/19_Campaign2Categories.sql \
-db_dump/tables/04_Categories2Domain.sql \
-db_dump/tables/13_geoTargeting.sql \
-db_dump/tables/03_Categories.sql \
-db_dump/tables/09_Campaign2Domains.sql \
-db_dump/tables/04_Categories2Informer.sql \
-db_dump/view/00_Campaign2GeoRerions.sql \
-db_dump/view/03_Campaign2Acnts.sql \
-db_dump/view/02_Campaign2Doms.sql \
-db_dump/view/04_Campaign2Infs.sql \
+db_dump/tables/Offer.sql \
 js/_t.js \
 js/_tc.js \
 templates/out.html \

@@ -17,7 +17,6 @@
 #include "Log.h"
 #include "DataBase.h"
 #include "KompexSQLiteException.h"
-#include "GeoRerions.h"
 #include "Config.h"
 
 DataBase::DataBase(bool create) :
@@ -86,7 +85,6 @@ bool DataBase::openDb()
 
         //load db dump from directory
         readDir(dirName + "/tables");
-        readDir(dirName + "/view");
     }
     catch(Kompex::SQLiteException &ex)
     {

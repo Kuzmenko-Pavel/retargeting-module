@@ -15,8 +15,8 @@
 
 #include "Log.h"
 #include "BaseCore.h"
-#include "Offer.h"
 #include "Config.h"
+#define MAXCOUNT 1000
 
 BaseCore::BaseCore()
 {
@@ -51,33 +51,42 @@ std::string BaseCore::toString(AMQPMessage *m)
 
 bool BaseCore::ProcessMQ()
 {
+    AMQPMessage *m;
+    int stopCount;
     time_mq_check_ = boost::posix_time::second_clock::local_time();
     try
     {
-        // Проверка сообщений advertise.#
-        std::string m1, ofrId, cmgId;
-        mq_advertise_->Get(AMQP_NOACK);
-        AMQPMessage *m = mq_advertise_->getMessage();
-        while(m->getMessageCount() > -1)
         {
-            Log::gdb("%s advertise: %s",__func__,m->getRoutingKey().c_str());
-            m1 = toString(m);
-            if(m->getRoutingKey() == "advertise.update")
+            // Проверка сообщений campaign.#
+            mq_campaign_->Get(AMQP_NOACK);
+            m = mq_campaign_->getMessage();
+            stopCount = MAXCOUNT;
+            while(m->getMessageCount() > -1 && stopCount--)
             {
-                if(cmdParser(m1,ofrId,cmgId))
+                if(m->getRoutingKey() == "campaign.update")
                 {
-                    pdb->OfferLoad(QUERY("guid" << ofrId));
+                    std::string CampaignId = toString(m);
+                    pdb->OfferLoad(CampaignId);
                 }
-            }
-            else if(m->getRoutingKey() == "advertise.delete")
-            {
-                if(cmdParser(m1,ofrId,cmgId))
+                else if(m->getRoutingKey() == "campaign.delete")
                 {
-                    pdb->OfferRemove(ofrId);
+                    std::string CampaignId = toString(m);
+                    pdb->OfferRemove(CampaignId);
                 }
+                else if(m->getRoutingKey() == "campaign.start")
+                {
+                    std::string CampaignId = toString(m);
+                    pdb->OfferLoad(CampaignId);
+                }
+                else if(m->getRoutingKey() == "campaign.stop")
+                {
+                    std::string CampaignId = toString(m);
+                    pdb->OfferRemove(CampaignId);
+                }
+
+                mq_campaign_->Get(AMQP_NOACK);
+                m = mq_campaign_->getMessage();
             }
-            mq_advertise_->Get(AMQP_NOACK);
-            m = mq_advertise_->getMessage();
         }
     }
     catch (AMQPException &ex)
@@ -106,7 +115,7 @@ void BaseCore::LoadAllEntities()
     }
 
     //Загрузили все предложения
-    pdb->OfferLoad(mongo::Query("{\"retargeting\":true}"));
+    pdb->OfferLoad("");
 
     Config::Instance()->pDb->indexRebuild();
 }
@@ -131,17 +140,17 @@ void BaseCore::InitMessageQueue()
         std::string postfix = to_iso_string(now);
         boost::replace_first(postfix, ".", ",");
 
-        std::string mq_advertise_name( "getmyad.advertise." + postfix );
+        std::string mq_campaign_name( "getmyad.campaign." + postfix );
 
         // Объявляем очереди
-        mq_advertise_ = amqp_->createQueue();
-        mq_advertise_->Declare(mq_advertise_name, AMQP_AUTODELETE | AMQP_EXCLUSIVE);
+        mq_campaign_ = amqp_->createQueue();
+        mq_campaign_->Declare(mq_campaign_name, AMQP_AUTODELETE | AMQP_EXCLUSIVE);
 
         // Привязываем очереди
-        exchange_->Bind(mq_advertise_name, "advertise.#");
+        exchange_->Bind(mq_campaign_name, "campaign.#");
 
         Log::info("%s: created ampq queues: %s",__func__,
-                  mq_advertise_name.c_str());
+                  mq_campaign_name.c_str());
     }
     catch (AMQPException &ex)
     {

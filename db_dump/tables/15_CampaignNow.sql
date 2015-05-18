@@ -1,6 +1,0 @@
-CREATE TABLE CampaignNow(
-id INT8 NOT NULL,
-FOREIGN KEY(id) REFERENCES Campaign(id),
-UNIQUE (id) ON CONFLICT IGNORE
-);
-CREATE INDEX IF NOT EXISTS idx_CampaignNow_id ON CampaignNow (id);
