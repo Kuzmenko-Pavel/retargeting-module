@@ -9,7 +9,6 @@
 #include <string>
 
 #include "Params.h"
-#include "GeoIPTools.h"
 #include "Log.h"
 #include "UrlParser.h"
 #include "Config.h"
@@ -117,19 +116,6 @@ bool Params::parse(FCGX_Request *req)
         }
     }
 
-    //get country code
-    country_ = query_parser->param("country");
-    if(country_.empty())
-    {
-        country_ = geoip->country_code_by_addr(ip_);
-    }
-
-    //get region name
-    region_ = query_parser->param("region");
-    if(region_.empty())
-    {
-        region_ = geoip->region_code_by_addr(ip_);
-    }
 
     search_ = query_parser->param("search");
     //context_ = query_parser->param("context");
@@ -138,17 +124,6 @@ bool Params::parse(FCGX_Request *req)
     /// ID посетителя, cookie
     if(cookie_id_.empty())
     {
-        //make new session id
-        //if(inet_pton(AF_INET, ip_.c_str(), &ipval))
-        //{
-        //    key_long = ipval.s_addr;
-        //}
-        //else
-        //{
-        //    key_long = 0;
-        //}
-
-        //key_long = key_long << 32;
         key_long = time(NULL);
         cookie_id_ = time_t_to_string(key_long);
     }
@@ -194,15 +169,6 @@ unsigned long long Params::getUserKeyLong() const
     return key_long;
 }
 
-std::string Params::getCountry() const
-{
-    return country_;
-}
-std::string Params::getRegion() const
-{
-    return region_;
-}
-
 boost::posix_time::ptime Params::getTime() const
 {
     return time_;
@@ -225,16 +191,4 @@ std::string Params::getContext() const
 std::string Params::getSearch() const
 {
     return search_;
-}
-
-std::string Params::getUrl() const
-{
-    std::stringstream url;
-    if (!country_.empty())
-        url << "&country=" << country_;
-    if (!region_.empty())
-        url << "&region=" << region_;
-    url << "&";
-
-    return url.str();
 }

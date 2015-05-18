@@ -97,16 +97,6 @@ bool Core::Process(Params *prms)
         }
     }
 
-    /* if(!params->getSearch().empty())
-    {
-        for(auto i = rcShortTerm.begin(); i != rcShortTerm.end(); ++i)
-        {
-            //(*i)->set(params->getUserKey(), params->getSearch()+" "+params->getContext());
-            (*i)->setex(params->getUserKey(), base64_encode(params->getSearch()),24*3600*14);
-        }
-    }
-    */
-
     std::clog<<"["<<tid<<"]";
 
     if(config->logCoretime)
@@ -141,11 +131,6 @@ bool Core::Process(Params *prms)
         }
     }
 
-    if(config->logCountry)
-        std::clog<<" country:"<<params->getCountry();
-
-    if(config->logRegion && !params->getRegion().empty())
-        std::clog<<" region:"<<params->getRegion();
 
     if(config->logSearch && !params->getSearch().empty())
         std::clog<<" search:"<<params->getSearch();

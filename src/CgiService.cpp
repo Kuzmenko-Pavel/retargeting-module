@@ -6,7 +6,6 @@
 #include "Core.h"
 #include "Server.h"
 #include "Cookie.h"
-#include "GeoIPTools.h"
 
 #include <fcgi_stdio.h>
 
@@ -14,7 +13,6 @@
 
 CgiService::CgiService()
 {
-    geoip = GeoIPTools::Instance();
 
     bcore = new BaseCore();
 
