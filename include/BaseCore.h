@@ -45,8 +45,6 @@ public:
     void LoadAllEntities();
 
 
-    void ReloadAllEntities();
-
     /** \brief  Обрабатывает новые сообщения в очереди RabbitMQ. */
     bool ProcessMQ();
 
@@ -82,8 +80,8 @@ private:
 
     /// Точка обмена
     AMQPExchange *exchange_;
-   /// Очередь сообщений об изменениях в offer
-    AMQPQueue *mq_advertise_;
+    /// Очередь сообщений об изменениях в кампаниях
+    AMQPQueue *mq_campaign_;
 
     /// История полученных сообщений MQ
     std::string toString(AMQPMessage *m);
