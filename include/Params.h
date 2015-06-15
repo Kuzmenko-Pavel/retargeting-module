@@ -17,8 +17,10 @@ public:
     boost::posix_time::ptime time_;
     int time_cookies_;
     std::string account_id_;
+    std::string target_;
     std::string retargeting_offer_id_;
     bool status;
+    unsigned long long key_long;
 
     Params();
     bool parse(FCGX_Request *req);
@@ -33,14 +35,9 @@ public:
     boost::posix_time::ptime getTime() const;
     std::string getScriptName() const;
     std::string getLocation() const;
-    std::string getContext() const;
-    std::string getSearch() const;
 
 private:
-    unsigned long long key_long;
     std::string script_name_;
-    std::string context_;//строка содержашяя контекст страницы
-    std::string search_;
 };
 
 #endif // PARAMS_H
