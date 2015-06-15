@@ -38,15 +38,6 @@ Core::Core()
         rcRetargeting.push_back(rc);
     }
 
-    /* 
-    for(auto i = config->redis_short_term_.begin(); i != config->redis_short_term_.end(); ++i)
-    {
-        SimpleRedisClient *rc = new SimpleRedisClient((*i).host,(*i).port,"short");
-        rc->setTimeout((*i).ttl*24*3600);
-        rcShortTerm.push_back(rc);
-    }
-    */
-
     std::clog<<"["<<tid<<"]start"<<std::endl;
 }
 
@@ -55,13 +46,11 @@ Core::~Core()
     delete []cmd;
 }
 
-/** Обработка запроса на показ рекламы с параметрами ``params``.
-	Изменён RealInvest Soft */
-bool Core::Process(Params *prms)
+std::string Core::Process(Params *prms)
 {
     boost::posix_time::ptime startTime;
     std::vector<long> result;
-    bool is_find = false;
+    std::string html;
 
     startTime = boost::posix_time::microsec_clock::local_time();
 
@@ -72,7 +61,7 @@ bool Core::Process(Params *prms)
         std::clog<<"["<<tid<<"]"<<__func__
                  <<" wrong input params: retargeting id from: "<<params->getIP()
                  <<std::endl;
-        return is_find;
+        return html;
     }
 
     if(params->retargeting_offer_id_.empty())
@@ -85,7 +74,6 @@ bool Core::Process(Params *prms)
     {
         if(getOffer(result))
         {
-            is_find = true;
             for(auto i = rcRetargeting.begin(); i != rcRetargeting.end(); ++i)
             {
                 for(auto j = result.begin(); j!=result.end(); ++j)
@@ -132,25 +120,20 @@ bool Core::Process(Params *prms)
     }
 
 
-    if(config->logSearch && !params->getSearch().empty())
-        std::clog<<" search:"<<params->getSearch();
-
-    if(config->logContext && !params->getContext().empty())
-        std::clog<<" context:"<<params->getContext();
-
     std::clog<<std::endl;
 
     result.clear();
 
     request_processed_++;
 
-    return is_find;
+    html = boost::str(boost::format(config->template_out_)
+                       % params->retargeting_offer_id_
+                       % params->getSecondTimeCookie()
+                       % params->account_id_
+                       % params->target_);
+    return html;
 }
 
-void Core::PostProcess()
-{
-
-}
 
 bool Core::getOffer(std::vector<long> &result)
 {

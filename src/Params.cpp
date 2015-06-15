@@ -61,6 +61,11 @@ bool Params::parse(FCGX_Request *req)
         return false;
     }
 
+    target_ = query_parser->param("target");
+    if(target_.empty())
+    {
+        target_ = "yt_view";
+    }
     std::string s_time_cookies_ = query_parser->param("time");
     if(s_time_cookies_.empty())
     {
@@ -115,11 +120,6 @@ bool Params::parse(FCGX_Request *req)
             }
         }
     }
-
-
-    search_ = query_parser->param("search");
-    //context_ = query_parser->param("context");
-    //location_ = query_parser->param("location");
 
     /// ID посетителя, cookie
     if(cookie_id_.empty())
@@ -181,14 +181,4 @@ std::string Params::getScriptName() const
 std::string Params::getLocation() const
 {
     return location_;
-}
-
-std::string Params::getContext() const
-{
-    return context_;
-}
-
-std::string Params::getSearch() const
-{
-    return search_;
 }

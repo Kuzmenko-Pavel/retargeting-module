@@ -33,8 +33,7 @@ public:
      * Самый главный метод. Возвращает HTML-строку, которую нужно вернуть
      * пользователю.
      */
-    bool Process(Params *params);
-    void PostProcess();
+    std::string Process(Params *params);
 
 private:
     pthread_t tid;
