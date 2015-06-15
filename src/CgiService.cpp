@@ -196,21 +196,17 @@ void CgiService::ProcessRequest(FCGX_Request *req, Core *core)
                                 ClearSilver::Cookie::Authority(config->cookie_domain_),
                                 ClearSilver::Cookie::Path(config->cookie_path_),
                                 ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::years(1))));
-
-    if (core->Process(prm))
-    {
-        ClearSilver::Cookie rc = ClearSilver::Cookie(config->cookie_tracking_name_,
-                                prm->cookie_id_,
-                                ClearSilver::Cookie::Credentials(
-                                    ClearSilver::Cookie::Authority(config->cookie_tracking_domain_),
-                                    ClearSilver::Cookie::Path(config->cookie_tracking_path_),
-                                    ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::days(prm->time_cookies_))));
-        Response(req, config->template_out_, c.to_string(), rc.to_string());
-    }
-    else
-    {
-        Response(req, config->template_out_, c.to_string());
-    }
+    
+    ClearSilver::Cookie rc = ClearSilver::Cookie(config->cookie_tracking_name_,
+                            prm->cookie_id_,
+                            ClearSilver::Cookie::Credentials(
+                                ClearSilver::Cookie::Authority(config->cookie_tracking_domain_),
+                                ClearSilver::Cookie::Path(config->cookie_tracking_path_),
+                                ClearSilver::Cookie::Expires(boost::posix_time::second_clock::local_time() + boost::gregorian::days(prm->time_cookies_))));
+    
+    std::string result = core->Process(prm);
+    
+    Response(req, result, c.to_string(), rc.to_string());
 
     delete prm;
 }
