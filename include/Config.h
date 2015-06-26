@@ -75,6 +75,7 @@ public:
     {
         return atoi(s.c_str());
     }
+    void minifyhtml(std::string &s);
 
 protected:
 private:
