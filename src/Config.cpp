@@ -191,6 +191,7 @@ bool Config::Load()
                 }
 
                 template_out_ = getFileContents(cfgFilePath + mels->GetText());
+                minifyhtml(template_out_);
             }
             else
             {
@@ -1059,4 +1060,30 @@ bool Config::ReLoad()
     std::clog<<"config file reloaded"<<std::endl;
 
     return mIsInited;
+}
+void Config::minifyhtml(std::string &s) {
+  boost::regex nowhitespace(
+    "(?ix)"
+    "(?>"           // Match all whitespans other than single space.
+    "[^\\S ]\\s*"   // Either one [\t\r\n\f\v] and zero or more ws,
+    "| \\s{2,}"     // or two or more consecutive-any-whitespace.
+    ")"             // Note: The remaining regex consumes no text at all...
+    "(?="           // Ensure we are not in a blacklist tag.
+    "[^<]*+"        // Either zero or more non-"<" {normal*}
+    "(?:"           // Begin {(special normal*)*} construct
+    "<"             // or a < starting a non-blacklist tag.
+    "(?!/?(?:textarea|pre)\\b)"
+    "[^<]*+"        // more non-"<" {normal*}
+    ")*+"           // Finish "unrolling-the-loop"
+    "(?:"           // Begin alternation group.
+    "<"             // Either a blacklist start tag.
+    "(?>textarea|pre)\\b"
+    "| \\z"         // or end of file.
+    ")"             // End alternation group.
+    ")"             // If we made it here, we are not in a blacklist tag.
+  );
+
+  boost::regex in_line("\r?\n|\r|\n");
+  s = boost::regex_replace(s, nowhitespace, "");
+  s = boost::regex_replace(s, in_line, "");
 }
