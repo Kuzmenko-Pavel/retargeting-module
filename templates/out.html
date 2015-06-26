@@ -71,6 +71,7 @@ RetargetingOffers.remove = function(key){
     delete this[key]
 };
 
+
 RetargetingOffers.get = function(){
     keys = [];
     res = [];
@@ -100,7 +101,7 @@ RetargetingOffers.get = function(){
     }
     );
     for(x in keys) {
-            res.push([key.split('...')[0]+"~"+this[key][2]+"~"+this[key][1]]);
+            res.push([keys[x][0]+"~"+keys[x][1]+"~"+keys[x][2]]);
     }
     return res.join(";");
 };
