@@ -18,6 +18,7 @@ public:
     int time_cookies_;
     std::string account_id_;
     std::string target_;
+    std::string action_;
     std::string retargeting_offer_id_;
     bool status;
     unsigned long long key_long;

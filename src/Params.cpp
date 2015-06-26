@@ -62,10 +62,7 @@ bool Params::parse(FCGX_Request *req)
     }
 
     target_ = query_parser->param("target");
-    if(target_.empty())
-    {
-        target_ = "yt_view";
-    }
+    
     std::string s_time_cookies_ = query_parser->param("time");
     if(s_time_cookies_.empty())
     {
@@ -78,11 +75,15 @@ bool Params::parse(FCGX_Request *req)
     }
 
     retargeting_offer_id_ = query_parser->param("offer_id");
-    if(account_id_.empty())
+    
+    std::string s_action = query_parser->param("action");
+    if(s_action == "remove")
     {
-        std::clog<<__func__<<" miss offer id"<<std::endl;
-        delete query_parser;
-        return false;
+        action_ = "remove";
+    }
+    else
+    {
+        action_ = "add";
     }
 
     if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
