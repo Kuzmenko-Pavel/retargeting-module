@@ -130,7 +130,8 @@ std::string Core::Process(Params *prms)
                        % params->retargeting_offer_id_
                        % params->getSecondTimeCookie()
                        % params->account_id_
-                       % params->target_);
+                       % params->target_
+                       % params->action_);
     return html;
 }
 
