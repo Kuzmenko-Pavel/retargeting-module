@@ -24,7 +24,7 @@
 Core::Core()
 {
     tid = pthread_self();
-
+/*
     sigset_t es;
     sigfillset(&es);
     pthread_sigmask(SIG_BLOCK, &es, NULL);
@@ -37,19 +37,19 @@ Core::Core()
         rc->setTimeout((*i).ttl*24*3600);
         rcRetargeting.push_back(rc);
     }
-
+*/
     std::clog<<"["<<tid<<"]start"<<std::endl;
 }
 
 Core::~Core()
 {
-    delete []cmd;
+  //  delete []cmd;
 }
 
 std::string Core::Process(Params *prms)
 {
     boost::posix_time::ptime startTime;
-    std::vector<long> result;
+    //std::vector<long> result;
     std::string html;
 
     startTime = boost::posix_time::microsec_clock::local_time();
@@ -70,7 +70,7 @@ std::string Core::Process(Params *prms)
                  <<" wrong input params: retargeting id from: "<<params->getIP()
                  <<std::endl;
     }
-    else
+    /*else
     {
         if(getOffer(result))
         {
@@ -83,7 +83,7 @@ std::string Core::Process(Params *prms)
                 }
             }
         }
-    }
+    }*/
 
     std::clog<<"["<<tid<<"]";
 
@@ -96,7 +96,7 @@ std::string Core::Process(Params *prms)
     if(config->logKey)
         std::clog<<" key:"<<params->getUserKey();
 
-    if(config->logOutPutOfferIds)
+    /*if(config->logOutPutOfferIds)
     {
         std::clog<<" offer ids:";
         if(result.size())
@@ -117,12 +117,12 @@ std::string Core::Process(Params *prms)
         {
             std::clog<<"0";
         }
-    }
+    }*/
 
 
-    std::clog<<std::endl;
+    //std::clog<<std::endl;
 
-    result.clear();
+    //result.clear();
 
     request_processed_++;
 
@@ -135,7 +135,7 @@ std::string Core::Process(Params *prms)
     return html;
 }
 
-
+/*
 bool Core::getOffer(std::vector<long> &result)
 {
     Kompex::SQLiteStatement *pStmt;
@@ -174,4 +174,4 @@ bool Core::getOffer(std::vector<long> &result)
 
     return result.size() ? true : false;
 }
-
+*/
