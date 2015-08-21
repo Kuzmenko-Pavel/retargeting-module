@@ -7,7 +7,6 @@
 #include <boost/algorithm/string.hpp>
 
 #include "Params.h"
-#include "SimpleRedisClient.h"
 
 /// Класс, который связывает воедино все части системы.
 class Core
@@ -36,12 +35,9 @@ public:
     std::string Process(Params *params);
 
 private:
-    pthread_t tid;
-    std::vector<SimpleRedisClient *> rcRetargeting, rcShortTerm;
     Params *params;
     char *cmd;
 
-    bool getOffer(std::vector<long> &result);
 };
 
 #endif // CORE_H

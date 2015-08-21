@@ -42,11 +42,6 @@ public:
 
     /** \brief  Загружает все сущности, которые используются при показе
      *          рекламы. */
-    void LoadAllEntities();
-
-
-    /** \brief  Обрабатывает новые сообщения в очереди RabbitMQ. */
-    bool ProcessMQ();
 
     /** \brief  Выводит состояние службы и некоторую статистику */
     std::string Status();
@@ -65,28 +60,9 @@ public:
     */
 
 private:
-    void InitMessageQueue();
-    void InitMongoDB();
-    /** Создаёт подключения к базам данных.
-     *
-     * Настройки читаются конструктором класса из переменных окружения среды.*/
-    bool ConnectLogDatabase();
-
 
  /// Время запуска службы
     boost::posix_time::ptime time_service_started_,time_mq_check_;
-
-    AMQP *amqp_;
-
-    /// Точка обмена
-    AMQPExchange *exchange_;
-    /// Очередь сообщений об изменениях в кампаниях
-    AMQPQueue *mq_campaign_;
-
-    /// История полученных сообщений MQ
-    std::string toString(AMQPMessage *m);
-    bool cmdParser(const std::string &cmd, std::string &offerId, std::string &campaignId);
-    ParentDB *pdb;
 };
 
 

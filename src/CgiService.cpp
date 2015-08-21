@@ -65,19 +65,8 @@ CgiService::~CgiService()
 
 void CgiService::run()
 {
-    int memSize = 0, newMemSize;
-    //main loop
     for(;;)
     {
-        //read mq and process
-        //bcore->ProcessMQ();
-
-        newMemSize = Log::memUsage();
-        if(newMemSize != memSize)
-        {
-            std::clog<<"VmSize:"<<newMemSize<<" diff:"<<newMemSize - memSize<<std::endl;
-            memSize = newMemSize;
-        }
 
         sleep(1);
     }
