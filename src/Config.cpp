@@ -42,11 +42,11 @@ bool Config::LoadConfig(const std::string fName)
 
     bool ret = Load();
 
-    if(!pDb)
+/*    if(!pDb)
     {
         pDb = new DataBase(true);
     }
-
+*/
     request_processed_ = 0;
     last_time_request_processed = 0;
 

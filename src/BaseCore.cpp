@@ -22,19 +22,19 @@ BaseCore::BaseCore()
 {
     time_service_started_ = boost::posix_time::second_clock::local_time();
 
-    pdb = new ParentDB();
+    //pdb = new ParentDB();
 
-    LoadAllEntities();
+    //LoadAllEntities();
 
-    InitMessageQueue();
+    //InitMessageQueue();
 }
 
 BaseCore::~BaseCore()
 {
-    delete amqp_;
+    //delete amqp_;
 }
 
-std::string BaseCore::toString(AMQPMessage *m)
+/*std::string BaseCore::toString(AMQPMessage *m)
 {
     unsigned len;
     char *pMes;
@@ -47,9 +47,9 @@ std::string BaseCore::toString(AMQPMessage *m)
 #endif // AMQPCPP_OLD
 
     return std::string(pMes,len);
-}
+}*/
 
-bool BaseCore::ProcessMQ()
+/*bool BaseCore::ProcessMQ()
 {
     AMQPMessage *m;
     int stopCount;
@@ -94,7 +94,7 @@ bool BaseCore::ProcessMQ()
         Log::err("%s: AMQPException: %s",__func__,ex.getMessage().c_str());
     }
     return false;
-}
+}*/
 
 
 /*
@@ -106,7 +106,7 @@ bool BaseCore::ProcessMQ()
 *
 *  Если в кампании нет рекламных предложений, она будет пропущена.
 */
-void BaseCore::LoadAllEntities()
+/*void BaseCore::LoadAllEntities()
 {
     if(config->pDb->reopen)
     {
@@ -118,7 +118,7 @@ void BaseCore::LoadAllEntities()
     pdb->OfferLoad("");
 
     Config::Instance()->pDb->indexRebuild();
-}
+}*/
 
 /** \brief  Инициализация очереди сообщений (AMQP).
 
@@ -126,7 +126,7 @@ void BaseCore::LoadAllEntities()
     продолжит работу, но возможность оповещения об изменениях и горячего
     обновления будет отключена.
 */
-void BaseCore::InitMessageQueue()
+/*void BaseCore::InitMessageQueue()
 {
     try
     {
@@ -157,7 +157,7 @@ void BaseCore::InitMessageQueue()
         Log::err("%s Error in AMPQ init: %s, Feature will be disabled.",__func__, ex.getMessage().c_str());
     }
 }
-
+*/
 /** Возвращает данные о состоянии службы
  *  TODO Надоб переписать с учётом использования boost::formater красивее будет как некак :)
  */
@@ -193,6 +193,7 @@ std::string BaseCore::Status()
     last_time_request_processed = request_processed_;
 
     std::stringstream out;
+    out.str("");
     out << "<html>\n"
         "<head><meta http-equiv=\"content-type\" content=\"text/html; "
         "charset=UTF-8\">\n"
@@ -211,18 +212,23 @@ std::string BaseCore::Status()
         "</b> (" << requests_per_second_current << "/сек, "
         " в среднем " << requests_per_second_average << "/сек) "
         "</td></tr>\n";
+
     out << "<tr><td>Имя сервера: </td> <td>" <<
         (getenv("SERVER_NAME")? getenv("SERVER_NAME"): "неизвестно") <<
         "</td></tr>\n";
+
     out << "<tr><td>Текущее время: </td> <td>" <<
         boost::posix_time::second_clock::local_time() <<
         "</td></tr>\n";
 
     out << "<tr><td>Время запуска:</td> <td>" << time_service_started_ <<
-        "</td></tr>" <<
-        out <<  "<tr><td>Сборка: </td><td>" << __DATE__ << " " << __TIME__ <<
         "</td></tr>";
+
+    out <<  "<tr><td>Сборка: </td><td>" << __DATE__ << " " << __TIME__ <<
+        "</td></tr>";
+
     out << "</table>\n";
+
     out << "</body>\n</html>\n";
 
     return out.str();

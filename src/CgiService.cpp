@@ -70,7 +70,7 @@ void CgiService::run()
     for(;;)
     {
         //read mq and process
-        bcore->ProcessMQ();
+        //bcore->ProcessMQ();
 
         newMemSize = Log::memUsage();
         if(newMemSize != memSize)
