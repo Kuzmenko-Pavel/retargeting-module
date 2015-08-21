@@ -42,11 +42,6 @@ bool Config::LoadConfig(const std::string fName)
 
     bool ret = Load();
 
-/*    if(!pDb)
-    {
-        pDb = new DataBase(true);
-    }
-*/
     request_processed_ = 0;
     last_time_request_processed = 0;
 
@@ -473,19 +468,6 @@ std::string Config::getFileContents(const std::string &fileName)
     Log::err("error open file: %s: %d",fileName.c_str(), errno);
     return std::string();
 }
-//---------------------------------------------------------------------------------------------------------------
-/*
-                stat = boost::filesystem::status(test, errcode);
-                if(errcode)
-                {
-                  Log::err("file system error: object: %s value: %d message: %s",
-                           test.string().c_str(),
-                           errcode.value(),
-                           errcode.message().c_str());
-                    return false;
-                }
-
-*/
 bool Config::checkPath(const std::string &path_, bool checkWrite, bool isFile, std::string &mes)
 {
     boost::filesystem::path path, test;

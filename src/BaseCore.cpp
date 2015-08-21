@@ -1,4 +1,3 @@
-#include "DB.h"
 #include <boost/foreach.hpp>
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/date_time/posix_time/posix_time_io.hpp>
@@ -21,143 +20,12 @@
 BaseCore::BaseCore()
 {
     time_service_started_ = boost::posix_time::second_clock::local_time();
-
-    //pdb = new ParentDB();
-
-    //LoadAllEntities();
-
-    //InitMessageQueue();
 }
 
 BaseCore::~BaseCore()
 {
-    //delete amqp_;
 }
 
-/*std::string BaseCore::toString(AMQPMessage *m)
-{
-    unsigned len;
-    char *pMes;
-
-#ifdef AMQPCPP_OLD
-    pMes = m->getMessage();
-    len = strlen(pMes);
-#else
-    pMes = m->getMessage(&len);
-#endif // AMQPCPP_OLD
-
-    return std::string(pMes,len);
-}*/
-
-/*bool BaseCore::ProcessMQ()
-{
-    AMQPMessage *m;
-    int stopCount;
-    time_mq_check_ = boost::posix_time::second_clock::local_time();
-    try
-    {
-        {
-            // Проверка сообщений campaign.#
-            mq_campaign_->Get(AMQP_NOACK);
-            m = mq_campaign_->getMessage();
-            stopCount = MAXCOUNT;
-            while(m->getMessageCount() > -1 && stopCount--)
-            {
-                if(m->getRoutingKey() == "campaign.update")
-                {
-                    std::string CampaignId = toString(m);
-                    pdb->OfferLoad(CampaignId);
-                }
-                else if(m->getRoutingKey() == "campaign.delete")
-                {
-                    std::string CampaignId = toString(m);
-                    pdb->OfferRemove(CampaignId);
-                }
-                else if(m->getRoutingKey() == "campaign.start")
-                {
-                    std::string CampaignId = toString(m);
-                    pdb->OfferLoad(CampaignId);
-                }
-                else if(m->getRoutingKey() == "campaign.stop")
-                {
-                    std::string CampaignId = toString(m);
-                    pdb->OfferRemove(CampaignId);
-                }
-
-                mq_campaign_->Get(AMQP_NOACK);
-                m = mq_campaign_->getMessage();
-            }
-        }
-    }
-    catch (AMQPException &ex)
-    {
-        Log::err("%s: AMQPException: %s",__func__,ex.getMessage().c_str());
-    }
-    return false;
-}*/
-
-
-/*
-*  Загружает из основной базы данных следующие сущности:
-*
-*  - рекламные предложения;
-*  - рекламные кампании;
-*  - информеры.
-*
-*  Если в кампании нет рекламных предложений, она будет пропущена.
-*/
-/*void BaseCore::LoadAllEntities()
-{
-    if(config->pDb->reopen)
-    {
-        Log::warn("%s: sqlite database didnot open",__func__);
-        return;
-    }
-
-    //Загрузили все предложения
-    pdb->OfferLoad("");
-
-    Config::Instance()->pDb->indexRebuild();
-}*/
-
-/** \brief  Инициализация очереди сообщений (AMQP).
-
-    Если во время инициализации произошла какая-либо ошибка, то сервис
-    продолжит работу, но возможность оповещения об изменениях и горячего
-    обновления будет отключена.
-*/
-/*void BaseCore::InitMessageQueue()
-{
-    try
-    {
-        // Объявляем точку обмена
-        amqp_ = new AMQP(config->mq_path_);
-        exchange_ = amqp_->createExchange();
-        exchange_->Declare("getmyad", "topic", AMQP_AUTODELETE);
-
-        // Составляем уникальные имена для очередей
-        boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
-        std::string postfix = to_iso_string(now);
-        boost::replace_first(postfix, ".", ",");
-
-        std::string mq_campaign_name( "getmyad.campaign." + postfix );
-
-        // Объявляем очереди
-        mq_campaign_ = amqp_->createQueue();
-        mq_campaign_->Declare(mq_campaign_name, AMQP_AUTODELETE | AMQP_EXCLUSIVE);
-
-        // Привязываем очереди
-        exchange_->Bind(mq_campaign_name, "campaign.#");
-
-        Log::info("%s: created ampq queues: %s",__func__,
-                  mq_campaign_name.c_str());
-    }
-    catch (AMQPException &ex)
-    {
-        Log::err("%s Error in AMPQ init: %s, Feature will be disabled.",__func__, ex.getMessage().c_str());
-    }
-}
-*/
 /** Возвращает данные о состоянии службы
  *  TODO Надоб переписать с учётом использования boost::formater красивее будет как некак :)
  */
@@ -232,18 +100,4 @@ std::string BaseCore::Status()
     out << "</body>\n</html>\n";
 
     return out.str();
-}
-
-bool BaseCore::cmdParser(const std::string &cmd, std::string &offerId, std::string &campaignId)
-{
-    boost::regex exp("Offer:(.*),Campaign:(.*)");
-    boost::cmatch pMatch;
-
-    if(boost::regex_match(cmd.c_str(), pMatch, exp))
-    {
-        offerId = pMatch[1];
-        campaignId = pMatch[2];
-        return true;
-    }
-    return false;
 }
