@@ -106,7 +106,6 @@ RetargetingOffers.get = function(){
     return res.join(";");
 };
 
-
 UserHistory.load = function(){
     if (Test() === true)
     {
@@ -115,10 +114,14 @@ UserHistory.load = function(){
             if (typeof(this[key]) != 'function')
             {
                 var history_name = key;
-                var retrievedObject = JSON.parse(localStorage.getItem(history_name));
-                for ( key in retrievedObject)
-                {   
-                    this[history_name].load(key, retrievedObject[key]);
+                var jobj = localStorage.getItem(history_name);
+                if  (typeof(jobj) && jobj.length > 0)
+                {
+                    var retrievedObject = JSON.parse(jobj);
+                    for ( key in retrievedObject)
+                    {   
+                        this[history_name].load(key, retrievedObject[key]);
+                    }
                 }
             }
         }
