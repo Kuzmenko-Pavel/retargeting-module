@@ -111,11 +111,11 @@ UserHistory.load = function(){
     {
         for (key in this)
         {
-            if (typeof(this[key]) != 'function')
+            if (typeof(this[key]) !== 'function')
             {
                 var history_name = key;
                 var jobj = localStorage.getItem(history_name);
-                if  (typeof(jobj) && jobj.length > 0)
+                if  (typeof(jobj) === "string" && jobj.length > 0)
                 {
                     var retrievedObject = JSON.parse(jobj);
                     for ( key in retrievedObject)
@@ -134,7 +134,7 @@ UserHistory.save = function(){
     {
         for (key in this)
         {
-            if (typeof(this[key]) != 'function')
+            if (typeof(this[key]) !== 'function')
             {
                 localStorage.setItem(key, JSON.stringify(this[key]));
             }
