@@ -12,7 +12,7 @@
 #include "Log.h"
 #include "UrlParser.h"
 #include "Config.h"
-
+const unsigned long STDIN_MAX = 6000000;
 
 Params::Params()
 {
@@ -29,6 +29,33 @@ std::string time_t_to_string(time_t t)
 
 bool Params::parse(FCGX_Request *req)
 {
+    char * content_length_str = FCGX_GetParam("CONTENT_LENGTH", req->envp);
+    UrlParser *post_parser;
+    unsigned long content_length = STDIN_MAX;
+    std::string postq;
+    if (content_length_str) {
+        content_length = strtol(content_length_str, &content_length_str, 10);
+        if (*content_length_str) {
+            Log::warn("Can't Parse 'CONTENT_LENGTH'");
+        }
+        if (content_length > STDIN_MAX) {
+            content_length = STDIN_MAX;
+        }
+        if (content_length > 0)
+        {
+            char * content = new char[content_length];
+            memset(content, 0, content_length);
+            FCGX_GetStr(content, content_length, req->in);
+            postq = std::string(content);
+            delete [] content;
+        }
+    }
+    post_parser = new UrlParser(postq);
+
+    referrer_ = post_parser->param("referrer");
+    location_ = post_parser->param("url");
+    title_ = post_parser->param("title");
+
     char *tmp_str = nullptr;
     UrlParser *query_parser;
 
@@ -77,7 +104,7 @@ bool Params::parse(FCGX_Request *req)
     retargeting_offer_id_ = query_parser->param("offer_id");
     
     std::string s_action = query_parser->param("action");
-    if(s_action == "remove")
+   if(s_action == "remove")
     {
         action_ = "remove";
     }
@@ -182,4 +209,12 @@ std::string Params::getScriptName() const
 std::string Params::getLocation() const
 {
     return location_;
+}
+std::string Params::getTitle() const
+{
+    return title_;
+}
+std::string Params::getReferrer() const
+{
+    return referrer_;
 }
