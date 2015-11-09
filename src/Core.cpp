@@ -52,6 +52,9 @@ std::string Core::Process(Params *prms)
                        % params->getSecondTimeCookie()
                        % params->account_id_
                        % params->target_
-                       % params->action_);
+                       % params->action_
+                       % params->referrer_
+                       % params->location_
+                       % params->title_);
     return html;
 }

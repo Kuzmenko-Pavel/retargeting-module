@@ -14,6 +14,8 @@ public:
     std::string ip_;
     std::string cookie_id_;
     std::string location_;
+    std::string referrer_;
+    std::string title_;
     boost::posix_time::ptime time_;
     int time_cookies_;
     std::string account_id_;
@@ -36,6 +38,8 @@ public:
     boost::posix_time::ptime getTime() const;
     std::string getScriptName() const;
     std::string getLocation() const;
+    std::string getTitle() const;
+    std::string getReferrer() const;
 
 private:
     std::string script_name_;
