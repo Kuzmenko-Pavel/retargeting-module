@@ -120,9 +120,8 @@ uh.save();
 </head>
 <body>
 <script>
-var location = '%7%';
 var parser = document.createElement('a');
-parser.href = location;
+parser.href = '%7%';
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -131,19 +130,17 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-69836571-1', 'auto');
 ga('send', 'pageview', {
   'referrer': '%6%',
-  'location': location,
-  'hostname': parser.hostname,
   'page': parser.pathname + parser.search + parser.hash,
   'title': '%8%'
 });
-ga('set', 'referrer', '%6%');
-ga('set', 'campaignName', parser.hostname);
-ga('set', 'campaignSource', '%3%');
-ga('set', 'campaignMedium', 'yottos_retargeting');
-ga('set', 'campaignContent', '%1%');
 ga('send', 'event',
 'Link', 'Click',
 {
+'referrer', '%6%',
+'campaignName', parser.hostname,
+'campaignSource', '%3%',
+'campaignMedium', 'yottos_retargeting',
+'campaignContent', '%1%',
 'page': parser.pathname + parser.search + parser.hash,
 'title': '%8%'
 });
