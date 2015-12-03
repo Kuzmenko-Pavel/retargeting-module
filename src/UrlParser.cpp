@@ -24,7 +24,7 @@ std::string UrlParser::param(const std::string &par) const
 /** Разбор URL-строки */
 void UrlParser::parse()
 {
-    mainParse(url_);
+    //mainParse(url_);
 
     // Ищем первый вопросительный знак
     std::string::size_type pos = url_.find_first_of('?');

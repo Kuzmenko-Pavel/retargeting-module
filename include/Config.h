@@ -5,39 +5,21 @@
 #include <vector>
 
 #include <tinyxml.h>
-#include "redis_server.h"
-#include "DataBase.h"
 
 extern unsigned long request_processed_;
 extern unsigned long last_time_request_processed;
-extern unsigned long offer_processed_;
-extern unsigned long social_processed_;
 
 #define REDIS_DEFAULT_TTL 3600*14
 
 class Config
 {
 public:
-    std::vector<redis_server> redis_short_term_, redis_retargeting_;
-
-    std::vector<std::string> mongo_main_host_;
-    std::string mongo_main_db_;
-    std::string mongo_main_set_;
-    bool mongo_main_slave_ok_;
-    std::string mongo_main_login_;
-    std::string mongo_main_passwd_;
-
-    std::string mq_path_;
 
     //new params
     std::string server_ip_;
     std::string server_socket_path_;
     int server_children_;
 
-    std::string dbpath_;
-    std::string db_dump_path_;
-    DataBase *pDb;
-    std::string offerSqlAll;
 
     std::string cookie_name_;
     std::string cookie_domain_;
@@ -46,7 +28,6 @@ public:
     std::string cookie_tracking_domain_;
     std::string cookie_tracking_path_;
 
-    std::string geocity_path_;
 
     int         instanceId;
     std::string lock_file_;
