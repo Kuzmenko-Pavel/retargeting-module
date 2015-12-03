@@ -2,6 +2,7 @@
 #define CGISERVICE_H
 
 #include <string>
+#include <signal.h>
 
 #include <fcgiapp.h>
 
