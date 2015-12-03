@@ -129,22 +129,6 @@ Server::Server(const std::string &lockFileName, const std::string &pidFileName) 
         syslog(LOG_ERR,"freopen error: stdin");
 
 	kill(parent, SIGUSR1);
-/*
-    struct sched_param param;
-    param.sched_priority = 49;
-
-    if(sched_setscheduler(0, SCHED_FIFO, &param) == -1)
-    {
-        syslog(LOG_ERR,"sched_setscheduler failed");
-        //exit(-1);
-    }
-
-    if(mlockall(MCL_CURRENT|MCL_FUTURE) == -1)
-    {
-        syslog(LOG_ERR,"mlockall failed");
-        //exit(-2);
-    }
-*/
 	writePid(m_pidFileName);
 
 	syslog(LOG_NOTICE, "staring: done");

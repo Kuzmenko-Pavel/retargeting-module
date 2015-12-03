@@ -9,7 +9,7 @@ if (!Date.now) {
         return new Date().getTime();
     }
 }
-if (!('indexOf' in Array.prototype)){
+if (!('indexOf' in Array.prototype)) {
     Array.prototype.indexOf= function(find, i /*opt*/) {
         if (i===undefined){
             i= 0;
@@ -20,16 +20,28 @@ if (!('indexOf' in Array.prototype)){
         if (i<0){
             i= 0;
         }
-        for (var n= this.length; i<n; i++)
-        {
-            if (i in this && this[i]===find)
-            {
+        for (var n= this.length; i<n; i++){
+            if (i in this && this[i]===find){
                 return i;
             }
         }
         return -1;
-    };
+};
 }
+
+Array.prototype.unique = function()
+{
+    var n = {},r=[];
+    for(var i = 0; i < this.length; i++) 
+    {
+        if (!n[this[i]]) 
+        {
+            n[this[i]] = true; 
+            r.push(this[i]); 
+        }
+    }
+    return r;
+};
 function Test(){
     var test = 'test';
     try {
@@ -43,9 +55,83 @@ function Test(){
 };
 function UserHistory(){
 	this.retargeting = new RetargetingOffers();
+	this.exclude_advertizer = new FixedQueue(100);
     this.load = UserHistory.load;
     this.save = UserHistory.save;
 };
+
+function FixedQueue(size){
+    var queue = new Array();
+    queue.fixedSize = size;
+    queue.add = FixedQueue.add;
+    queue.load = FixedQueue.load;
+    queue.remove = FixedQueue.remove;
+    return( queue );
+};
+FixedQueue.add = function(arg1,arg2){
+    arg2 = (arg2 || false);
+    if (arg2)
+    {
+        if (arg1 < this.fixedSize)
+        {
+            this[arg1] = arg2;
+        }
+    }
+    else
+    {
+        if (this.indexOf(arg1) < 0)
+        {
+            this.push(arg1);
+        }
+    }
+    
+    if (this.length <= this.fixedSize){
+        return;
+    }
+    Array.prototype.splice.call(
+        this,
+        0,
+        (this.length - this.fixedSize)
+    );
+
+};
+
+FixedQueue.load = function(arg1,arg2){
+    arg2 = (arg2 || false);
+    if (arg2)
+    {
+        if (arg1 < this.fixedSize)
+        {
+            this[arg1] = arg2;
+        }
+    }
+    else
+    {
+        if (this.indexOf(arg1) < 0)
+        {
+            this.push(arg1);
+        }
+    }
+    
+    if (this.length <= this.fixedSize){
+        return;
+    }
+    Array.prototype.splice.call(
+        this,
+        0,
+        (this.length - this.fixedSize)
+    );
+
+};
+
+FixedQueue.remove = function(key){
+    var index = this.indexOf(key);
+    if (index > -1)
+    {
+        this.splice(index,1)
+    }
+};
+
 
 function RetargetingOffers(){
     initialValues = new Object({});
@@ -114,10 +200,32 @@ UserHistory.save = function(){
 
 var uh = new UserHistory();
 uh.load();
-var ids = '%1%'.split(',');
-for (id in ids)
+var ac_id = '%3%', ids = '%1%'.split(','), action, target, offer_type,offer_id,tmp=[];
+
+if (ac_id != '')
 {
-    uh.retargeting.%5%(ids[id] + '...%3%', Math.floor(Date.now())+(%2%*1000),'%3%','%4%', Math.floor(Date.now()/1000));
+    for (id in ids)
+    {
+        if (ids[id].length > 3)
+        {
+            tmp = ids[id].split('~');
+            action = tmp[0];
+            offer_id = tmp[1];
+            target = tmp[2];
+            offer_type = tmp[3];
+            offer_type = typeof offer_type == 'string' && (offer_type == 'retargeting' || offer_type == 'exclude_advertizer') ? offer_type : 'retargeting';
+            action = typeof action == 'string' && (action == 'add' || action == 'remove') ? action : 'add';
+            target = typeof target == 'string' ? target : '';
+            if (offer_type == 'retargeting')
+            {
+                uh[offer_type][action](offer_id + '...' + ac_id, Math.floor(Date.now())+(%2%*1000), ac_id,target, Math.floor(Date.now()/1000));
+            }
+            else if (offer_type == 'exclude_advertizer')
+            {
+                uh[offer_type][action](offer_id + '...' + ac_id);
+            }
+        }
+    }
 }
 uh.save();
 </script>
@@ -125,19 +233,34 @@ uh.save();
 <body>
 <script>
 var parser = document.createElement('a');
-parser.href = '%7%';
+var parser_ref = document.createElement('a');
+parser.href = '%5%';
+parser_ref.href = '%4%';
+var hostname = parser.hostname;
 var page = parser.hostname;
+var title = '%6%';
+var referrer = parser_ref.href;
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-69836571-1', {'alwaysSendReferrer': true});
-ga('send', 'pageview', {
-  'referrer': '%7%',
-  'hostname': page,
+if (offer_type == 'retargeting')
+{
+    ga('create', 'UA-69836571-1', {'alwaysSendReferrer': true});
+    ga('send', 'pageview', {
+      'referrer': referrer,
+      'hostname': hostname,
+      'page': page,
+      'title': title
+  });
+}
+ga('create', 'UA-69836571-2', {'alwaysSendReferrer': true, 'name': 'all'});
+ga('all.send', 'pageview', {
+  'referrer': referrer,
+  'hostname': hostname,
   'page': page,
-  'title': '%8%'
+  'title': title
 });
 </script>
 </body>

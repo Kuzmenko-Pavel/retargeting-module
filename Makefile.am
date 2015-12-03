@@ -1,24 +1,17 @@
 ACLOCAL_AMFLAGS = -I m4
 
 SRC_ALL=\
-src/redis_server.cpp \
 src/Server.cpp \
-src/DB.cpp \
-src/KompexSQLiteStatement.cpp \
-src/DataBase.cpp \
 src/BaseCore.cpp \
 src/Config.cpp \
 src/Log.cpp \
 src/CgiService.cpp \
-src/ParentDB.cpp \
-src/KompexSQLiteDatabase.cpp \
 src/Params.cpp \
 src/Cookie.cpp \
 src/Core.cpp \
 src/base64.cpp \
 src/UrlParser.cpp \
-src/SimpleRedisClient.cpp \
-main.cpp
+src/main.cpp
 
 
 CMN_CPPFLAGS=-std=c++11 -Iinclude
@@ -53,10 +46,6 @@ debian_BUILD = $(bin_PROGRAMS)-$(VERSION)
 dist_doc_DATA=README
 
 sysconf_DATA= \
-db_dump/requests/all.sql \
-db_dump/tables/Offer.sql \
-js/_t.js \
-js/_tc.js \
 templates/out.html \
 templates/error.html
 
