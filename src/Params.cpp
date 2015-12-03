@@ -55,6 +55,19 @@ bool Params::parse(FCGX_Request *req)
     referrer_ = post_parser->param("referrer");
     location_ = post_parser->param("url");
     title_ = post_parser->param("title");
+    account_id_ = post_parser->param("ac");
+    offer_id_ = post_parser->param("offer_id");
+
+    std::string s_time_cookies_ = post_parser->param("time");
+    if(s_time_cookies_.empty())
+    {
+        time_cookies_ = 365;
+    }
+    else
+    {
+        time_cookies_ = atoi(s_time_cookies_.c_str());
+    }
+
 
     char *tmp_str = nullptr;
     UrlParser *query_parser;
@@ -78,39 +91,6 @@ bool Params::parse(FCGX_Request *req)
     else
     {
         status = false;
-    }
-
-    account_id_ = query_parser->param("ac");
-    if(account_id_.empty())
-    {
-        std::clog<<__func__<<" miss account id"<<std::endl;
-        delete query_parser;
-        return false;
-    }
-
-    target_ = query_parser->param("target");
-    
-    std::string s_time_cookies_ = query_parser->param("time");
-    if(s_time_cookies_.empty())
-    {
-        std::clog<<__func__<<" miss time"<<std::endl;
-        time_cookies_ = 365;
-    }
-    else
-    {
-        time_cookies_ = atoi(s_time_cookies_.c_str());
-    }
-
-    retargeting_offer_id_ = query_parser->param("offer_id");
-    
-    std::string s_action = query_parser->param("action");
-   if(s_action == "remove")
-    {
-        action_ = "remove";
-    }
-    else
-    {
-        action_ = "add";
     }
 
     if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
@@ -177,11 +157,6 @@ std::string Params::getCookieId() const
     return cookie_id_;
 }
 
-std::string Params::getUserKey() const
-{
-    return cookie_id_;
-}
-
 int Params::getTimeCookie() const
 {
     return time_cookies_;
@@ -192,10 +167,6 @@ int Params::getSecondTimeCookie() const
     return time_cookies_ * 24 * 60 * 60;
 }
 
-unsigned long long Params::getUserKeyLong() const
-{
-    return key_long;
-}
 
 boost::posix_time::ptime Params::getTime() const
 {

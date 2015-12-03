@@ -16,7 +16,6 @@
 #include "Core.h"
 #include "base64.h"
 
-#define CMD_SIZE 8192
 Core::Core()
 {
 }
@@ -29,32 +28,16 @@ std::string Core::Process(Params *prms)
 {
     std::string html;
     params = prms;
-    if(params->account_id_.empty())
-    {
-        return html;
-    }
-
-    if(params->retargeting_offer_id_.empty())
-    {
-        return html;
-    }
-    if(config->logAccountId)
-        std::clog<<" account id:"<<params->account_id_;
-
-    if(config->logKey)
-        std::clog<<" key:"<<params->getUserKey();
-
 
     request_processed_++;
 
     html = boost::str(boost::format(config->template_out_)
-                       % params->retargeting_offer_id_
+                       % params->offer_id_
                        % params->getSecondTimeCookie()
                        % params->account_id_
-                       % params->target_
-                       % params->action_
                        % params->referrer_
                        % params->location_
-                       % params->title_);
+                       % params->title_
+                        );
     return html;
 }

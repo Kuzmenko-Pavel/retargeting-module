@@ -8,8 +8,6 @@
 #include <cstdlib>
 #include <sstream>
 
-#include <mongo/util/net/hostandport.h>
-
 #include "../config.h"
 
 #include "Log.h"

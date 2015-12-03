@@ -10,7 +10,7 @@
     <!--путь к файлу сокета-->
     <socket_path>/run/workerd-track/sock</socket_path>
     <!--количество ниток-->
-    <children>2</children>
+    <children>10</children>
 
     <!--путь к фалу базы данных sqlite или :memory:-->
     <sqlite>

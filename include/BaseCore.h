@@ -9,15 +9,6 @@
 #include <utility>
 #include <boost/date_time.hpp>
 
-#ifndef AMQPCPP_OLD
-#include <AMQPcpp.h>
-#else
-#include <amqpcpp.h>
-#endif
-
-
-#include "DataBase.h"
-#include "ParentDB.h"
 
 /// Класс, который связывает воедино все части системы.
 class BaseCore
