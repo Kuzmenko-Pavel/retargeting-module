@@ -85,6 +85,7 @@ bool Params::parse(FCGX_Request *req)
     if(query_parser->param("show") == "status")
     {
         status = true;
+        delete post_parser;
         delete query_parser;
         return true;
     }
@@ -96,6 +97,7 @@ bool Params::parse(FCGX_Request *req)
     if( !(tmp_str = FCGX_GetParam("REMOTE_ADDR", req->envp)) )
     {
         std::clog<<"remote address is not set"<<std::endl;
+        delete post_parser;
         delete query_parser;
         return false;
     }
@@ -143,7 +145,7 @@ bool Params::parse(FCGX_Request *req)
         boost::trim(cookie_id_);
         key_long = atol(cookie_id_.c_str());
     }
-
+    delete post_parser;
     delete query_parser;
     return true;
 }
