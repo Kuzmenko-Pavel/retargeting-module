@@ -175,7 +175,7 @@ bool Config::Load()
                 }
 
                 template_out_ = getFileContents(cfgFilePath + mels->GetText());
-                //minifyhtml(template_out_);
+                minifyhtml(template_out_);
             }
             else
             {

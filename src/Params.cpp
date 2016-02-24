@@ -55,6 +55,8 @@ bool Params::parse(FCGX_Request *req)
     referrer_ = post_parser->param("referrer");
     location_ = post_parser->param("url");
     title_ = post_parser->param("title");
+    gender_ = post_parser->param("gender");
+    cost_ = post_parser->param("cost");
     account_id_ = post_parser->param("ac");
     offer_id_ = post_parser->param("offer_id");
 
