@@ -38,6 +38,8 @@ std::string Core::Process(Params *prms)
                        % params->referrer_
                        % params->location_
                        % params->title_
+                       % params->gender_
+                       % params->cost_
                         );
     return html;
 }

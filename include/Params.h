@@ -16,6 +16,8 @@ public:
     std::string location_;
     std::string referrer_;
     std::string title_;
+    std::string gender_;
+    std::string cost_;
     boost::posix_time::ptime time_;
     int time_cookies_;
     std::string account_id_;
