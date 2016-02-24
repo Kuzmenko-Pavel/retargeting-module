@@ -55,11 +55,70 @@ function Test(){
 };
 function UserHistory(){
 	this.retargeting = new RetargetingOffers();
-	this.exclude_advertizer = new FixedQueue(100);
+    this.exclude_advertizer = new FixedQueue(100);
+    this.gender_accounts = new GenderAccount();
+    this.gender_user = new GenderUser();
+    this.cost_accounts = new CostAccount();
+    this.cost_user = new CostUser();
+    this.activity_accounts = new ActivityAccount();
+    this.activity_user = new ActivityUser();
     this.load = UserHistory.load;
     this.save = UserHistory.save;
 };
 
+function getGender(val){
+    var result = 0;
+    if (val == 'm')
+    {
+        result = 1;
+    }
+    else if (val == 'w')
+    {
+        result = 2;
+    }
+    else
+    {
+        result = 0;
+    }
+    return result;
+};
+
+function costRange(val){
+    var result = 0;
+    if (val>0 && val <= 2500)
+    {
+        result = 1;
+    }
+    else if (val>2500 && val <= 4500)
+    {
+        result = 2;
+    }
+    else if (val>4500 && val <= 9000)
+    {
+        result = 3;
+    }
+    else if (val>9000 && val <= 14000)
+    {
+        result = 4;
+    }
+    else if (val>14000 && val <= 16500)
+    {
+        result = 5;
+    }
+    else if (val>16500 && val <= 19000)
+    {
+        result = 6;
+    }
+    else if (val>19000 && val <= 25000)
+    {
+        result = 7;
+    }
+    else
+    {
+        result = 8;
+    }
+    return result;
+};
 function FixedQueue(size){
     var queue = new Array();
     queue.fixedSize = size;
@@ -132,6 +191,155 @@ FixedQueue.remove = function(key){
     }
 };
 
+function GenderAccount(){
+    initialValues = new Object({});
+    initialValues.add = GenderAccount.add;
+    initialValues.load = GenderAccount.load;
+    return(initialValues);
+};
+
+GenderAccount.add = function(guid, val)
+{
+    if (typeof this[guid] == 'undefined')
+    {
+        var hit_log = new Array(0,0,0);
+        hit_log[val] += 1;
+        this[guid] = [val, hit_log]
+    }
+    else
+    {
+        var hit_log = this[guid][1];
+        hit_log[val] += 1;
+        this[guid] = [hit_log.indexOf(Math.max.apply(Math, hit_log)), hit_log];
+    }
+};
+GenderAccount.load = function(guid, arg1){
+    if( Object.prototype.toString.call( arg1 ) === '[object Array]' ) {
+        this[guid] = [arg1[0], arg1[1]];
+    }
+};
+function GenderUser(){
+    initialValues = new Object({});
+    initialValues.add = GenderUser.add;
+    initialValues.load = GenderUser.load;
+    return(initialValues);
+};
+GenderUser.add = function(val)
+{
+    if (typeof this['gender'] == 'undefined')
+    {
+        this['gender'] = val;
+        var hit_log = new Array(0,0,0);
+        hit_log[val] += 1;
+        this['hit_log'] = hit_log;
+    }
+    else
+    {
+        if( Object.prototype.toString.call( this['hit_log'] ) === '[object Array]' ) {
+            var hit_log = this['hit_log'];
+            hit_log[val] += 1;
+            this['hit_log'] = hit_log;
+            this['gender'] = hit_log.indexOf(Math.max.apply(Math, hit_log));
+        }
+    }
+};
+GenderUser.load = function(guid, arg1){
+    this[guid] = arg1;
+};
+
+function CostAccount(){
+    initialValues = new Object({});
+    initialValues.add = CostAccount.add;
+    initialValues.load = CostAccount.load;
+    return(initialValues);
+};
+CostAccount.add = function(guid, val)
+{
+    if (typeof this[guid] == 'undefined')
+    {
+        var hit_log = new Array(0,0,0,0,0,0,0,0,0);
+        hit_log[val] += 1;
+        this[guid] = [val, hit_log]
+    }
+    else
+    {
+        var hit_log = this[guid][1];
+        hit_log[val] += 1;
+        this[guid] = [hit_log.indexOf(Math.max.apply(Math, hit_log)), hit_log];
+    }
+};
+CostAccount.load = function(guid, arg1){
+    if( Object.prototype.toString.call( arg1 ) === '[object Array]' ) {
+        this[guid] = [arg1[0], arg1[1]];
+    }
+};
+
+function CostUser(){
+    initialValues = new Object({});
+    initialValues.add = CostUser.add;
+    initialValues.load = CostUser.load;
+    return(initialValues);
+};
+CostUser.add = function(val)
+{
+    if (typeof this['cost'] == 'undefined')
+    {
+        this['cost'] = val;
+        var hit_log = new Array(0,0,0,0,0,0,0,0,0);
+        hit_log[val] += 1;
+        this['hit_log'] = hit_log;
+    }
+    else
+    {
+        if( Object.prototype.toString.call( this['hit_log'] ) === '[object Array]' ) {
+            var hit_log = this['hit_log'];
+            hit_log[val] += 1;
+            this['hit_log'] = hit_log;
+            this['cost'] = hit_log.indexOf(Math.max.apply(Math, hit_log));
+        }
+    }
+};
+CostUser.load = function(guid, arg1){
+    this[guid] = arg1;
+};
+function ActivityAccount(){
+    initialValues = new Object({});
+    initialValues.add = ActivityAccount.add;
+    initialValues.load = ActivityAccount.load;
+    return(initialValues);
+};
+ActivityAccount.add = function(guid, timeFirst, timeLast){
+    if (typeof this[guid] == 'undefined')
+    {
+        this[guid] = [timeFirst, timeLast];
+    }
+    else
+    {
+        this[guid][1] = timeLast;
+    }
+};
+ActivityAccount.load = function(guid, arg1){
+    if( Object.prototype.toString.call( arg1 ) === '[object Array]' ) {
+        this[guid] = [arg1[0], arg1[1]];
+    }
+};
+
+function ActivityUser(){
+    initialValues = new Object({});
+    initialValues.add = ActivityUser.add;
+    initialValues.load = ActivityUser.load;
+    return(initialValues);
+};
+ActivityUser.add = function(timeFirst, timeLast){
+    if (typeof this['timeFirst'] == 'undefined')
+    {
+        this['timeFirst'] = timeFirst;
+    }
+    this['timeLast'] = timeLast;
+};
+ActivityUser.load = function(guid, arg1){
+    this[guid] = arg1;
+};
 
 function RetargetingOffers(){
     initialValues = new Object({});
@@ -201,6 +409,8 @@ UserHistory.save = function(){
 var uh = new UserHistory();
 uh.load();
 var ac_id = '%3%', ids = '%1%'.split(','), action, target, offer_type,offer_id,tmp=[];
+var gender = '%7%';
+var cost = '%8%';
 
 if (ac_id != '')
 {
@@ -226,6 +436,12 @@ if (ac_id != '')
             }
         }
     }
+    uh.activity_accounts.add(ac_id, Date.now() * 1000, Date.now() * 1000);
+    uh.activity_user.add(Date.now() * 1000, Date.now() * 1000);
+    uh.cost_accounts.add(ac_id, costRange(cost));
+    uh.cost_user.add(costRange(cost));
+    uh.gender_accounts.add(ac_id, getGender(gender));
+    uh.gender_user.add(getGender(gender));
 }
 uh.save();
 </script>
