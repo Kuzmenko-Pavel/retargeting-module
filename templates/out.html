@@ -113,9 +113,13 @@ function costRange(val){
     {
         result = 7;
     }
-    else
+    else if (val>25001)
     {
         result = 8;
+    }
+    else
+    {
+        result = 0;
     }
     return result;
 };
@@ -210,6 +214,7 @@ GenderAccount.add = function(guid, val)
     {
         var hit_log = this[guid][1];
         hit_log[val] += 1;
+        hit_log[0] = 1;
         this[guid] = [hit_log.indexOf(Math.max.apply(Math, hit_log)), hit_log];
     }
 };
@@ -238,6 +243,7 @@ GenderUser.add = function(val)
         if( Object.prototype.toString.call( this['hit_log'] ) === '[object Array]' ) {
             var hit_log = this['hit_log'];
             hit_log[val] += 1;
+            hit_log[0] = 1;
             this['hit_log'] = hit_log;
             this['gender'] = hit_log.indexOf(Math.max.apply(Math, hit_log));
         }
@@ -265,6 +271,7 @@ CostAccount.add = function(guid, val)
     {
         var hit_log = this[guid][1];
         hit_log[val] += 1;
+        hit_log[0] = 1;
         this[guid] = [hit_log.indexOf(Math.max.apply(Math, hit_log)), hit_log];
     }
 };
@@ -294,6 +301,7 @@ CostUser.add = function(val)
         if( Object.prototype.toString.call( this['hit_log'] ) === '[object Array]' ) {
             var hit_log = this['hit_log'];
             hit_log[val] += 1;
+            hit_log[0] = 1;
             this['hit_log'] = hit_log;
             this['cost'] = hit_log.indexOf(Math.max.apply(Math, hit_log));
         }
