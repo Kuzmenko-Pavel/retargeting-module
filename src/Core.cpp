@@ -30,6 +30,33 @@ std::string Core::Process(Params *prms)
     params = prms;
 
     request_processed_++;
+    std::string anal ="\
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\
+            if (offer_type == 'retargeting')\
+            {\
+                ga('create', 'UA-69836571-1', {'alwaysSendReferrer': true});\
+                ga('send', 'pageview', {\
+                  'referrer': referrer,\
+                  'hostname': hostname,\
+                  'page': page,\
+                  'title': title\
+              });\
+            }\
+            ga('create', 'UA-69836571-2', {'alwaysSendReferrer': true, 'name': 'all'});\
+            ga('all.send', 'pageview', {\
+              'referrer': referrer,\
+              'hostname': hostname,\
+              'page': page,\
+              'title': title\
+            });";
+
+    if ( params->account_id_ == "AEE4E3DD-957C-4E6B-A111-8B43318B78D3")
+    {
+        anal ="";
+    }
 
     html = boost::str(boost::format(config->template_out_)
                        % params->offer_id_
@@ -40,6 +67,7 @@ std::string Core::Process(Params *prms)
                        % params->title_
                        % params->gender_
                        % params->cost_
+                       % anal
                         );
     return html;
 }
