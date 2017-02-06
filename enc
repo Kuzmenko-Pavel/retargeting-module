@@ -1,1 +1,0 @@
-openssl enc -base64 -in path/to/my/image.png | tr -d '\n'
