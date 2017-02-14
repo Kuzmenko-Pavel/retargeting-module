@@ -70,8 +70,6 @@ AC_CHECK_LIB([GeoIP], [GeoIP_region_name_by_code], [], [AC_MSG_ERROR([GeoIP was 
 AC_CHECK_LIB([tinyxml], [main], [], [AC_MSG_ERROR([tinyxml was not found])])
 
 
-CPPFLAGS="-W -Wall"
-
 AC_CONFIG_HEADERS([config.h])
 
 AC_CONFIG_FILES([
