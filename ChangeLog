@@ -1,0 +1,237 @@
+[33mcdfa444[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmongocxx_3_1_x[m[33m, [m[1;31morigin/mongocxx_3_1_x[m[33m)[m cleaning
+[33m6dfec5b[m cleaning
+[33m8997a37[m cleaning
+[33mecca7bc[m update autoconf
+[33m8b9ccbf[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m Merge branch 'master' of gitlab.yottos.com:rgadworker/retargeting-module
+[33m583e7b3[m Merge branch 'master' of gitlab.yottos.com:rgadworker/retargeting-module
+[33med13bab[m Merge branch 'master' of gitlab.yottos.com:rgadworker/retargeting-module
+[33m7856d4c[m disable analytuc
+[33m79f989e[m disable analytuc
+[33m47376c7[m disable analytuc
+[33m0378135[m disable analytuc
+[33m59bb9e8[m update set
+[33m5d84607[m update set
+[33mb6c7140[m update set
+[33m93f2f99[m update set
+[33m95a5f8c[m add gender
+[33m9561da3[m add gender
+[33m5b364e0[m add gender
+[33m7d875b5[m add gender
+[33m51d5a16[m fix memory leek
+[33m8e52cdb[m fix memory leek
+[33ma1f4875[m fix memory leek
+[33ma137ca8[m fix memory leek
+[33m887f5f5[m change
+[33ma2b190d[m change
+[33m39d0871[m change
+[33mc8f4f94[m change
+[33m3080f2e[m update js
+[33m7aac89e[m update js
+[33mc5f4d14[m update js
+[33m6989330[m update js
+[33m5178058[m fix
+[33m9415b1d[m fix
+[33m6cf3adc[m fix
+[33m77bfb54[m fix
+[33m5276ba0[m up
+[33m352b47b[m up
+[33m26470ba[m up
+[33me19fcbf[m up
+[33m143ec34[m update analytyc
+[33mf6614e4[m update analytyc
+[33m91bbe13[m update analytyc
+[33md58a69a[m update analytyc
+[33m4e4b2e4[m update analytyc
+[33m9918678[m update analytyc
+[33md99ade3[m update analytyc
+[33ma51f5fe[m update analytyc
+[33m09d0180[m update analytyc
+[33m7703c08[m update analytyc
+[33m041b315[m update analytyc
+[33m4a98013[m update analytyc
+[33m7ea275a[m fix
+[33mbf3537c[m fix
+[33m14dbfde[m fix
+[33m4c6c34a[m fix
+[33ma9c0241[m add analytyc
+[33m277dc83[m add analytyc
+[33m39561f5[m add analytyc
+[33m93df578[m add analytyc
+[33m703aa0f[m change retargeting order
+[33m516087c[m change retargeting order
+[33mcc63fe9[m change retargeting order
+[33m34eed16[m change retargeting order
+[33m19a481b[m change retargeting order
+[33mdf8406b[m change retargeting order
+[33m9f43266[m change retargeting order
+[33md8879bb[m change retargeting order
+[33m135c90e[m js fix
+[33mc71248e[m js fix
+[33m1801ff5[m js fix
+[33m8398b1c[m js fix
+[33m2697bd3[m fix
+[33mbe7f4d2[m fix
+[33m799e9fe[m fix
+[33m5e5a49a[m fix
+[33m708d658[m fix
+[33md8fdcab[m fix
+[33m5d56f3e[m fix
+[33md734936[m fix
+[33md84011d[m delete redis
+[33m9900bf7[m delete redis
+[33m441af06[m delete redis
+[33mabb8822[m delete redis
+[33m06b5bc3[m store
+[33m701afb1[m store
+[33m4da525b[m store
+[33mecfcd06[m store
+[33mbba8170[m localstorage
+[33m96465b3[m localstorage
+[33ma25ffe1[m localstorage
+[33m029d1ab[m localstorage
+[33m86aec7a[m add localstorage
+[33md8e658a[m add localstorage
+[33m641778e[m add localstorage
+[33m0251e34[m add localstorage
+[33md442ed8[m Change tracking modyle
+[33mef53b49[m Change tracking modyle
+[33m25dde9d[m Change tracking modyle
+[33m4824eb1[m Change tracking modyle
+[33mf3b8fa7[m fix mq
+[33ma2974a5[m fix mq
+[33m5493a68[m fix mq
+[33mf2a5c17[m fix mq
+[33m87b8426[m fix redirect
+[33m8322c56[m fix redirect
+[33m4fe9188[m fix redirect
+[33mbf032f5[m fix redirect
+[33m3535bdb[m fix ordering
+[33m115c310[m fix ordering
+[33mc9bae16[m fix ordering
+[33m65a482d[m fix ordering
+[33m801c8bf[m fix traking worker
+[33me467b0a[m fix traking worker
+[33m89252cc[m fix traking worker
+[33mcb13553[m fix traking worker
+[33m65ae8da[m verifi version
+[33m68cdace[m verifi version
+[33m6ee93f9[m verifi version
+[33md06ce7f[m verifi version
+[33m210aa90[m verifi version
+[33md163bf8[m verifi version
+[33m586fcc6[m verifi version
+[33m8e1ffde[m verifi version
+[33m3f4877b[m add config
+[33m04315cf[m add config
+[33m0176eb7[m add config
+[33m8c4e02b[m add config
+[33mda74061[m ubdate
+[33m930f2a2[m ubdate
+[33m13a3913[m ubdate
+[33m569a0de[m ubdate
+[33m9309bef[m libredis removed
+[33mf0ccf70[m libredis removed
+[33m16614e2[m beta
+[33mf17ccb5[m beta
+[33m5bc7651[m redisset fix
+[33me71fb3f[m redisset fix
+[33mbfe701c[m redisset fix
+[33m22f2a77[m redisset fix
+[33m6e80c92[m key migrate
+[33m8f70cf5[m key migrate
+[33m1b97e24[m key migrate
+[33me5a324d[m key migrate
+[33m42e3442[m getout context
+[33m9c0a3b6[m getout context
+[33m9fa357e[m retargeting id to num
+[33mf5450c5[m retargeting id to num
+[33m01c83b8[m limited request to one offer
+[33m098251f[m limited request to one offer
+[33m82e999e[m redis module
+[33m613a81f[m redis module
+[33m7366360[m vm size monitor
+[33mcf7893d[m vm size monitor
+[33m13b5cc2[m config redis default ttl
+[33m034db0e[m config redis default ttl
+[33m25d5c40[m config reload by sighup
+[33m831a6ec[m config reload by sighup
+[33m2f15b51[m config reload by sighup
+[33m5d50754[m config reload by sighup
+[33m1e5520d[m config reload by sighup
+[33mc35ef7f[m config reload by sighup
+[33mc0ecd0f[m config reload by sighup
+[33mc5a729e[m config reload by sighup
+[33mea1aa61[m config reload by sighup
+[33maa48b86[m config reload by sighup
+[33m9e97829[m config reload
+[33m1ff381c[m config reload
+[33mb1cf524[m logging
+[33mbc3d1e6[m logging
+[33m08588b3[m logging
+[33m82552ae[m logging
+[33m50c4647[m logging
+[33m57cc62b[m logging
+[33mfb0cfad[m logging
+[33m2b7523a[m logging
+[33m492a4c3[m logging
+[33m79853fe[m logging
+[33mdcc08de[m logging
+[33md5ed4d9[m logging
+[33mf6b59fb[m logging
+[33mdc5ba4e[m logging
+[33mb297ddd[m logging
+[33m920aa0f[m logging
+[33mb57dbbb[m logging
+[33ma65735a[m logging
+[33mdc26745[m logging & js filter tune
+[33m37a4128[m logging & js filter tune
+[33mecf84f2[m logging
+[33m2a61502[m logging
+[33m69fb344[m logging
+[33m25238ef[m logging
+[33mf133c17[m libredis single thread
+[33m68fe626[m libredis single thread
+[33ma21e01b[m logging
+[33m98ed07a[m logging
+[33m18b03c1[m info
+[33mc40c0a7[m info
+[33m89ee11c[m loggin
+[33m0333746[m loggin
+[33me854ad8[m loggin
+[33mb5d684d[m loggin
+[33med9a1a3[m loggin
+[33m4d7a4f6[m loggin
+[33mfa17110[m build fix
+[33maf10415[m build fix
+[33mb2ac98f[m build fix & doc
+[33mc0520fc[m build fix & doc
+[33m9e7483c[m multy redis
+[33ma3f46ac[m multy redis
+[33m6e283c5[m search fix
+[33mc6147bb[m search fix
+[33m4994d4b[m sqlite check
+[33m70ebed5[m sqlite check
+[33mcf63436[m config clean
+[33m06b2d2a[m config clean
+[33m3b175e3[m redis ttl
+[33m374f5e2[m redis ttl
+[33me46ce1c[m debug removed
+[33m4c627b5[m debug removed
+[33m46b977a[m without shpinx
+[33m9f137c2[m without shpinx
+[33m9f7ca14[m clean up
+[33mb060f9c[m clean up
+[33md2d4914[m input parameters test done
+[33me2899ef[m input parameters test done
+[33mce36182[m tested
+[33m1e16acd[m tested
+[33m62e438b[m working with retargeting id
+[33m7749b19[m working with retargeting id
+[33mc151fac[m ie8 fix for topshop
+[33me246cb2[m ie8 fix for topshop
+[33m3aa3f16[m so removed
+[33m10e8c7f[m so removed
+[33md39e457[m retargeting with sqlite
+[33mfc388a9[m retargeting with sqlite
+[33m2a1f29f[m the retargeting-module start
+[33m6b53adf[m the retargeting-module start
