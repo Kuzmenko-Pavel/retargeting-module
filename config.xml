@@ -20,7 +20,7 @@
     </sqlite>
 
     <!--путь к очереди сообщений-->
-    <mq_path>guest:guest@localhost//</mq_path>
+    <mq_path>test-worker:test-worker@srv-4.yottos.com/test-worker</mq_path>
 
     <!--Путь к файлу базы данных MaxMind GeoIP City Edition-->
     <geocity_path>/usr/share/GeoIP/GeoLiteCity.dat</geocity_path>
@@ -72,11 +72,9 @@
     <!--Параметры подключения к основной базе данных-->
     <main>
         <!--Адрес сервера баз данных-->
-        <host>srv-9.yottos.com:27018</host>
-        <host>srv-8.yottos.com:27018</host>
-        <host>srv-1.yottos.com:27017</host>
-        <host>srv-2.yottos.com:27018</host>
-        <host>srv-3.yottos.com:27018</host>
+        <host>srv-5.yottos.com:27018</host>
+        <host>srv-5.yottos.com:27019</host>
+        <host>srv-5.yottos.com:27020</host>
         <!--Название базы данных-->
         <db>getmyad_db</db>
         <!--Название группы реплик (если база данных находится в Replica Set)-->
